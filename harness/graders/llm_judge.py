@@ -15,26 +15,17 @@ from __future__ import annotations
 
 import json
 import re
+from pathlib import Path
 
 from .. import config, llm_client
 from ..taskspec import Criterion, Task
 from .base import CriterionResult, GradingContext
 
-JUDGE_TEMPLATE = """You are grading ONE binary criterion of a marketing-agent deliverable.
-Judge ONLY this criterion — not overall quality.
-
-CRITERION:
-{criterion}
-
-EVIDENCE FILES (ground truth from the brand environment):
-{evidence}
-
-DELIVERABLE (the agent's submission):
-{deliverable}
-
-Reply with ONLY a JSON object:
-{{"pass": true|false, "quote_of_evidence": "<short quote from deliverable or evidence that decides it>", "rationale": "<1-3 sentences>"}}
-Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it."""
+# The judge prompt lives in a template file so it can be versioned and diffed independently
+# of grader code (harvey-labs' evaluation/prompts/ convention). Placeholders: {criterion},
+# {evidence}, {deliverable}.
+_TEMPLATE_PATH = Path(__file__).resolve().parent.parent / "prompts" / "rubric_criterion.txt"
+JUDGE_TEMPLATE = _TEMPLATE_PATH.read_text()
 
 _NEGATION = re.compile(
     r"\b(not|n't|no|never|neither|without|rather than|instead of|rule[sd]? out|"

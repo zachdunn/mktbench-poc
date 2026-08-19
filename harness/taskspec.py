@@ -97,3 +97,28 @@ def load_task_by_id(task_id: str, universe: str = "alma-botanica") -> Task:
 def list_task_ids(universe: str = "alma-botanica") -> list[str]:
     root = config.TASKS_ROOT / universe
     return sorted(json.loads(p.read_text()).get("id", "?") for p in root.rglob("*.json"))
+
+
+def list_tasks(universe: str = "alma-botanica") -> list[tuple[str, str, Path]]:
+    """(category, task_id, path) for every task file, sorted by path. Category is the
+    folder under tasks/<universe>/ (account-audit, flow-design, escalation, …)."""
+    root = config.TASKS_ROOT / universe
+    out = []
+    for path in sorted(root.rglob("*.json")):
+        category = path.parent.name if path.parent != root else ""
+        out.append((category, json.loads(path.read_text()).get("id", "?"), path))
+    return out
+
+
+def resolve_task_selector(selector: str, universe: str = "alma-botanica") -> list[str]:
+    """Resolve a --task argument to task ids: an exact id, a category folder name, or 'all'."""
+    tasks = list_tasks(universe)
+    if selector == "all":
+        return [tid for _, tid, _ in tasks]
+    by_category = [tid for cat, tid, _ in tasks if cat == selector]
+    if by_category:
+        return by_category
+    if any(tid == selector for _, tid, _ in tasks):
+        return [selector]
+    known = sorted({cat for cat, _, _ in tasks if cat})
+    raise TaskSpecError(f"no task id or category {selector!r}; categories: {', '.join(known)}")

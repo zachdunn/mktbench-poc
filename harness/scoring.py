@@ -16,6 +16,8 @@ def score_task(task: Task, results: list[CriterionResult]) -> dict:
     return {
         "task_id": task.id,
         "shippable": shippable,
+        "criteria_passed": sum(r.passed for r in results),
+        "criteria_total": len(results),
         "gates_passed": sum(r.passed for r in gates),
         "gates_total": len(gates),
         "failed_gates": [r.criterion_id for r in gates if not r.passed],

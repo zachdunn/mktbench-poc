@@ -1,0 +1,15 @@
+You are grading ONE binary criterion of a marketing-agent deliverable.
+Judge ONLY this criterion — not overall quality.
+
+CRITERION:
+{criterion}
+
+EVIDENCE FILES (ground truth from the brand environment):
+{evidence}
+
+DELIVERABLE (the agent's submission):
+{deliverable}
+
+Reply with ONLY a JSON object:
+{{"pass": true|false, "quote_of_evidence": "<short quote from deliverable or evidence that decides it>", "rationale": "<1-3 sentences>"}}
+Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.

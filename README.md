@@ -26,7 +26,12 @@ python3 run_eval.py --task A1 --agent llm
 ```
 
 Each run writes `runs/<run-id>/report.html` — open it in a browser, or see committed samples in
-[`examples/`](examples/). Tests: `python3 -m unittest discover -s tests`.
+[`examples/`](examples/). Validate the dataset and harness without spending tokens:
+
+```bash
+python3 run_eval.py --dry-run
+python3 -m unittest discover -s tests
+```
 
 ## Documentation
 
@@ -36,3 +41,4 @@ Each run writes `runs/<run-id>/report.html` — open it in a browser, or see com
 | [docs/architecture.md](docs/architecture.md) | Module map, the four grader types, how to add a task |
 | [docs/grading.md](docs/grading.md) | Scoring model, provider/model config, offline mode, conservative-grading decisions |
 | [docs/marketing-benchmark-framework.md](docs/marketing-benchmark-framework.md) | Overall benchmark design and layer model |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Adding tasks, rubric-authoring conventions, validation, ground rules |
