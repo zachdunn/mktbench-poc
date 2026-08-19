@@ -35,6 +35,4 @@ Each run writes `runs/<run-id>/report.html` — open it in a browser, or see com
 | [docs/acceptance.md](docs/acceptance.md) | Reproducing the six acceptance criteria, one command each |
 | [docs/architecture.md](docs/architecture.md) | Module map, the four grader types, how to add a task |
 | [docs/grading.md](docs/grading.md) | Scoring model, provider/model config, offline mode, conservative-grading decisions |
-| [docs/HANDOFF-eval-harness-poc.md](docs/HANDOFF-eval-harness-poc.md) | The build brief this PoC implements |
-| [docs/phase1-task-spec.md](docs/phase1-task-spec.md) | The universe, planted issues, and worked tasks (rubric source of truth) |
 | [docs/marketing-benchmark-framework.md](docs/marketing-benchmark-framework.md) | Overall benchmark design and layer model |
