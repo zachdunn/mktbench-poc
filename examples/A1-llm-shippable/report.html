@@ -1,0 +1,1177 @@
+<!doctype html><html><head><meta charset="utf-8">
+<title>MarketingBench — A1 — llm</title><style>
+body{font-family:-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;margin:2rem auto;max-width:1080px;
+     padding:0 1rem;color:#1e2530;background:#fbfaf8;line-height:1.5}
+h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:2rem;border-bottom:2px solid #e4ded4;padding-bottom:.3rem}
+table{border-collapse:collapse;width:100%;font-size:.9rem;background:#fff}
+th,td{border:1px solid #e4ded4;padding:.5rem .6rem;text-align:left;vertical-align:top}
+th{background:#f2efe9}
+.badge{display:inline-block;padding:.1rem .55rem;border-radius:1rem;font-weight:600;font-size:.8rem;color:#fff}
+.pass{background:#2e7d46}.fail{background:#b3402a}.gate{background:#5b5f97}.quality{background:#9c8447}
+.verdict{font-size:1.2rem;padding:1rem;border-radius:.5rem;margin:1rem 0;font-weight:600}
+.verdict.ok{background:#e5f2e8;border:1px solid #2e7d46}.verdict.bad{background:#f8e8e3;border:1px solid #b3402a}
+details{margin:.5rem 0}summary{cursor:pointer;font-weight:600}
+pre{background:#f4f2ee;padding:.8rem;overflow-x:auto;font-size:.8rem;border-radius:.4rem;white-space:pre-wrap}
+.muted{color:#6b7280;font-size:.85rem}
+</style></head><body>
+<h1>MarketingBench run report — A1: The welcome flow dropped off</h1>
+<p class="muted">Universe alma-botanica · agent llm · run 20260819T175803Z-A1-llm
+· mode live judge</p>
+<div class="verdict ok">SHIPPABLE — every gate criterion passed</div>
+<p>4/4 gate criteria passed. Quality score: <b>0.5</b> (1/2 quality criteria)</p>
+<h2>Criteria</h2>
+<table><tr><th>ID</th><th>Tier</th><th>Grader</th><th>Criterion</th><th>Result</th><th>Detail</th></tr><tr><td><code>a1_root_cause</code></td><td><span class='badge gate'>gate</span></td><td>llm_judge</td><td>Identifies the expired SOLSTICE10 code as the root cause of the welcome-flow revenue drop.</td><td><span class='badge pass'>PASS</span></td><td>The deliverable explicitly identifies the expired SOLSTICE10 discount code as the root cause of the welcome-flow revenue drop, noting it expired on 2026-05-31 and is still featured in the hero image, which matches the evidence that SOLSTICE10 expired on 2026-05-31 and the welcome flow&#x27;s conversions halved in June 2026.<div class='muted'>The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (WELCOME15) is restricted to two product lines, and it&#x27;s not referenced in the email.</div></td></tr><tr><td><code>a1_timing</code></td><td><span class='badge gate'>gate</span></td><td>llm_judge</td><td>States the drop began with the June cohort, consistent with the May 31 code expiry.</td><td><span class='badge pass'>PASS</span></td><td>The deliverable explicitly states the drop began in June 2026, and the evidence shows that the SOLSTICE10 discount code expired on 2026-05-31, so the root cause (expired code) applies from the first cohort that entered after that expiry, i.e., the June cohort.<div class='muted'>The welcome flow (flow_welcome) revenue dropped from a steady ~$17K/month to $9,034 in June</div></td></tr><tr><td><code>a1_impact</code></td><td><span class='badge gate'>gate</span></td><td>computed</td><td>Revenue-impact estimate reconciles with pre/post conversion delta × entry volume × AOV, within tolerance.</td><td><span class='badge pass'>PASS</span></td><td>claimed 8800.0 vs expected 7798 (tolerance ±1169.7; via llm extraction)<div class='muted'>answer_key[welcome_monthly_revenue_impact] = 7798</div></td></tr><tr><td><code>a1_distractors</code></td><td><span class='badge gate'>gate</span></td><td>llm_judge</td><td>Does not attribute the drop to seasonality, deliverability, or the (irrelevant) March Yahoo incident.</td><td><span class='badge pass'>PASS</span></td><td>The deliverable clearly identifies the root cause as an expired discount code, not seasonality, deliverability, or the March Yahoo incident. It explicitly states that top-of-funnel metrics (including deliverability) are unchanged, ruling out those factors.<div class='muted'>Root Cause: Expired Discount Code in Email Hero Image</div></td></tr><tr><td><code>a1_fix_prevention</code></td><td><span class='badge quality'>quality</span></td><td>llm_judge</td><td>Proposes both an immediate fix and a prevention practice (e.g. code-expiry monitoring).</td><td><span class='badge pass'>PASS</span></td><td>The deliverable clearly proposes an immediate fix (updating the hero image) and a prevention practice (adding a check in the discount-code lifecycle to monitor code expiry and trigger updates), satisfying the criterion.<div class='muted'>Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer. ... Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code</div></td></tr><tr><td><code>a1_remail</code></td><td><span class='badge quality'>quality</span></td><td>llm_judge</td><td>Notes the affected cohort could be re-mailed a working code.</td><td><span class='badge fail'>FAIL</span></td><td>The criterion requires that the deliverable note the affected cohort could be re-mailed a working code, but the deliverable makes no mention of re-mailing or sending a corrected code to the cohort. The recommended next steps focus on updating the image and process fixes, not re-engaging the affected subscribers via a new email with a working code.<div class='muted'>No evidence files linked</div></td></tr></table>
+
+<h2>Judge transcripts (calibration dataset)</h2><details><summary>judge — a1_root_cause</summary><pre>PROMPT:
+You are grading ONE binary criterion of a marketing-agent deliverable.
+Judge ONLY this criterion — not overall quality.
+
+CRITERION:
+Identifies the expired SOLSTICE10 code as the root cause of the welcome-flow revenue drop.
+
+EVIDENCE FILES (ground truth from the brand environment):
+=== campaigns/discount_codes.csv ===
+code,discount,applies_to,created,expires,status
+SOLSTICE10,10%,first order,2025-06-01,2026-05-31,expired
+WELCOME15,15%,&quot;first order, Midnight &amp; Terra only&quot;,2026-01-10,2026-12-31,active
+BDAY20,20%,birthday flow,2025-03-01,2026-12-31,active
+VIPFALL,free shipping,VIP segment,2026-07-01,2026-10-31,active
+
+
+=== campaigns/messages/welcome_email_1.html ===
+&lt;!doctype html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Welcome to Alma&lt;/title&gt;&lt;/head&gt;
+&lt;body style=&quot;margin:0;background:#faf6ef;font-family:Georgia,serif;color:#3d3325;&quot;&gt;
+&lt;table role=&quot;presentation&quot; width=&quot;600&quot; align=&quot;center&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;
+&lt;tr&gt;&lt;td style=&quot;padding:28px 0 12px;text-align:center;font-size:22px;letter-spacing:3px;&quot;&gt;ALMA BOTÁNICA&lt;/td&gt;&lt;/tr&gt;
+&lt;!-- NOTE: hero contains the welcome offer; no alt text, no live-text code fallback --&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;hero_welcome.png&quot; width=&quot;600&quot;&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;padding:24px 36px;font-size:16px;line-height:1.6;&quot;&gt;
+Welcome to the garden. We make skincare slowly, from plants that earn their place.
+Start with our bestsellers, or take the ritual quiz to find your routine.&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td align=&quot;center&quot; style=&quot;padding:8px 0 28px;&quot;&gt;
+&lt;a href=&quot;https://almabotanica.example/shop?utm_source=klaviyo&amp;utm_medium=email&amp;utm_campaign=flow_welcome&quot;
+   style=&quot;background:#C4552F;color:#ffffff;padding:14px 34px;text-decoration:none;border-radius:3px;&quot;&gt;Shop bestsellers&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td style=&quot;padding:16px 36px;font-size:11px;color:#8a7c66;text-align:center;&quot;&gt;
+Alma Botánica · 214 Verano St, Santa Fe, NM 87501 · &lt;a href=&quot;{{ unsubscribe_url }}&quot;&gt;Unsubscribe&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;&lt;/body&gt;&lt;/html&gt;
+
+
+=== flows/flow_performance.csv ===
+flow_id,month,entries,emails_delivered,open_rate,click_rate,conversions,revenue_usd,unsubscribes
+flow_welcome,2024-08,3834,11118,0.52,0.118,299,16199.25,20
+flow_cart_2024,2024-08,2513,4774,0.51,0.135,155,9815.78,9
+flow_browse,2024-08,5393,5662,0.44,0.083,113,6568.67,9
+flow_winback,2024-08,1951,5267,0.31,0.036,15,889.66,27
+flow_sunset,2024-08,2587,4656,0.19,0.041,0,0.0,5
+flow_postpurchase,2024-08,3789,5304,0.58,0.14,121,5941.15,6
+flow_backinstock,2024-08,233,326,0.71,0.34,44,2921.82,0
+flow_bday,2024-08,622,870,0.62,0.22,68,3968.36,1
+flow_review,2024-08,3747,5245,0.47,0.09,0,0.0,6
+flow_vip,2024-08,496,694,0.36,0.052,10,770.78,1
+flow_welcome,2024-09,3752,10880,0.52,0.118,305,16478.09,20
+flow_cart_2024,2024-09,2563,4869,0.51,0.135,158,10011.08,9
+flow_browse,2024-09,5177,5435,0.44,0.083,108,6305.59,9
+flow_winback,2024-09,1992,5378,0.31,0.036,15,908.35,28
+flow_sunset,2024-09,2352,4233,0.19,0.041,0,0.0,4
+flow_postpurchase,2024-09,4025,5635,0.58,0.14,128,6311.2,7
+flow_backinstock,2024-09,252,352,0.71,0.34,47,3160.08,0
+flow_bday,2024-09,583,816,0.62,0.22,64,3719.54,1
+flow_review,2024-09,3591,5027,0.47,0.09,0,0.0,6
+flow_vip,2024-09,469,656,0.36,0.052,9,728.83,1
+flow_welcome,2024-10,3535,10251,0.52,0.118,302,16331.29,18
+flow_cart_2024,2024-10,2604,4947,0.51,0.135,161,10171.22,9
+flow_browse,2024-10,4796,5035,0.44,0.083,100,5841.53,8
+flow_winback,2024-10,2068,5583,0.31,0.036,16,943.01,29
+flow_sunset,2024-10,2374,4273,0.19,0.041,0,0.0,4
+flow_postpurchase,2024-10,4101,5741,0.58,0.14,131,6430.37,7
+flow_backinstock,2024-10,242,338,0.71,0.34,45,3034.68,0
+flow_bday,2024-10,604,845,0.62,0.22,66,3853.52,1
+flow_review,2024-10,3951,5531,0.47,0.09,0,0.0,7
+flow_vip,2024-10,493,690,0.36,0.052,10,766.12,1
+flow_welcome,2024-11,3663,10622,0.52,0.118,300,16244.06,19
+flow_cart_2024,2024-11,2549,4843,0.51,0.135,158,9956.39,9
+flow_browse,2024-11,5217,5477,0.44,0.083,109,6354.31,9
+flow_winback,2024-11,1876,5065,0.31,0.036,15,855.46,26
+flow_sunset,2024-11,2296,4132,0.19,0.041,0,0.0,4
+flow_postpurchase,2024-11,4188,5863,0.58,0.14,134,6566.78,7
+flow_backinstock,2024-11,250,350,0.71,0.34,47,3135.0,0
+flow_bday,2024-11,645,902,0.62,0.22,70,4115.1,1
+flow_review,2024-11,3869,5416,0.47,0.09,0,0.0,6
+flow_vip,2024-11,499,698,0.36,0.052,10,775.45,1
+flow_welcome,2024-12,3779,10959,0.52,0.118,302,16317.74,20
+flow_cart_2024,2024-12,2697,5124,0.51,0.135,167,10534.48,10
+flow_browse,2024-12,5328,5594,0.44,0.083,111,6489.5,9
+flow_winback,2024-12,1859,5019,0.31,0.036,14,847.7,26
+flow_sunset,2024-12,2509,4516,0.19,0.041,0,0.0,5
+flow_postpurchase,2024-12,3778,5289,0.58,0.14,120,5923.9,6
+flow_backinstock,2024-12,227,317,0.71,0.34,43,2846.58,0
+flow_bday,2024-12,606,848,0.62,0.22,66,3866.28,1
+flow_review,2024-12,4062,5686,0.47,0.09,0,0.0,7
+flow_vip,2024-12,513,718,0.36,0.052,10,797.2,1
+flow_welcome,2025-01,3433,9955,0.52,0.118,282,15275.93,18
+flow_cart_2024,2025-01,2344,4453,0.51,0.135,145,9155.66,8
+flow_browse,2025-01,5044,5296,0.44,0.083,105,6143.59,8
+flow_winback,2025-01,1836,4957,0.31,0.036,14,837.22,26
+flow_sunset,2025-01,2318,4172,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-01,4226,5916,0.58,0.14,135,6626.37,7
+flow_backinstock,2025-01,243,340,0.71,0.34,46,3047.22,0
+flow_bday,2025-01,624,873,0.62,0.22,68,3981.12,1
+flow_review,2025-01,4100,5740,0.47,0.09,0,0.0,7
+flow_vip,2025-01,493,690,0.36,0.052,10,766.12,1
+flow_welcome,2025-02,3944,11437,0.52,0.118,342,18476.15,21
+flow_cart_2024,2025-02,2769,5261,0.51,0.135,171,10815.71,10
+flow_browse,2025-02,4984,5233,0.44,0.083,104,6070.51,8
+flow_winback,2025-02,1903,5138,0.31,0.036,15,867.77,27
+flow_sunset,2025-02,2527,4548,0.19,0.041,0,0.0,5
+flow_postpurchase,2025-02,4181,5853,0.58,0.14,133,6555.81,7
+flow_backinstock,2025-02,234,327,0.71,0.34,44,2934.36,0
+flow_bday,2025-02,613,858,0.62,0.22,67,3910.94,1
+flow_review,2025-02,3879,5430,0.47,0.09,0,0.0,7
+flow_vip,2025-02,466,652,0.36,0.052,9,724.16,1
+flow_welcome,2025-03,3740,10846,0.52,0.118,312,16892.19,20
+flow_cart_2024,2025-03,2551,4846,0.51,0.135,158,9964.21,9
+flow_browse,2025-03,5570,5848,0.44,0.083,116,6784.26,9
+flow_winback,2025-03,1899,5127,0.31,0.036,15,865.94,27
+flow_sunset,2025-03,2214,3985,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-03,3914,5479,0.58,0.14,125,6137.15,7
+flow_backinstock,2025-03,233,326,0.71,0.34,44,2921.82,0
+flow_bday,2025-03,635,889,0.62,0.22,69,4051.3,1
+flow_review,2025-03,4568,6395,0.47,0.09,0,0.0,8
+flow_vip,2025-03,520,728,0.36,0.052,10,808.08,1
+flow_welcome,2025-04,3806,11037,0.52,0.118,322,17439.12,20
+flow_cart_2024,2025-04,2844,5403,0.51,0.135,176,11108.66,10
+flow_browse,2025-04,5205,5465,0.44,0.083,109,6339.69,9
+flow_winback,2025-04,2005,5413,0.31,0.036,16,914.28,28
+flow_sunset,2025-04,2474,4453,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-04,4304,6025,0.58,0.14,137,6748.67,7
+flow_backinstock,2025-04,232,324,0.71,0.34,44,2909.28,0
+flow_bday,2025-04,694,971,0.62,0.22,76,4427.72,1
+flow_review,2025-04,4035,5649,0.47,0.09,0,0.0,7
+flow_vip,2025-04,496,694,0.36,0.052,10,770.78,1
+flow_welcome,2025-05,3864,11205,0.52,0.118,314,16982.14,20
+flow_cart_2024,2025-05,2587,4915,0.51,0.135,160,10104.82,9
+flow_browse,2025-05,5243,5505,0.44,0.083,110,6385.97,9
+flow_winback,2025-05,1763,4760,0.31,0.036,14,803.93,25
+flow_sunset,2025-05,2438,4388,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-05,3906,5468,0.58,0.14,124,6124.61,7
+flow_backinstock,2025-05,242,338,0.71,0.34,45,3034.68,0
+flow_bday,2025-05,604,845,0.62,0.22,66,3853.52,1
+flow_review,2025-05,4183,5856,0.47,0.09,0,0.0,7
+flow_vip,2025-05,476,666,0.36,0.052,9,739.7,1
+flow_welcome,2025-06,3839,11133,0.52,0.118,305,16508.02,20
+flow_cart_2024,2025-06,2508,4765,0.51,0.135,155,9796.25,9
+flow_browse,2025-06,5985,6284,0.44,0.083,125,7289.73,10
+flow_winback,2025-06,1778,4800,0.31,0.036,14,810.77,25
+flow_sunset,2025-06,2548,4586,0.19,0.041,0,0.0,5
+flow_postpurchase,2025-06,3992,5588,0.58,0.14,127,6259.46,7
+flow_backinstock,2025-06,256,358,0.71,0.34,48,3210.24,0
+flow_bday,2025-06,654,915,0.62,0.22,71,4172.52,1
+flow_review,2025-06,3950,5530,0.47,0.09,0,0.0,7
+flow_vip,2025-06,461,645,0.36,0.052,9,716.39,1
+flow_welcome,2025-07,3873,11231,0.52,0.118,299,16161.2,20
+flow_cart_2024,2025-07,2444,4643,0.51,0.135,151,9546.26,9
+flow_browse,2025-07,5120,5376,0.44,0.083,107,6236.16,9
+flow_winback,2025-07,1957,5283,0.31,0.036,15,892.39,27
+flow_sunset,2025-07,2442,4395,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-07,4222,5910,0.58,0.14,135,6620.1,7
+flow_backinstock,2025-07,260,364,0.71,0.34,49,3260.4,0
+flow_bday,2025-07,605,847,0.62,0.22,66,3859.9,1
+flow_review,2025-07,3923,5492,0.47,0.09,0,0.0,7
+flow_vip,2025-07,486,680,0.36,0.052,10,755.24,1
+flow_welcome,2025-08,3943,11434,0.52,0.118,309,16705.6,21
+flow_cart_2024,2025-08,2699,5128,0.51,0.135,167,10542.29,10
+flow_browse,2025-08,5311,5576,0.44,0.083,111,6468.8,9
+flow_winback,2025-08,1885,5089,0.31,0.036,15,859.56,26
+flow_sunset,2025-08,2346,4222,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-08,4559,6382,0.58,0.14,145,7148.51,8
+flow_backinstock,2025-08,237,331,0.71,0.34,45,2971.98,0
+flow_bday,2025-08,541,757,0.62,0.22,59,3451.58,1
+flow_review,2025-08,4118,5765,0.47,0.09,0,0.0,7
+flow_vip,2025-08,461,645,0.36,0.052,9,716.39,1
+flow_welcome,2025-09,3757,10895,0.52,0.118,311,16847.86,20
+flow_cart_2024,2025-09,2546,4837,0.51,0.135,157,9944.68,9
+flow_browse,2025-09,5298,5562,0.44,0.083,111,6452.96,9
+flow_winback,2025-09,1815,4900,0.31,0.036,14,827.64,25
+flow_sunset,2025-09,2433,4379,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-09,4167,5833,0.58,0.14,133,6533.86,7
+flow_backinstock,2025-09,256,358,0.71,0.34,48,3210.24,0
+flow_bday,2025-09,636,890,0.62,0.22,69,4057.68,1
+flow_review,2025-09,4009,5612,0.47,0.09,0,0.0,7
+flow_vip,2025-09,469,656,0.36,0.052,9,728.83,1
+flow_welcome,2025-10,3870,11223,0.52,0.118,313,16947.66,20
+flow_cart_2024,2025-10,2561,4865,0.51,0.135,158,10003.27,9
+flow_browse,2025-10,4663,4896,0.44,0.083,97,5679.53,8
+flow_winback,2025-10,1879,5073,0.31,0.036,15,856.82,26
+flow_sunset,2025-10,2335,4203,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-10,3928,5499,0.58,0.14,125,6159.1,7
+flow_backinstock,2025-10,233,326,0.71,0.34,44,2921.82,0
+flow_bday,2025-10,541,757,0.62,0.22,59,3451.58,1
+flow_review,2025-10,3622,5070,0.47,0.09,0,0.0,6
+flow_vip,2025-10,474,663,0.36,0.052,9,736.6,1
+flow_welcome,2025-11,3945,11440,0.52,0.118,330,17830.07,21
+flow_cart_2024,2025-11,2789,5299,0.51,0.135,172,10893.83,10
+flow_browse,2025-11,5371,5639,0.44,0.083,112,6541.88,9
+flow_winback,2025-11,1819,4911,0.31,0.036,14,829.46,26
+flow_sunset,2025-11,2673,4811,0.19,0.041,0,0.0,5
+flow_postpurchase,2025-11,4128,5779,0.58,0.14,132,6472.7,7
+flow_backinstock,2025-11,230,322,0.71,0.34,43,2884.2,0
+flow_bday,2025-11,610,854,0.62,0.22,67,3891.8,1
+flow_review,2025-11,4106,5748,0.47,0.09,0,0.0,7
+flow_vip,2025-11,452,632,0.36,0.052,9,702.41,1
+flow_welcome,2025-12,3720,10788,0.52,0.118,316,17100.03,19
+flow_cart_2024,2025-12,2528,4803,0.51,0.135,156,9874.37,9
+flow_browse,2025-12,4994,5243,0.44,0.083,104,6082.69,8
+flow_winback,2025-12,1893,5111,0.31,0.036,15,863.21,27
+flow_sunset,2025-12,2244,4039,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-12,4273,5982,0.58,0.14,136,6700.06,7
+flow_backinstock,2025-12,244,341,0.71,0.34,46,3059.76,0
+flow_bday,2025-12,583,816,0.62,0.22,64,3719.54,1
+flow_review,2025-12,3613,5058,0.47,0.09,0,0.0,6
+flow_vip,2025-12,458,641,0.36,0.052,9,711.73,1
+flow_welcome,2026-01,4045,11730,0.52,0.118,333,18021.09,21
+flow_cart_2024,2026-01,2394,4548,0.51,0.135,148,9350.96,9
+flow_browse,2026-01,5281,5545,0.44,0.083,110,6432.26,9
+flow_winback,2026-01,1915,5170,0.31,0.036,15,873.24,27
+flow_sunset,2026-01,2374,4273,0.19,0.041,0,0.0,4
+flow_postpurchase,2026-01,3916,5482,0.58,0.14,125,6140.29,7
+flow_backinstock,2026-01,249,348,0.71,0.34,47,3122.46,0
+flow_bday,2026-01,590,826,0.62,0.22,64,3764.2,1
+flow_review,2026-01,4188,5863,0.47,0.09,0,0.0,7
+flow_vip,2026-01,481,673,0.36,0.052,10,747.47,1
+flow_welcome,2026-02,3636,10544,0.52,0.118,301,16291.53,19
+flow_cart_2024,2026-02,2497,4744,0.51,0.135,154,9753.28,9
+flow_browse,2026-02,5517,5792,0.44,0.083,115,6719.71,9
+flow_winback,2026-02,1819,4911,0.31,0.036,14,829.46,26
+flow_sunset,2026-02,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-02,4220,5908,0.58,0.14,135,6616.96,7
+flow_backinstock,2026-02,244,341,0.71,0.34,46,3059.76,0
+flow_bday,2026-02,633,886,0.62,0.22,69,4038.54,1
+flow_review,2026-02,3883,5436,0.47,0.09,0,0.0,7
+flow_vip,2026-02,468,655,0.36,0.052,9,727.27,1
+flow_welcome,2026-03,3658,10608,0.52,0.118,310,16787.89,19
+flow_cart_v2,2026-03,2613,6793,0.55,0.16,185,12244.52,28
+flow_cart_2024,2026-03,1097,2085,0.49,0.105,53,3280.31,9
+flow_browse,2026-03,5491,5765,0.44,0.083,115,6688.04,9
+flow_winback,2026-03,1910,5157,0.31,0.036,15,870.96,27
+flow_sunset,2026-03,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-03,3992,5588,0.58,0.14,127,6259.46,7
+flow_backinstock,2026-03,243,340,0.71,0.34,46,3047.22,0
+flow_bday,2026-03,582,814,0.62,0.22,64,3713.16,1
+flow_review,2026-03,3630,5082,0.47,0.09,0,0.0,6
+flow_vip,2026-03,476,666,0.36,0.052,9,739.7,1
+flow_welcome,2026-04,3674,10654,0.52,0.118,307,16586.95,19
+flow_cart_v2,2026-04,2446,6359,0.55,0.16,173,11461.96,26
+flow_cart_2024,2026-04,1027,1951,0.49,0.105,50,3070.66,9
+flow_browse,2026-04,5012,5262,0.44,0.083,105,6104.62,8
+flow_winback,2026-04,1684,4546,0.31,0.036,13,767.9,24
+flow_sunset,2026-04,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-04,4027,5637,0.58,0.14,128,6314.34,7
+flow_backinstock,2026-04,220,308,0.71,0.34,41,2758.8,0
+flow_bday,2026-04,624,873,0.62,0.22,68,3981.12,1
+flow_review,2026-04,3954,5535,0.47,0.09,0,0.0,7
+flow_vip,2026-04,496,694,0.36,0.052,10,770.78,1
+flow_welcome,2026-05,4057,11765,0.52,0.118,330,17823.22,21
+flow_cart_v2,2026-05,2526,6567,0.55,0.16,179,11836.84,27
+flow_cart_2024,2026-05,1060,2015,0.49,0.105,51,3171.09,9
+flow_browse,2026-05,5425,5696,0.44,0.083,113,6607.65,9
+flow_winback,2026-05,1917,5175,0.31,0.036,15,874.15,27
+flow_sunset,2026-05,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-05,4295,6013,0.58,0.14,137,6734.56,7
+flow_backinstock,2026-05,247,345,0.71,0.34,46,3097.38,0
+flow_bday,2026-05,642,898,0.62,0.22,70,4095.96,1
+flow_review,2026-05,3577,5007,0.47,0.09,0,0.0,6
+flow_vip,2026-05,470,658,0.36,0.052,9,730.38,1
+flow_welcome,2026-06,3784,10973,0.52,0.118,167,9033.69,20
+flow_cart_v2,2026-06,2532,6583,0.55,0.16,179,11864.95,27
+flow_cart_2024,2026-06,1063,2020,0.49,0.105,52,3178.62,9
+flow_browse,2026-06,5112,5367,0.44,0.083,107,6226.42,9
+flow_winback,2026-06,1921,5186,0.31,0.036,15,875.98,27
+flow_sunset,2026-06,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-06,4481,6273,0.58,0.14,143,7026.21,8
+flow_backinstock,2026-06,228,319,0.71,0.34,43,2859.12,0
+flow_bday,2026-06,576,806,0.62,0.22,63,3674.88,1
+flow_review,2026-06,3975,5565,0.47,0.09,0,0.0,7
+flow_vip,2026-06,506,708,0.36,0.052,10,786.32,1
+flow_welcome,2026-07,3820,11078,0.52,0.118,168,9100.27,20
+flow_cart_v2,2026-07,2700,7020,0.55,0.16,191,12652.2,29
+flow_cart_2024,2026-07,1134,2154,0.49,0.105,55,3389.53,9
+flow_browse,2026-07,5295,5559,0.44,0.083,52,3071.1,9
+flow_winback,2026-07,1821,4916,0.31,0.036,14,830.38,26
+flow_sunset,2026-07,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-07,4150,5810,0.58,0.14,132,6507.2,7
+flow_backinstock,2026-07,244,341,0.71,0.34,46,3059.76,0
+flow_bday,2026-07,628,879,0.62,0.22,69,4006.64,1
+flow_review,2026-07,3730,5222,0.47,0.09,0,0.0,6
+flow_vip,2026-07,455,637,0.36,0.052,9,707.07,1
+
+
+DELIVERABLE (the agent&#x27;s submission):
+--- memo ---
+# MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+
+
+Reply with ONLY a JSON object:
+{&quot;pass&quot;: true|false, &quot;quote_of_evidence&quot;: &quot;&lt;short quote from deliverable or evidence that decides it&gt;&quot;, &quot;rationale&quot;: &quot;&lt;1-3 sentences&gt;&quot;}
+Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.
+
+RESPONSE:
+{&quot;pass&quot;: true, &quot;quote_of_evidence&quot;: &quot;The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (WELCOME15) is restricted to two product lines, and it&#x27;s not referenced in the email.&quot;, &quot;rationale&quot;: &quot;The deliverable explicitly identifies the expired SOLSTICE10 discount code as the root cause of the welcome-flow revenue drop, noting it expired on 2026-05-31 and is still featured in the hero image, which matches the evidence that SOLSTICE10 expired on 2026-05-31 and the welcome flow&#x27;s conversions halved in June 2026.&quot;}</pre></details><details><summary>judge — a1_timing</summary><pre>PROMPT:
+You are grading ONE binary criterion of a marketing-agent deliverable.
+Judge ONLY this criterion — not overall quality.
+
+CRITERION:
+States the drop began with the June cohort, consistent with the May 31 code expiry.
+
+EVIDENCE FILES (ground truth from the brand environment):
+=== flows/flow_performance.csv ===
+flow_id,month,entries,emails_delivered,open_rate,click_rate,conversions,revenue_usd,unsubscribes
+flow_welcome,2024-08,3834,11118,0.52,0.118,299,16199.25,20
+flow_cart_2024,2024-08,2513,4774,0.51,0.135,155,9815.78,9
+flow_browse,2024-08,5393,5662,0.44,0.083,113,6568.67,9
+flow_winback,2024-08,1951,5267,0.31,0.036,15,889.66,27
+flow_sunset,2024-08,2587,4656,0.19,0.041,0,0.0,5
+flow_postpurchase,2024-08,3789,5304,0.58,0.14,121,5941.15,6
+flow_backinstock,2024-08,233,326,0.71,0.34,44,2921.82,0
+flow_bday,2024-08,622,870,0.62,0.22,68,3968.36,1
+flow_review,2024-08,3747,5245,0.47,0.09,0,0.0,6
+flow_vip,2024-08,496,694,0.36,0.052,10,770.78,1
+flow_welcome,2024-09,3752,10880,0.52,0.118,305,16478.09,20
+flow_cart_2024,2024-09,2563,4869,0.51,0.135,158,10011.08,9
+flow_browse,2024-09,5177,5435,0.44,0.083,108,6305.59,9
+flow_winback,2024-09,1992,5378,0.31,0.036,15,908.35,28
+flow_sunset,2024-09,2352,4233,0.19,0.041,0,0.0,4
+flow_postpurchase,2024-09,4025,5635,0.58,0.14,128,6311.2,7
+flow_backinstock,2024-09,252,352,0.71,0.34,47,3160.08,0
+flow_bday,2024-09,583,816,0.62,0.22,64,3719.54,1
+flow_review,2024-09,3591,5027,0.47,0.09,0,0.0,6
+flow_vip,2024-09,469,656,0.36,0.052,9,728.83,1
+flow_welcome,2024-10,3535,10251,0.52,0.118,302,16331.29,18
+flow_cart_2024,2024-10,2604,4947,0.51,0.135,161,10171.22,9
+flow_browse,2024-10,4796,5035,0.44,0.083,100,5841.53,8
+flow_winback,2024-10,2068,5583,0.31,0.036,16,943.01,29
+flow_sunset,2024-10,2374,4273,0.19,0.041,0,0.0,4
+flow_postpurchase,2024-10,4101,5741,0.58,0.14,131,6430.37,7
+flow_backinstock,2024-10,242,338,0.71,0.34,45,3034.68,0
+flow_bday,2024-10,604,845,0.62,0.22,66,3853.52,1
+flow_review,2024-10,3951,5531,0.47,0.09,0,0.0,7
+flow_vip,2024-10,493,690,0.36,0.052,10,766.12,1
+flow_welcome,2024-11,3663,10622,0.52,0.118,300,16244.06,19
+flow_cart_2024,2024-11,2549,4843,0.51,0.135,158,9956.39,9
+flow_browse,2024-11,5217,5477,0.44,0.083,109,6354.31,9
+flow_winback,2024-11,1876,5065,0.31,0.036,15,855.46,26
+flow_sunset,2024-11,2296,4132,0.19,0.041,0,0.0,4
+flow_postpurchase,2024-11,4188,5863,0.58,0.14,134,6566.78,7
+flow_backinstock,2024-11,250,350,0.71,0.34,47,3135.0,0
+flow_bday,2024-11,645,902,0.62,0.22,70,4115.1,1
+flow_review,2024-11,3869,5416,0.47,0.09,0,0.0,6
+flow_vip,2024-11,499,698,0.36,0.052,10,775.45,1
+flow_welcome,2024-12,3779,10959,0.52,0.118,302,16317.74,20
+flow_cart_2024,2024-12,2697,5124,0.51,0.135,167,10534.48,10
+flow_browse,2024-12,5328,5594,0.44,0.083,111,6489.5,9
+flow_winback,2024-12,1859,5019,0.31,0.036,14,847.7,26
+flow_sunset,2024-12,2509,4516,0.19,0.041,0,0.0,5
+flow_postpurchase,2024-12,3778,5289,0.58,0.14,120,5923.9,6
+flow_backinstock,2024-12,227,317,0.71,0.34,43,2846.58,0
+flow_bday,2024-12,606,848,0.62,0.22,66,3866.28,1
+flow_review,2024-12,4062,5686,0.47,0.09,0,0.0,7
+flow_vip,2024-12,513,718,0.36,0.052,10,797.2,1
+flow_welcome,2025-01,3433,9955,0.52,0.118,282,15275.93,18
+flow_cart_2024,2025-01,2344,4453,0.51,0.135,145,9155.66,8
+flow_browse,2025-01,5044,5296,0.44,0.083,105,6143.59,8
+flow_winback,2025-01,1836,4957,0.31,0.036,14,837.22,26
+flow_sunset,2025-01,2318,4172,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-01,4226,5916,0.58,0.14,135,6626.37,7
+flow_backinstock,2025-01,243,340,0.71,0.34,46,3047.22,0
+flow_bday,2025-01,624,873,0.62,0.22,68,3981.12,1
+flow_review,2025-01,4100,5740,0.47,0.09,0,0.0,7
+flow_vip,2025-01,493,690,0.36,0.052,10,766.12,1
+flow_welcome,2025-02,3944,11437,0.52,0.118,342,18476.15,21
+flow_cart_2024,2025-02,2769,5261,0.51,0.135,171,10815.71,10
+flow_browse,2025-02,4984,5233,0.44,0.083,104,6070.51,8
+flow_winback,2025-02,1903,5138,0.31,0.036,15,867.77,27
+flow_sunset,2025-02,2527,4548,0.19,0.041,0,0.0,5
+flow_postpurchase,2025-02,4181,5853,0.58,0.14,133,6555.81,7
+flow_backinstock,2025-02,234,327,0.71,0.34,44,2934.36,0
+flow_bday,2025-02,613,858,0.62,0.22,67,3910.94,1
+flow_review,2025-02,3879,5430,0.47,0.09,0,0.0,7
+flow_vip,2025-02,466,652,0.36,0.052,9,724.16,1
+flow_welcome,2025-03,3740,10846,0.52,0.118,312,16892.19,20
+flow_cart_2024,2025-03,2551,4846,0.51,0.135,158,9964.21,9
+flow_browse,2025-03,5570,5848,0.44,0.083,116,6784.26,9
+flow_winback,2025-03,1899,5127,0.31,0.036,15,865.94,27
+flow_sunset,2025-03,2214,3985,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-03,3914,5479,0.58,0.14,125,6137.15,7
+flow_backinstock,2025-03,233,326,0.71,0.34,44,2921.82,0
+flow_bday,2025-03,635,889,0.62,0.22,69,4051.3,1
+flow_review,2025-03,4568,6395,0.47,0.09,0,0.0,8
+flow_vip,2025-03,520,728,0.36,0.052,10,808.08,1
+flow_welcome,2025-04,3806,11037,0.52,0.118,322,17439.12,20
+flow_cart_2024,2025-04,2844,5403,0.51,0.135,176,11108.66,10
+flow_browse,2025-04,5205,5465,0.44,0.083,109,6339.69,9
+flow_winback,2025-04,2005,5413,0.31,0.036,16,914.28,28
+flow_sunset,2025-04,2474,4453,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-04,4304,6025,0.58,0.14,137,6748.67,7
+flow_backinstock,2025-04,232,324,0.71,0.34,44,2909.28,0
+flow_bday,2025-04,694,971,0.62,0.22,76,4427.72,1
+flow_review,2025-04,4035,5649,0.47,0.09,0,0.0,7
+flow_vip,2025-04,496,694,0.36,0.052,10,770.78,1
+flow_welcome,2025-05,3864,11205,0.52,0.118,314,16982.14,20
+flow_cart_2024,2025-05,2587,4915,0.51,0.135,160,10104.82,9
+flow_browse,2025-05,5243,5505,0.44,0.083,110,6385.97,9
+flow_winback,2025-05,1763,4760,0.31,0.036,14,803.93,25
+flow_sunset,2025-05,2438,4388,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-05,3906,5468,0.58,0.14,124,6124.61,7
+flow_backinstock,2025-05,242,338,0.71,0.34,45,3034.68,0
+flow_bday,2025-05,604,845,0.62,0.22,66,3853.52,1
+flow_review,2025-05,4183,5856,0.47,0.09,0,0.0,7
+flow_vip,2025-05,476,666,0.36,0.052,9,739.7,1
+flow_welcome,2025-06,3839,11133,0.52,0.118,305,16508.02,20
+flow_cart_2024,2025-06,2508,4765,0.51,0.135,155,9796.25,9
+flow_browse,2025-06,5985,6284,0.44,0.083,125,7289.73,10
+flow_winback,2025-06,1778,4800,0.31,0.036,14,810.77,25
+flow_sunset,2025-06,2548,4586,0.19,0.041,0,0.0,5
+flow_postpurchase,2025-06,3992,5588,0.58,0.14,127,6259.46,7
+flow_backinstock,2025-06,256,358,0.71,0.34,48,3210.24,0
+flow_bday,2025-06,654,915,0.62,0.22,71,4172.52,1
+flow_review,2025-06,3950,5530,0.47,0.09,0,0.0,7
+flow_vip,2025-06,461,645,0.36,0.052,9,716.39,1
+flow_welcome,2025-07,3873,11231,0.52,0.118,299,16161.2,20
+flow_cart_2024,2025-07,2444,4643,0.51,0.135,151,9546.26,9
+flow_browse,2025-07,5120,5376,0.44,0.083,107,6236.16,9
+flow_winback,2025-07,1957,5283,0.31,0.036,15,892.39,27
+flow_sunset,2025-07,2442,4395,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-07,4222,5910,0.58,0.14,135,6620.1,7
+flow_backinstock,2025-07,260,364,0.71,0.34,49,3260.4,0
+flow_bday,2025-07,605,847,0.62,0.22,66,3859.9,1
+flow_review,2025-07,3923,5492,0.47,0.09,0,0.0,7
+flow_vip,2025-07,486,680,0.36,0.052,10,755.24,1
+flow_welcome,2025-08,3943,11434,0.52,0.118,309,16705.6,21
+flow_cart_2024,2025-08,2699,5128,0.51,0.135,167,10542.29,10
+flow_browse,2025-08,5311,5576,0.44,0.083,111,6468.8,9
+flow_winback,2025-08,1885,5089,0.31,0.036,15,859.56,26
+flow_sunset,2025-08,2346,4222,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-08,4559,6382,0.58,0.14,145,7148.51,8
+flow_backinstock,2025-08,237,331,0.71,0.34,45,2971.98,0
+flow_bday,2025-08,541,757,0.62,0.22,59,3451.58,1
+flow_review,2025-08,4118,5765,0.47,0.09,0,0.0,7
+flow_vip,2025-08,461,645,0.36,0.052,9,716.39,1
+flow_welcome,2025-09,3757,10895,0.52,0.118,311,16847.86,20
+flow_cart_2024,2025-09,2546,4837,0.51,0.135,157,9944.68,9
+flow_browse,2025-09,5298,5562,0.44,0.083,111,6452.96,9
+flow_winback,2025-09,1815,4900,0.31,0.036,14,827.64,25
+flow_sunset,2025-09,2433,4379,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-09,4167,5833,0.58,0.14,133,6533.86,7
+flow_backinstock,2025-09,256,358,0.71,0.34,48,3210.24,0
+flow_bday,2025-09,636,890,0.62,0.22,69,4057.68,1
+flow_review,2025-09,4009,5612,0.47,0.09,0,0.0,7
+flow_vip,2025-09,469,656,0.36,0.052,9,728.83,1
+flow_welcome,2025-10,3870,11223,0.52,0.118,313,16947.66,20
+flow_cart_2024,2025-10,2561,4865,0.51,0.135,158,10003.27,9
+flow_browse,2025-10,4663,4896,0.44,0.083,97,5679.53,8
+flow_winback,2025-10,1879,5073,0.31,0.036,15,856.82,26
+flow_sunset,2025-10,2335,4203,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-10,3928,5499,0.58,0.14,125,6159.1,7
+flow_backinstock,2025-10,233,326,0.71,0.34,44,2921.82,0
+flow_bday,2025-10,541,757,0.62,0.22,59,3451.58,1
+flow_review,2025-10,3622,5070,0.47,0.09,0,0.0,6
+flow_vip,2025-10,474,663,0.36,0.052,9,736.6,1
+flow_welcome,2025-11,3945,11440,0.52,0.118,330,17830.07,21
+flow_cart_2024,2025-11,2789,5299,0.51,0.135,172,10893.83,10
+flow_browse,2025-11,5371,5639,0.44,0.083,112,6541.88,9
+flow_winback,2025-11,1819,4911,0.31,0.036,14,829.46,26
+flow_sunset,2025-11,2673,4811,0.19,0.041,0,0.0,5
+flow_postpurchase,2025-11,4128,5779,0.58,0.14,132,6472.7,7
+flow_backinstock,2025-11,230,322,0.71,0.34,43,2884.2,0
+flow_bday,2025-11,610,854,0.62,0.22,67,3891.8,1
+flow_review,2025-11,4106,5748,0.47,0.09,0,0.0,7
+flow_vip,2025-11,452,632,0.36,0.052,9,702.41,1
+flow_welcome,2025-12,3720,10788,0.52,0.118,316,17100.03,19
+flow_cart_2024,2025-12,2528,4803,0.51,0.135,156,9874.37,9
+flow_browse,2025-12,4994,5243,0.44,0.083,104,6082.69,8
+flow_winback,2025-12,1893,5111,0.31,0.036,15,863.21,27
+flow_sunset,2025-12,2244,4039,0.19,0.041,0,0.0,4
+flow_postpurchase,2025-12,4273,5982,0.58,0.14,136,6700.06,7
+flow_backinstock,2025-12,244,341,0.71,0.34,46,3059.76,0
+flow_bday,2025-12,583,816,0.62,0.22,64,3719.54,1
+flow_review,2025-12,3613,5058,0.47,0.09,0,0.0,6
+flow_vip,2025-12,458,641,0.36,0.052,9,711.73,1
+flow_welcome,2026-01,4045,11730,0.52,0.118,333,18021.09,21
+flow_cart_2024,2026-01,2394,4548,0.51,0.135,148,9350.96,9
+flow_browse,2026-01,5281,5545,0.44,0.083,110,6432.26,9
+flow_winback,2026-01,1915,5170,0.31,0.036,15,873.24,27
+flow_sunset,2026-01,2374,4273,0.19,0.041,0,0.0,4
+flow_postpurchase,2026-01,3916,5482,0.58,0.14,125,6140.29,7
+flow_backinstock,2026-01,249,348,0.71,0.34,47,3122.46,0
+flow_bday,2026-01,590,826,0.62,0.22,64,3764.2,1
+flow_review,2026-01,4188,5863,0.47,0.09,0,0.0,7
+flow_vip,2026-01,481,673,0.36,0.052,10,747.47,1
+flow_welcome,2026-02,3636,10544,0.52,0.118,301,16291.53,19
+flow_cart_2024,2026-02,2497,4744,0.51,0.135,154,9753.28,9
+flow_browse,2026-02,5517,5792,0.44,0.083,115,6719.71,9
+flow_winback,2026-02,1819,4911,0.31,0.036,14,829.46,26
+flow_sunset,2026-02,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-02,4220,5908,0.58,0.14,135,6616.96,7
+flow_backinstock,2026-02,244,341,0.71,0.34,46,3059.76,0
+flow_bday,2026-02,633,886,0.62,0.22,69,4038.54,1
+flow_review,2026-02,3883,5436,0.47,0.09,0,0.0,7
+flow_vip,2026-02,468,655,0.36,0.052,9,727.27,1
+flow_welcome,2026-03,3658,10608,0.52,0.118,310,16787.89,19
+flow_cart_v2,2026-03,2613,6793,0.55,0.16,185,12244.52,28
+flow_cart_2024,2026-03,1097,2085,0.49,0.105,53,3280.31,9
+flow_browse,2026-03,5491,5765,0.44,0.083,115,6688.04,9
+flow_winback,2026-03,1910,5157,0.31,0.036,15,870.96,27
+flow_sunset,2026-03,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-03,3992,5588,0.58,0.14,127,6259.46,7
+flow_backinstock,2026-03,243,340,0.71,0.34,46,3047.22,0
+flow_bday,2026-03,582,814,0.62,0.22,64,3713.16,1
+flow_review,2026-03,3630,5082,0.47,0.09,0,0.0,6
+flow_vip,2026-03,476,666,0.36,0.052,9,739.7,1
+flow_welcome,2026-04,3674,10654,0.52,0.118,307,16586.95,19
+flow_cart_v2,2026-04,2446,6359,0.55,0.16,173,11461.96,26
+flow_cart_2024,2026-04,1027,1951,0.49,0.105,50,3070.66,9
+flow_browse,2026-04,5012,5262,0.44,0.083,105,6104.62,8
+flow_winback,2026-04,1684,4546,0.31,0.036,13,767.9,24
+flow_sunset,2026-04,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-04,4027,5637,0.58,0.14,128,6314.34,7
+flow_backinstock,2026-04,220,308,0.71,0.34,41,2758.8,0
+flow_bday,2026-04,624,873,0.62,0.22,68,3981.12,1
+flow_review,2026-04,3954,5535,0.47,0.09,0,0.0,7
+flow_vip,2026-04,496,694,0.36,0.052,10,770.78,1
+flow_welcome,2026-05,4057,11765,0.52,0.118,330,17823.22,21
+flow_cart_v2,2026-05,2526,6567,0.55,0.16,179,11836.84,27
+flow_cart_2024,2026-05,1060,2015,0.49,0.105,51,3171.09,9
+flow_browse,2026-05,5425,5696,0.44,0.083,113,6607.65,9
+flow_winback,2026-05,1917,5175,0.31,0.036,15,874.15,27
+flow_sunset,2026-05,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-05,4295,6013,0.58,0.14,137,6734.56,7
+flow_backinstock,2026-05,247,345,0.71,0.34,46,3097.38,0
+flow_bday,2026-05,642,898,0.62,0.22,70,4095.96,1
+flow_review,2026-05,3577,5007,0.47,0.09,0,0.0,6
+flow_vip,2026-05,470,658,0.36,0.052,9,730.38,1
+flow_welcome,2026-06,3784,10973,0.52,0.118,167,9033.69,20
+flow_cart_v2,2026-06,2532,6583,0.55,0.16,179,11864.95,27
+flow_cart_2024,2026-06,1063,2020,0.49,0.105,52,3178.62,9
+flow_browse,2026-06,5112,5367,0.44,0.083,107,6226.42,9
+flow_winback,2026-06,1921,5186,0.31,0.036,15,875.98,27
+flow_sunset,2026-06,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-06,4481,6273,0.58,0.14,143,7026.21,8
+flow_backinstock,2026-06,228,319,0.71,0.34,43,2859.12,0
+flow_bday,2026-06,576,806,0.62,0.22,63,3674.88,1
+flow_review,2026-06,3975,5565,0.47,0.09,0,0.0,7
+flow_vip,2026-06,506,708,0.36,0.052,10,786.32,1
+flow_welcome,2026-07,3820,11078,0.52,0.118,168,9100.27,20
+flow_cart_v2,2026-07,2700,7020,0.55,0.16,191,12652.2,29
+flow_cart_2024,2026-07,1134,2154,0.49,0.105,55,3389.53,9
+flow_browse,2026-07,5295,5559,0.44,0.083,52,3071.1,9
+flow_winback,2026-07,1821,4916,0.31,0.036,14,830.38,26
+flow_sunset,2026-07,0,0,0.19,0.041,0,0.0,0
+flow_postpurchase,2026-07,4150,5810,0.58,0.14,132,6507.2,7
+flow_backinstock,2026-07,244,341,0.71,0.34,46,3059.76,0
+flow_bday,2026-07,628,879,0.62,0.22,69,4006.64,1
+flow_review,2026-07,3730,5222,0.47,0.09,0,0.0,6
+flow_vip,2026-07,455,637,0.36,0.052,9,707.07,1
+
+
+=== campaigns/discount_codes.csv ===
+code,discount,applies_to,created,expires,status
+SOLSTICE10,10%,first order,2025-06-01,2026-05-31,expired
+WELCOME15,15%,&quot;first order, Midnight &amp; Terra only&quot;,2026-01-10,2026-12-31,active
+BDAY20,20%,birthday flow,2025-03-01,2026-12-31,active
+VIPFALL,free shipping,VIP segment,2026-07-01,2026-10-31,active
+
+
+DELIVERABLE (the agent&#x27;s submission):
+--- memo ---
+# MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+
+
+Reply with ONLY a JSON object:
+{&quot;pass&quot;: true|false, &quot;quote_of_evidence&quot;: &quot;&lt;short quote from deliverable or evidence that decides it&gt;&quot;, &quot;rationale&quot;: &quot;&lt;1-3 sentences&gt;&quot;}
+Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.
+
+RESPONSE:
+{&quot;pass&quot;: true, &quot;quote_of_evidence&quot;: &quot;The welcome flow (flow_welcome) revenue dropped from a steady ~$17K/month to $9,034 in June&quot;, &quot;rationale&quot;: &quot;The deliverable explicitly states the drop began in June 2026, and the evidence shows that the SOLSTICE10 discount code expired on 2026-05-31, so the root cause (expired code) applies from the first cohort that entered after that expiry, i.e., the June cohort.&quot;}</pre></details><details><summary>extraction — Revenue-impact estimate reconciles with pre/post conversion delta × entry volume × AOV, within tolerance.</summary><pre>PROMPT:
+Extract the numeric value the deliverable below claims for this criterion. Criterion: Revenue-impact estimate reconciles with pre/post conversion delta × entry volume × AOV, within tolerance.
+Hint: the claimed monthly revenue impact of the welcome-flow drop, in dollars
+If the deliverable expresses the claim in a different unit or period than the hint asks for (e.g. a two-month total when the hint asks per month), convert it to the hinted unit before answering. Reply with ONLY a JSON object: {&quot;value&quot;: &lt;number&gt;} or {&quot;value&quot;: null} if no value is claimed.
+
+DELIVERABLE:
+--- memo ---
+# MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+
+
+RESPONSE:
+{&quot;value&quot;: 8800}</pre></details><details><summary>judge — a1_distractors</summary><pre>PROMPT:
+You are grading ONE binary criterion of a marketing-agent deliverable.
+Judge ONLY this criterion — not overall quality.
+
+CRITERION:
+Does not attribute the drop to seasonality, deliverability, or the (irrelevant) March Yahoo incident.
+
+EVIDENCE FILES (ground truth from the brand environment):
+=== deliverability/deliverability_report.md ===
+# Deliverability status — July 2026
+
+**Gmail spam-complaint rate (rolling 30d):** Feb 0.09% · Mar 0.11% · Apr 0.14% · May 0.17% ·
+Jun 0.23% · **Jul 0.28%** — above Gmail&#x27;s 0.10% guidance and approaching the 0.30% enforcement line.
+One-click unsubscribe: implemented. SPF/DKIM/DMARC: pass.
+
+**Contributing factors (open questions for lifecycle team):**
+- The sunset/re-permission flow has sent nothing since January; unengaged-12m+ cohort has grown
+  from ~96k to ~131k profiles and full-list campaigns are still including them.
+- Campaign volume roughly doubled in June; unsub and complaint rates per send are up materially.
+- March incident: Yahoo temporary deferrals (resolved Mar 19; no lasting impact — do not confuse
+  with the Gmail trend).
+
+**House rules while this is elevated:** no sends to unengaged-12m+; nothing that would re-mail the
+24-month inactive file; keep full-list sends to transactional-adjacent announcements only.
+
+
+DELIVERABLE (the agent&#x27;s submission):
+--- memo ---
+# MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+
+
+Reply with ONLY a JSON object:
+{&quot;pass&quot;: true|false, &quot;quote_of_evidence&quot;: &quot;&lt;short quote from deliverable or evidence that decides it&gt;&quot;, &quot;rationale&quot;: &quot;&lt;1-3 sentences&gt;&quot;}
+Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.
+
+RESPONSE:
+{&quot;pass&quot;: true, &quot;quote_of_evidence&quot;: &quot;Root Cause: Expired Discount Code in Email Hero Image&quot;, &quot;rationale&quot;: &quot;The deliverable clearly identifies the root cause as an expired discount code, not seasonality, deliverability, or the March Yahoo incident. It explicitly states that top-of-funnel metrics (including deliverability) are unchanged, ruling out those factors.&quot;}</pre></details><details><summary>judge — a1_fix_prevention</summary><pre>PROMPT:
+You are grading ONE binary criterion of a marketing-agent deliverable.
+Judge ONLY this criterion — not overall quality.
+
+CRITERION:
+Proposes both an immediate fix and a prevention practice (e.g. code-expiry monitoring).
+
+EVIDENCE FILES (ground truth from the brand environment):
+(no evidence files linked)
+
+DELIVERABLE (the agent&#x27;s submission):
+--- memo ---
+# MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+
+
+Reply with ONLY a JSON object:
+{&quot;pass&quot;: true|false, &quot;quote_of_evidence&quot;: &quot;&lt;short quote from deliverable or evidence that decides it&gt;&quot;, &quot;rationale&quot;: &quot;&lt;1-3 sentences&gt;&quot;}
+Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.
+
+RESPONSE:
+{&quot;pass&quot;: true, &quot;quote_of_evidence&quot;: &quot;Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer. ... Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.&quot;, &quot;rationale&quot;: &quot;The deliverable clearly proposes an immediate fix (updating the hero image) and a prevention practice (adding a check in the discount-code lifecycle to monitor code expiry and trigger updates), satisfying the criterion.&quot;}</pre></details><details><summary>judge — a1_remail</summary><pre>PROMPT:
+You are grading ONE binary criterion of a marketing-agent deliverable.
+Judge ONLY this criterion — not overall quality.
+
+CRITERION:
+Notes the affected cohort could be re-mailed a working code.
+
+EVIDENCE FILES (ground truth from the brand environment):
+(no evidence files linked)
+
+DELIVERABLE (the agent&#x27;s submission):
+--- memo ---
+# MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+
+
+Reply with ONLY a JSON object:
+{&quot;pass&quot;: true|false, &quot;quote_of_evidence&quot;: &quot;&lt;short quote from deliverable or evidence that decides it&gt;&quot;, &quot;rationale&quot;: &quot;&lt;1-3 sentences&gt;&quot;}
+Judge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.
+
+RESPONSE:
+{&quot;pass&quot;: false, &quot;quote_of_evidence&quot;: &quot;No evidence files linked&quot;, &quot;rationale&quot;: &quot;The criterion requires that the deliverable note the affected cohort could be re-mailed a working code, but the deliverable makes no mention of re-mailing or sending a corrected code to the cohort. The recommended next steps focus on updating the image and process fixes, not re-engaging the affected subscribers via a new email with a working code.&quot;}</pre></details>
+<h2>Deliverable</h2><details><summary>memo</summary><pre># MEMO: Welcome Flow Revenue Drop — June 2026
+
+**To:** Standup (Thursday)
+**From:** Lifecycle Marketing
+**Date:** August 2026
+**Subject:** Welcome series revenue fell ~49% in June — root cause identified
+
+---
+
+## What Happened
+
+The welcome flow (`flow_welcome`) revenue dropped from a steady ~$17K/month to **$9,034 in June** and **$9,100 in July** — a roughly **$8,800/month shortfall** (~49% decline). Conversions halved from ~330/month to ~167/month.
+
+| Metric | May 2026 | June 2026 | July 2026 |
+|---|---|---|---|
+| Flow entries | 4,057 | 3,784 | 3,820 |
+| Emails delivered | 11,765 | 10,973 | 11,078 |
+| Open rate | 52% | 52% | 52% |
+| Click rate | 11.8% | 11.8% | 11.8% |
+| **Conversions** | **330** | **167** | **168** |
+| **Revenue** | **$17,823** | **$9,034** | **$9,100** |
+| Conversion rate | 8.1% | 4.4% | 4.4% |
+
+Top-of-funnel metrics (entries, deliverability, open rate, click rate) are **unchanged**. The issue is purely in the conversion step — people see the email, click at the same rate, but then don&#x27;t convert.
+
+---
+
+## Root Cause: Expired Discount Code in Email Hero Image
+
+The welcome email&#x27;s hero image (`hero_welcome.png`) contains the welcome offer in static image text with **no live-text code fallback** (per the HTML comment: *&quot;hero contains the welcome offer; no alt text, no live-text code fallback&quot;*).
+
+### Timeline
+
+- **2025-06-01:** Discount code `SOLSTICE10` (10% off first order) was created.
+- **2025-06-02:** Welcome flow last edited — hero image was designed featuring the `SOLSTICE10` offer.
+- **2026-01-10:** Discount code `WELCOME15` (15% off, but restricted to **Midnight &amp; Terra only**) was created.
+- **2026-05-31:** `SOLSTICE10` **expired**.
+- **June 2026 onward:** The hero image still shows/promotes the old offer, but the code no longer works. The only active first-order code (`WELCOME15`) is restricted to two product lines, and it&#x27;s not referenced in the email.
+
+### Why It Wasn&#x27;t Caught
+
+- The welcome email template was last edited on **2025-06-02** — no one updated the hero image when the discount code changed.
+- The offer is baked into a static PNG image, not dynamic/live text, so it didn&#x27;t auto-update with the code system.
+- No alt text was provided, so accessibility/QA checks didn&#x27;t surface the offer text either.
+
+---
+
+## Financial Impact
+
+| Timeframe | Expected revenue (avg of prior 12 months) | Actual | Shortfall |
+|---|---|---|---|
+| June 2026 | ~$16,884 | $9,034 | **−$7,850** |
+| July 2026 | ~$16,884 | $9,100 | **−$7,784** |
+| **Total (2 months)** | **~$33,768** | **$18,134** | **−$15,634** |
+
+If not fixed, each additional month costs ~$7,800+ in lost revenue. The welcome flow is one of the highest-converting automated flows, typically generating ~$17K/mo.
+
+---
+
+## Recommended Next Steps
+
+1. **Immediate:** Update the hero image (`hero_welcome.png`) to feature the active `WELCOME15` code (15% off first order on Midnight &amp; Terra). Add proper alt text describing the offer.
+2. **Better fix:** Convert the offer to live text in the HTML template so it can be updated without re-rendering images. This also resolves the missing alt-text accessibility issue.
+3. **Process fix:** Add a step in the discount-code lifecycle (creation/expiration) to check whether any triggered email/flows reference the old code and schedule a hero image update.
+4. **Caveat:** `WELCOME15` is restricted to &quot;Midnight &amp; Terra only&quot; — narrower than the previous general first-order discount. Even after the image update, the conversion rate may not fully recover to 8% unless the offer scope is broadened (within brand guidelines — note: Solstice cannot be %-off discounted per brand policy).
+
+---
+
+## Escalation Note
+
+Per ops policy: the welcome email goes to ~3,800-4,000 new subscribers/month, well under the 100K threshold. The hero image update is a standard creative change within my authority. I recommend Ravi (ecomm) approve the updated creative before the next send cycle.
+</pre></details>
+<h2>File access log</h2>
+<p class="muted">Every file the agent opened. This log powers fairness audits now and duty-to-notice grading later.</p>
+<table><tr><th>Time (UTC)</th><th>Path</th><th></th></tr><tr><td>2026-08-19T17:58:08+00:00</td><td><code>flows/flow_performance.csv</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:08+00:00</td><td><code>flows/flows.json</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:08+00:00</td><td><code>campaigns/messages/welcome_email_1.html</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:08+00:00</td><td><code>campaigns/discount_codes.csv</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:29+00:00</td><td><code>campaigns/messages/hero_welcome.png</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:29+00:00</td><td><code>campaigns/messages/renders/welcome_email_1_light.png</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:29+00:00</td><td><code>campaigns/messages/renders/bfcm_preview_desktop.png</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:29+00:00</td><td><code>crm/events_orders_sample.csv</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:56+00:00</td><td><code>deliverability/deliverability_report.md</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:56+00:00</td><td><code>crm/profiles_sample.csv</code></td><td>ok</td></tr><tr><td>2026-08-19T17:58:56+00:00</td><td><code>crm/segments.json</code></td><td>ok</td></tr><tr><td>2026-08-19T17:59:52+00:00</td><td><code>campaigns/campaign_history.csv</code></td><td>ok</td></tr><tr><td>2026-08-19T17:59:52+00:00</td><td><code>comms/merchandising_email_2026-07-28.md</code></td><td>ok</td></tr><tr><td>2026-08-19T17:59:52+00:00</td><td><code>comms/founder_slack_2026-08-04.md</code></td><td>ok</td></tr><tr><td>2026-08-19T18:00:43+00:00</td><td><code>ops/authority_and_escalation.md</code></td><td>ok</td></tr><tr><td>2026-08-19T18:01:10+00:00</td><td><code>campaigns/messages/renders/welcome_email_1_light.png</code></td><td>ok</td></tr><tr><td>2026-08-19T18:01:10+00:00</td><td><code>campaigns/client_engagement_sample.csv</code></td><td>ok</td></tr><tr><td>2026-08-19T18:01:38+00:00</td><td><code>goals/h2_targets.md</code></td><td>ok</td></tr><tr><td>2026-08-19T18:01:38+00:00</td><td><code>brand/brand_guidelines.md</code></td><td>ok</td></tr><tr><td>2026-08-19T18:02:05+00:00</td><td><code>campaigns/messages/welcome_email_1.html</code></td><td>ok</td></tr><tr><td>2026-08-19T18:02:30+00:00</td><td><code>campaigns/sms_send_log_sample.csv</code></td><td>ok</td></tr></table>
+<p class="muted">Raw data: <code>report.json</code> alongside this file.</p>
+</body></html>

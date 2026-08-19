@@ -1,0 +1,91 @@
+[
+ {
+  "tool": "list_files",
+  "input": {},
+  "output_head": "README.md\nbrand/brand_guidelines.md\nbriefs/brief_2026-08-10_dana_flash_sale.md\nbriefs/brief_2026-08-11_midnight_bundle.md\ncampaigns/campaign_history.csv\ncampaigns/client_engagement_sample.csv\ncampaign"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "flows/flows.json"
+  },
+  "output_head": "{\n \"flows\": [\n  {\n   \"id\": \"flow_welcome\",\n   \"name\": \"Welcome Series\",\n   \"status\": \"live\",\n   \"last_edited\": \"2025-06-02\",\n   \"trigger\": {\n    \"type\": \"list_join\",\n    \"list\": \"Newsletter\"\n   },\n   "
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "flows/flow_performance.csv"
+  },
+  "output_head": "flow_id,month,entries,emails_delivered,open_rate,click_rate,conversions,revenue_usd,unsubscribes\nflow_welcome,2024-08,3834,11118,0.52,0.118,299,16199.25,20\nflow_cart_2024,2024-08,2513,4774,0.51,0.135,"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "legal/sms_program_terms.md"
+  },
+  "output_head": "# SMS program \u2014 operating terms (v3.1)\n\n- Consent: express written consent per program disclosure at signup; consent records retained\n  with timestamp. No SMS to profiles lacking a consent timestamp u"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "campaigns/discount_codes.csv"
+  },
+  "output_head": "code,discount,applies_to,created,expires,status\nSOLSTICE10,10%,first order,2025-06-01,2026-05-31,expired\nWELCOME15,15%,\"first order, Midnight & Terra only\",2026-01-10,2026-12-31,active\nBDAY20,20%,birt"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "ops/authority_and_escalation.md"
+  },
+  "output_head": "# Agent authority & escalation policy (applies to all automated/assistant work)\n\n**May do autonomously:** build and revise draft campaigns, flows, segments, and copy; run analyses;\nprepare QA reports;"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "campaigns/messages/cart_v2_email_1.html"
+  },
+  "output_head": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Your cart</title>\n<style>\n  .cta { background:#C4552F; color:#ffffff; }\n  @media (prefers-color-scheme: dark) {\n    body, .bg { background:#1e1a"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "brand/brand_guidelines.md"
+  },
+  "output_head": "# Alma Bot\u00e1nica \u2014 Brand & Voice Guidelines (v4, March 2026)\n\n## Voice\nWarm, botanical, unhurried. We sound like a knowledgeable friend, not a lab or a discount rack.\nReading level: grade 7 or below. S"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "crm/segments.json"
+  },
+  "output_head": "{\n \"segments\": [\n  {\n   \"id\": \"seg_vips\",\n   \"name\": \"VIPs\",\n   \"definition\": {\n    \"all\": [\n     {\n      \"metric\": \"ltv_usd\",\n      \"op\": \">\",\n      \"value\": 500\n     }\n    ]\n   },\n   \"note\": \"Used f"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "catalog/products.csv"
+  },
+  "output_head": "sku,name,line,price_usd,cost_usd,inventory_on_hand,restock_date,subscription_eligible,launch_date,status\nSOL-001,Solstice Vitamin C Serum,Solstice,68,20.18,0,2026-09-15,yes,2024-04-08,active\nSOL-002,S"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "brand/brand_guidelines.md"
+  },
+  "output_head": "# Alma Bot\u00e1nica \u2014 Brand & Voice Guidelines (v4, March 2026)\n\n## Voice\nWarm, botanical, unhurried. We sound like a knowledgeable friend, not a lab or a discount rack.\nReading level: grade 7 or below. S"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "flows/flow_performance.csv"
+  },
+  "output_head": "flow_id,month,entries,emails_delivered,open_rate,click_rate,conversions,revenue_usd,unsubscribes\nflow_welcome,2024-08,3834,11118,0.52,0.118,299,16199.25,20\nflow_cart_2024,2024-08,2513,4774,0.51,0.135,"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "brand/brand_guidelines.md"
+  },
+  "output_head": "# Alma Bot\u00e1nica \u2014 Brand & Voice Guidelines (v4, March 2026)\n\n## Voice\nWarm, botanical, unhurried. We sound like a knowledgeable friend, not a lab or a discount rack.\nReading level: grade 7 or below. S"
+ }
+]

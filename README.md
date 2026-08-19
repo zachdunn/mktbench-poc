@@ -25,8 +25,8 @@ cp .env.example .env                                # set an Anthropic or OpenRo
 python3 run_eval.py --task A1 --agent llm
 ```
 
-Each run writes `runs/<run-id>/report.html` — open it in a browser. Tests:
-`python3 -m unittest discover -s tests`.
+Each run writes `runs/<run-id>/report.html` — open it in a browser, or see committed samples in
+[`examples/`](examples/). Tests: `python3 -m unittest discover -s tests`.
 
 ## Documentation
 
