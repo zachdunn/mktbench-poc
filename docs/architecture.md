@@ -17,7 +17,7 @@ harness/
   adapters/               replay (canned deliverables) · llm (read_file/submit tool loop)
   scoring.py              gates → shippable; quality conditional; escalation pair metrics
   report_html.py          self-contained report
-tasks/alma-botanica/      6 machine-readable task files authored from the spec's worked examples
+tasks/<universe>/<category>/  task files by taxonomy: account-audit · flow-design · escalation
 canned/alma-botanica/     3 canned deliverables per task (good / bad / edge)
 universes/                the closed brand environments + their generators and answer keys
 tests/                    acceptance + unit tests (stdlib unittest, no deps)
@@ -39,7 +39,10 @@ Each run writes `runs/<run-id>/report.json`, `report.html`, and (for the LLM ada
 
 ## Adding a task
 
-1. Drop `tasks/<universe>/<ID>.json` — see `tasks/alma-botanica/F1.json` for the shape.
+1. Drop `tasks/<universe>/<category>/<ID>-<slug>.json` — see
+   `tasks/alma-botanica/flow-design/F1-cart-flow-consolidation.json` for the shape. Categories
+   mirror the spec's taxonomy (`account-audit`, `flow-design`, `escalation`); the harness
+   resolves tasks by their `id` field, so folder and slug are for humans.
 2. Add canned deliverables under `canned/<universe>/<ID>/{good,bad,edge}/` (every file in the
    variant directory becomes a deliverable part named by its filename).
 3. If the task grades flow changes, list the flows in its remit in `invariant_scope`.

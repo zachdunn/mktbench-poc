@@ -81,7 +81,19 @@ def load_task(path: Path) -> Task:
 
 
 def load_task_by_id(task_id: str, universe: str = "alma-botanica") -> Task:
-    path = config.TASKS_ROOT / universe / f"{task_id}.json"
-    if not path.exists():
-        raise TaskSpecError(f"no task file at {path}")
-    return load_task(path)
+    """Find a task by its `id` field anywhere under tasks/<universe>/ — task files live in
+    category folders with descriptive slugs (e.g. flow-design/F1-cart-flow-consolidation.json),
+    so resolution goes by content, not filename."""
+    root = config.TASKS_ROOT / universe
+    for path in sorted(root.rglob("*.json")):
+        try:
+            if json.loads(path.read_text()).get("id") == task_id:
+                return load_task(path)
+        except json.JSONDecodeError as e:
+            raise TaskSpecError(f"unparsable task file {path}: {e}") from e
+    raise TaskSpecError(f"no task with id {task_id!r} under {root}")
+
+
+def list_task_ids(universe: str = "alma-botanica") -> list[str]:
+    root = config.TASKS_ROOT / universe
+    return sorted(json.loads(p.read_text()).get("id", "?") for p in root.rglob("*.json"))
