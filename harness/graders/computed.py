@@ -34,6 +34,9 @@ def extract_value(text: str, extract: dict, ctx: GradingContext, criterion_text:
         prompt = (
             "Extract the numeric value the deliverable below claims for this criterion. "
             f"Criterion: {criterion_text}\nHint: {extract.get('hint', '')}\n"
+            "If the deliverable expresses the claim in a different unit or period than the hint "
+            "asks for (e.g. a two-month total when the hint asks per month), convert it to the "
+            "hinted unit before answering. "
             "Reply with ONLY a JSON object: {\"value\": <number>} or {\"value\": null} if no value is claimed.\n\n"
             f"DELIVERABLE:\n{text[:20000]}"
         )

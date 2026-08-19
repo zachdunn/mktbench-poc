@@ -46,8 +46,19 @@ def materialize(base_flows: list[dict], submitted_flows: list[dict]) -> list[dic
     return merged
 
 
-def touched_flow_ids(submitted_flows: list[dict]) -> set[str]:
-    return {f["id"] for f in submitted_flows}
+def touched_flow_ids(submitted_flows: list[dict], base_flows: list[dict] | None = None) -> set[str]:
+    """Flows the agent actually changed. Agents (small ones especially) often echo the whole
+    flows file back; a resubmission byte-identical to baseline is not a change and must not
+    pull that flow's pre-existing violations into the task's gated scope."""
+    if base_flows is None:
+        return {f["id"] for f in submitted_flows}
+    base_by_id = {f["id"]: f for f in base_flows}
+
+    def canon(f: dict) -> str:
+        return json.dumps(f, sort_keys=True)
+
+    return {f["id"] for f in submitted_flows
+            if f["id"] not in base_by_id or canon(f) != canon(base_by_id[f["id"]])}
 
 
 def live_flows(flows: list[dict]) -> list[dict]:

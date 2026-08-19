@@ -69,15 +69,22 @@ def offline_evaluate(check: dict, text: str) -> tuple[bool, str]:
     return True, "offline keyword rules satisfied"
 
 
-def _load_evidence(ctx: GradingContext, files: list[str], budget_chars: int = 24000) -> str:
+def _load_evidence(ctx: GradingContext, files: list[str], budget_chars: int = 120000) -> str:
     chunks = []
-    per_file = max(budget_chars // max(len(files), 1), 2000)
+    per_file = max(budget_chars // max(len(files), 1), 4000)
     for rel in files:
         path = ctx.universe.root / rel
         try:
-            content = path.read_text()[:per_file]
+            content = path.read_text()
         except Exception as e:
             content = f"[unreadable: {e}]"
+        if len(content) > per_file:
+            # Head+tail, never head-only: time-series CSVs carry the planted signal at the
+            # END of the file, and a head-only excerpt misleads the judge about what exists.
+            half = per_file // 2
+            content = (content[:half]
+                       + f"\n… [{len(content) - per_file} chars elided — file continues] …\n"
+                       + content[-half:])
         chunks.append(f"=== {rel} ===\n{content}")
     return "\n\n".join(chunks) if chunks else "(no evidence files linked)"
 

@@ -183,7 +183,7 @@
   <div class="tiles">
     <div class="tile"><div class="l">Pilot task suite</div><div class="v">~46</div><div class="s">tasks, 2 categories + 2 cross-cutting slices</div></div>
     <div class="tile"><div class="l">Rubric criteria</div><div class="v">~1,600</div><div class="s">atomic, binary, file-linked</div></div>
-    <div class="tile"><div class="l">Sample universes built</div><div class="v">2</div><div class="s">88 files, deterministic generators</div></div>
+    <div class="tile"><div class="l">Example accounts built</div><div class="v">2</div><div class="s">fictional brands, generated data</div></div>
     <div class="tile"><div class="l">Marketing benchmarks today</div><div class="v">0</div><div class="s">credible, practitioner-anchored</div></div>
   </div>
 </header>
@@ -397,18 +397,13 @@
     performance dip it produces (the numbers). So grading can tell an agent that noticed something was off
     from one that worked out <i>why</i> — and the data holds up when experts pull on its threads.</p></div>
   </div>
-  <h3>Two universes built (88 files, deterministic)</h3>
-  <p class="d"><b>Alma Botánica</b> — mid-size DTC skincare: 342k profiles, AOV $62, 74-day repurchase cycle,
-  subscriptions, a no-discounts-on-the-hero-line rule. Carries 8 data-level planted issues (flow collision,
-  winback targeting happy subscribers, expired welcome code, quiet-hours timezone bug, VIP segment rot…),
-  4 render-level issues visible only in captured light/dark/mobile screenshots (an invisible dark-mode CTA;
-  a discount code trapped in a hero image), and an escalation brief pair.</p>
-  <p class="d"><b>Meridian Travel Goods</b> — premium DTC luggage (Away-like category dynamics, fully fictional):
-  910k profiles, AOV $285, a 3.8-<i>year</i> repurchase cycle, gift-heavy Q4, a strict zero-discount policy.
-  It proves the framework's core claim: <b>the same fault classes produce different correct answers in a
-  different category.</b> A 90-day winback is sensible for serums and absurd for suitcases; cart-recovery
-  discounting is tactics for most brands and brand damage here; "purchaser = owner" fails for gifted luggage.
-  Generic best practices score poorly by design — rubrics are authored per-universe.</p>
+  <h3>Two example accounts, already built</h3>
+  <p class="d"><b>Alma Botánica</b>, a fictional skincare brand, carries most of the demonstration: planted
+  problems in the data, a few visible only in email screenshots, and one brief that should make an agent stop
+  and ask a human.</p>
+  <p class="d"><b>Meridian Travel Goods</b>, a fictional luggage brand, exists to prove the grading can't be
+  generic: luggage sells on a years-long repurchase cycle, with heavy gifting and no discounting — so the
+  same mistakes have different right answers than they do in skincare.</p>
 </section>
 
 <section id="data">
@@ -416,19 +411,12 @@
   <p class="sub">The benchmark's environments are synthetic — but nearly every part of it gets sharper when
   grounded in datasets only Klaviyo holds. All uses are aggregate and anonymized; data-use terms review is a
   gating open question.</p>
-  <div class="callout">
-    <h4>Support &amp; CX tickets — the registry of what actually goes wrong</h4>
-    <p>Tickets where customers are trying to fix a marketing problem — or are worried an agent did something
-    out of band — are an empirical catalog of real failure modes, written in the customer's own words. They
-    feed four layers at once: <b>planted issues</b> (the universes' faults should mirror what really breaks,
-    at the frequency it really breaks — no more inventing failure modes), <b>nuisance severity weights</b>
-    (harms that generate tickets are empirically worse than harms that don't), <b>escalation triggers</b>
-    (the situations where customers wished a human had been asked), and <b>duty-to-notice scenarios</b>
-    (problems that sat visible-but-unflagged before someone complained). "My agent sent a campaign I never
-    approved" tickets are, quite literally, the ground truth for the benchmark's trust layers.</p>
-  </div>
   <table>
     <tr><th>Dataset</th><th>What it feeds</th></tr>
+    <tr class="hl"><td>Support &amp; CX tickets</td><td>The catalog of what actually goes wrong, in customers'
+    own words — including tickets from people worried an agent did something it shouldn't have. Grounds the
+    planted problems, the harm severity weights, the escalation triggers, and the duty-to-notice scenarios.
+    "My agent sent a campaign I never approved" is ground truth for the benchmark's trust layers.</td></tr>
     <tr><td>Aggregate campaign &amp; flow performance</td><td>Calibrates the synthetic universes so open rates, AOVs, repurchase cycles, and churn are distributionally honest — the "true-to-life" claim rests on this.</td></tr>
     <tr><td>A/B test archive</td><td>Backtest task families (predict the winner of tests that actually ran) and empirical rubric validation — do campaigns satisfying criterion X actually outperform?</td></tr>
     <tr><td>Composer approval / rejection logs</td><td>What human reviewers rejected, and why, is gate-criteria authorship data mined from real review behavior — and ground truth for where the approval boundary actually sits.</td></tr>

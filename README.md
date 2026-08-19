@@ -2,9 +2,9 @@
 
 A runnable pipeline that sandboxes an agent against the `alma-botanica` universe, grades its
 deliverable through four grader types (`computed`, `structural`, `llm_judge`, `invariant`), and
-emits `report.json` + a marketer-legible `report.html`. Built per `HANDOFF-eval-harness-poc.md`;
-rubrics authored from `phase1-task-spec.md` §4/§4a/§8/§9; scoring per
-`marketing-benchmark-framework.md` §2 (two-tier: gates → shippable, quality conditional on
+emits `report.json` + a marketer-legible `report.html`. Built per `docs/HANDOFF-eval-harness-poc.md`;
+rubrics authored from `docs/phase1-task-spec.md` §4/§4a/§8/§9; scoring per
+`docs/marketing-benchmark-framework.md` §2 (two-tier: gates → shippable, quality conditional on
 shippable). Layout mirrors [Harvey LAB](https://github.com/harveyai/harvey-labs)
 (`tasks/` + `harness/` + sandbox + all-pass rubric with per-criterion LLM-judge calls).
 
@@ -137,7 +137,8 @@ criteria text. An `llm_judge` criterion with no `offline_check` fails conservati
 - **Invariant gating scope.** The account ships with eight planted issues, so a naive "all
   invariants must hold post-change" fails every task for pre-existing reasons. Rule adopted:
   a violation gates iff it involves a flow in the task's `invariant_scope` ∪ flows the agent
-  submitted, **or** it is new relative to the baseline account. Everything else is reported as
+  actually *changed* (submitted flows byte-identical to baseline don't count — agents often echo
+  the whole flows file back), **or** it is new relative to the baseline account. Everything else is reported as
   pre-existing context. Frequency-cap breaches gate as per-profile *regressions* vs baseline
   (fatigue is planted issue #8; the agent is charged only for making a profile's count worse).
 - **F2's "revenue-at-stake reconciles" gate** is graded on the exactly-checkable half of the math:

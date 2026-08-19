@@ -113,7 +113,7 @@ def run_invariants(task: Task, deliverable, ctx: GradingContext) -> dict:
     universe = ctx.universe
     submitted = _submitted_flows(deliverable)
     end = materialize(universe.flows, submitted)
-    scope = set(task.invariant_scope) | touched_flow_ids(submitted)
+    scope = set(task.invariant_scope) | touched_flow_ids(submitted, universe.flows)
 
     base_static = static_violations(universe.flows, universe)
     end_static = static_violations(end, universe)
