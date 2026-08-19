@@ -1,0 +1,5 @@
+code,discount,applies_to,created,expires,status
+SOLSTICE10,10%,first order,2025-06-01,2026-05-31,expired
+WELCOME15,15%,"first order, Midnight & Terra only",2026-01-10,2026-12-31,active
+BDAY20,20%,birthday flow,2025-03-01,2026-12-31,active
+VIPFALL,free shipping,VIP segment,2026-07-01,2026-10-31,active

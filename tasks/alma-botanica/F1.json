@@ -1,0 +1,82 @@
+{
+ "id": "F1",
+ "universe": "alma-botanica",
+ "title": "One cart flow, please",
+ "instructions": "Pretty sure people are getting two different abandoned-cart series from us — my sister got both. Merge them into one flow that keeps whatever's working. Don't lose the SMS step.",
+ "files_in_scope": [
+  "flows/flows.json",
+  "flows/flow_performance.csv",
+  "legal/sms_program_terms.md",
+  "campaigns/discount_codes.csv"
+ ],
+ "deliverable": {
+  "kind": "flow_json",
+  "parts": {
+   "flow.json": "{\"flows\": [...]} — the merged cart flow plus the explicit deprecation of the retired one",
+   "rationale.md": "one-paragraph rationale"
+  }
+ },
+ "invariant_scope": ["flow_cart_v2", "flow_cart_2024"],
+ "criteria": [
+  {
+   "id": "f1_schema", "tier": "gate", "method": "structural",
+   "text": "Submitted flow definitions are valid against the flow schema.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "flow_schema_valid"}
+  },
+  {
+   "id": "f1_one_live", "tier": "gate", "method": "structural",
+   "text": "Exactly one resulting live cart flow; the other explicitly deprecated.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "one_live_cart_flow_other_deprecated", "cart_flow_ids": ["flow_cart_v2", "flow_cart_2024"]}
+  },
+  {
+   "id": "f1_union", "tier": "gate", "method": "structural",
+   "text": "Trigger and filters cover the union of the two old flows' audiences with no double-entry path.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "cart_union_no_double_entry"}
+  },
+  {
+   "id": "f1_sms_retained", "tier": "gate", "method": "structural",
+   "text": "Retains the SMS step.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "cart_sms_retained"}
+  },
+  {
+   "id": "f1_sms_compliance", "tier": "gate", "method": "structural",
+   "text": "SMS step gated on sms_consent, with quiet hours enforced in the recipient's timezone.",
+   "evidence_files": ["legal/sms_program_terms.md", "flows/flows.json"],
+   "params": {"predicate": "sms_consent_and_recipient_quiet_hours", "trigger_event": "Started Checkout", "require_sms_step": true}
+  },
+  {
+   "id": "f1_exit", "tier": "gate", "method": "structural",
+   "text": "Purchase-exit condition present — buyers leave the flow.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "purchase_exit_present", "trigger_event": "Started Checkout"}
+  },
+  {
+   "id": "f1_refs", "tier": "gate", "method": "structural",
+   "text": "Message references resolve to existing templates; discount codes referenced are unexpired.",
+   "evidence_files": ["campaigns/discount_codes.csv"],
+   "params": {"predicate": "refs_resolve_codes_unexpired"}
+  },
+  {
+   "id": "f1_invariants", "tier": "gate", "method": "invariant",
+   "text": "Account invariants hold after the change (no overlapping-trigger enrollment, consent, quiet hours, frequency caps, no OOS promotion, discount envelope) and the 14-day ledger shows no harm events attributable to this work.",
+   "evidence_files": ["flows/flows.json", "crm/profiles_sample.csv"],
+   "params": {}
+  },
+  {
+   "id": "f1_keep_better", "tier": "quality", "method": "llm_judge",
+   "text": "Keeps the better-performing messages per flow_performance.csv rather than defaulting to the newer flow.",
+   "evidence_files": ["flows/flow_performance.csv"],
+   "params": {"part": "rationale.md", "offline_check": {"must_mention": [["performance", "conversion", "flow_performance"]]}}
+  },
+  {
+   "id": "f1_delays", "tier": "quality", "method": "llm_judge",
+   "text": "Sensible delay structure versus the brand's checkout-to-purchase timing distribution.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"part": "rationale.md", "offline_check": {"must_mention": [["delay", "hour", "timing"]]}}
+  }
+ ]
+}

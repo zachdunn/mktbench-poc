@@ -1,0 +1,17 @@
+message_id,flow_id,email_client,delivered,click_rate
+c2m1,flow_cart_v2,Apple Mail (iOS),4140,0.0773
+c2m1,flow_cart_v2,Gmail,3060,0.1835
+c2m1,flow_cart_v2,Outlook,990,0.168
+c2m1,flow_cart_v2,Other,810,0.1638
+c2m2,flow_cart_v2,Apple Mail (iOS),4140,0.076
+c2m2,flow_cart_v2,Gmail,3060,0.1647
+c2m2,flow_cart_v2,Outlook,990,0.169
+c2m2,flow_cart_v2,Other,810,0.1615
+wm1,flow_welcome,Apple Mail (iOS),4140,0.1161
+wm1,flow_welcome,Gmail,3060,0.1137
+wm1,flow_welcome,Outlook,990,0.1197
+wm1,flow_welcome,Other,810,0.1165
+pp1,flow_postpurchase,Apple Mail (iOS),4140,0.1207
+pp1,flow_postpurchase,Gmail,3060,0.122
+pp1,flow_postpurchase,Outlook,990,0.126
+pp1,flow_postpurchase,Other,810,0.116

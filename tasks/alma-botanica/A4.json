@@ -1,0 +1,66 @@
+{
+ "id": "A4",
+ "universe": "alma-botanica",
+ "title": "Why do VIP campaigns underperform?",
+ "instructions": "Our VIP early-access campaigns keep coming in under forecast even though these are supposedly our best customers. Marketing blames the creative. Look into it before we rebrief the designers.",
+ "files_in_scope": [
+  "crm/segments.json",
+  "crm/profiles_sample.csv",
+  "campaigns/campaign_history.csv",
+  "flows/flows.json"
+ ],
+ "deliverable": {
+  "kind": "memo",
+  "parts": {
+   "memo": "diagnostic memo (markdown)",
+   "segment.json": "corrected VIP segment definition as JSON, valid against the segment schema"
+  }
+ },
+ "criteria": [
+  {
+   "id": "a4_definition_flaw", "tier": "gate", "method": "llm_judge",
+   "text": "Identifies the segment-definition flaw: seg_vips has no engagement or suppression filter.",
+   "evidence_files": ["crm/segments.json"],
+   "params": {"offline_check": {"must_mention": [["engagement filter", "no engagement", "missing engagement", "lacks engagement"], ["suppress"]]}}
+  },
+  {
+   "id": "a4_deadweight", "tier": "gate", "method": "computed",
+   "text": "Quantifies the dead weight in the VIP segment (share suppressed, bounced, or 12-month-unengaged), within tolerance.",
+   "evidence_files": ["crm/profiles_sample.csv", "crm/segments.json"],
+   "params": {
+    "key": "vip_rot_pct", "tolerance_abs": 3,
+    "extract": {
+     "regexes": [
+      "([\\d.]{1,5})\\s?%[^.\\n]*(?:dead\\s?weight|suppressed|unengaged|rot)",
+      "(?:dead\\s?weight|rot|invalid)[^.\\n]*?([\\d.]{1,5})\\s?%"
+     ],
+     "hint": "the claimed percentage of the VIP segment that is dead weight (suppressed or unengaged)"
+    }
+   }
+  },
+  {
+   "id": "a4_exonerate", "tier": "gate", "method": "llm_judge",
+   "text": "Shows per-engaged-member performance is actually fine, exonerating the creative.",
+   "evidence_files": ["campaigns/campaign_history.csv", "crm/profiles_sample.csv"],
+   "params": {"offline_check": {"must_mention": [["per engaged", "engaged member", "engaged-member", "among engaged"], ["creative"]]}}
+  },
+  {
+   "id": "a4_segment_json", "tier": "gate", "method": "structural",
+   "text": "Corrected segment definition is logically valid JSON against the segment schema and excludes suppressed and 12-month-unengaged profiles while keeping the ltv>$500 bar.",
+   "evidence_files": ["crm/segments.json", "crm/profiles_sample.csv"],
+   "params": {"predicate": "vip_segment_fixed", "part": "segment.json"}
+  },
+  {
+   "id": "a4_tiered", "tier": "quality", "method": "llm_judge",
+   "text": "Proposes a tiered VIP definition using LTV plus engagement.",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [["tier"]]}}
+  },
+  {
+   "id": "a4_pattern", "tier": "quality", "method": "llm_judge",
+   "text": "Flags implications for other segments sharing the same pattern.",
+   "evidence_files": ["crm/segments.json"],
+   "params": {"offline_check": {"must_mention": [["other segment", "same pattern", "across segments", "seg_"]]}}
+  }
+ ]
+}

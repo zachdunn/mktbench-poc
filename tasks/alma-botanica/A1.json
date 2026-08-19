@@ -1,0 +1,61 @@
+{
+ "id": "A1",
+ "universe": "alma-botanica",
+ "title": "The welcome flow dropped off",
+ "instructions": "Something's up with the welcome series — revenue from it fell off a cliff in June and no one changed anything. Can you figure out what happened and what it's costing us? Need it for Thursday's standup.",
+ "files_in_scope": [
+  "flows/flow_performance.csv",
+  "flows/flows.json",
+  "campaigns/messages/welcome_email_1.html",
+  "campaigns/discount_codes.csv",
+  "crm/events_orders_sample.csv"
+ ],
+ "deliverable": {"kind": "memo", "parts": {"memo": "short diagnostic memo (markdown)"}},
+ "criteria": [
+  {
+   "id": "a1_root_cause", "tier": "gate", "method": "llm_judge",
+   "text": "Identifies the expired SOLSTICE10 code as the root cause of the welcome-flow revenue drop.",
+   "evidence_files": ["campaigns/discount_codes.csv", "campaigns/messages/welcome_email_1.html", "flows/flow_performance.csv"],
+   "params": {"offline_check": {"must_mention": [["SOLSTICE10"], ["expir"]]}}
+  },
+  {
+   "id": "a1_timing", "tier": "gate", "method": "llm_judge",
+   "text": "States the drop began with the June cohort, consistent with the May 31 code expiry.",
+   "evidence_files": ["flows/flow_performance.csv", "campaigns/discount_codes.csv"],
+   "params": {"offline_check": {"must_mention": [["June", "2026-06"], ["May 31", "2026-05-31", "end of May"]]}}
+  },
+  {
+   "id": "a1_impact", "tier": "gate", "method": "computed",
+   "text": "Revenue-impact estimate reconciles with pre/post conversion delta × entry volume × AOV, within tolerance.",
+   "evidence_files": ["flows/flow_performance.csv"],
+   "params": {
+    "key": "welcome_monthly_revenue_impact", "tolerance_pct": 15,
+    "extract": {
+     "regexes": [
+      "\\$\\s?([\\d,]{4,})\\s*(?:per\\s+month|/\\s?mo|a\\s+month|monthly)",
+      "(?:impact|costing|losing|loss\\s+of)[^.\\n]*?\\$\\s?([\\d,]{4,})"
+     ],
+     "hint": "the claimed monthly revenue impact of the welcome-flow drop, in dollars"
+    }
+   }
+  },
+  {
+   "id": "a1_distractors", "tier": "gate", "method": "llm_judge",
+   "text": "Does not attribute the drop to seasonality, deliverability, or the (irrelevant) March Yahoo incident.",
+   "evidence_files": ["deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_not_mention": ["seasonal", "Yahoo", "deliverability"]}}
+  },
+  {
+   "id": "a1_fix_prevention", "tier": "quality", "method": "llm_judge",
+   "text": "Proposes both an immediate fix and a prevention practice (e.g. code-expiry monitoring).",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [["replace", "reissue", "new code", "update the code"], ["monitor", "alert", "expiry check", "audit"]]}}
+  },
+  {
+   "id": "a1_remail", "tier": "quality", "method": "llm_judge",
+   "text": "Notes the affected cohort could be re-mailed a working code.",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [["re-send", "resend", "re-mail", "remail", "re-email"]]}}
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "campaign_id": "cmp_midnight_bundle_2026",
+ "name": "Midnight Body Oil Bundle — 18% off",
+ "status": "staged_for_send_approval",
+ "offer": {
+  "discount_pct": 18,
+  "applies_to": "Midnight Body Oil + Midnight Hand Cream bundle",
+  "line": "Midnight"
+ },
+ "audience_segment": "seg_engaged_90",
+ "channel": "email",
+ "schedule": {"proposed_send": "2026-08-18T10:00:00-04:00"},
+ "creative": {
+  "subject": "An evening pair, made for each other",
+  "hero": "Midnight Body Oil + Hand Cream bundle",
+  "copy_ref": "copy.md"
+ },
+ "tracking": {"utm_source": "klaviyo", "utm_medium": "email", "utm_campaign": "midnight_bundle_2026"}
+}

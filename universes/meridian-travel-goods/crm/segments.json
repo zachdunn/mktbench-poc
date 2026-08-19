@@ -1,0 +1,123 @@
+{
+ "segments": [
+  {
+   "id": "seg_insiders",
+   "name": "Insiders (VIP)",
+   "definition": {
+    "all": [
+     {
+      "metric": "ltv_usd",
+      "op": ">",
+      "value": 1200
+     }
+    ]
+   },
+   "note": "Early access + referral perks"
+  },
+  {
+   "id": "seg_lapsed_90",
+   "name": "Lapsed 90d",
+   "definition": {
+    "all": [
+     {
+      "metric": "last_order_date",
+      "op": "older_than_days",
+      "value": 90
+     }
+    ]
+   },
+   "note": "Feeds winback"
+  },
+  {
+   "id": "seg_engaged_90",
+   "name": "Engaged 90d",
+   "definition": {
+    "all": [
+     {
+      "metric": "engagement_tier",
+      "op": "in",
+      "value": [
+       "engaged_30",
+       "engaged_90"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_full_list",
+   "name": "Full list",
+   "definition": {
+    "all": [
+     {
+      "metric": "email_consent",
+      "op": "=",
+      "value": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_luggage_owners",
+   "name": "Luggage owners",
+   "definition": {
+    "all": [
+     {
+      "metric": "line_purchased",
+      "op": "in",
+      "value": [
+       "Poly",
+       "Aluminum"
+      ]
+     }
+    ]
+   },
+   "note": "Used by post-purchase care; NOTE: includes 2025Q4 gift purchasers (givers, not owners)"
+  },
+  {
+   "id": "seg_accessories_only",
+   "name": "Accessories-only buyers",
+   "definition": {
+    "all": [
+     {
+      "metric": "line_purchased",
+      "op": "only",
+      "value": "Accessories"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_sms",
+   "name": "SMS list",
+   "definition": {
+    "all": [
+     {
+      "metric": "sms_consent",
+      "op": "=",
+      "value": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_coast_waitlist",
+   "name": "Coast colorway waitlist",
+   "definition": {
+    "all": [
+     {
+      "metric": "back_in_stock_sku",
+      "op": "in",
+      "value": [
+       "MER-005",
+       "MER-010",
+       "MER-015",
+       "MER-020"
+      ]
+     }
+    ]
+   },
+   "note": "3,400 profiles waiting on discontinued SKUs"
+  }
+ ]
+}

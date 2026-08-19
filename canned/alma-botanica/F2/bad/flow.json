@@ -1,0 +1,74 @@
+{
+ "flows": [
+  {
+   "id": "flow_winback",
+   "name": "Winback (rebuilt 2026)",
+   "status": "live",
+   "last_edited": "2026-08-14",
+   "trigger": {
+    "type": "segment_join",
+    "segment": "seg_winback_v2",
+    "segment_definition": {
+     "all": [
+      {
+       "metric": "last_onetime_order_date",
+       "op": "older_than_days",
+       "value": 90
+      },
+      {
+       "metric": "is_subscriber",
+       "op": "=",
+       "value": false
+      },
+      {
+       "metric": "engagement_tier",
+       "op": "!=",
+       "value": "unengaged_12m"
+      },
+      {
+       "metric": "suppressed",
+       "op": "=",
+       "value": false
+      }
+     ]
+    }
+   },
+   "steps": [
+    {
+     "id": "wb1",
+     "channel": "email",
+     "name": "We've been blending something new \u2014 Midnight Body Oil spotlight"
+    },
+    {
+     "delay_days": 5
+    },
+    {
+     "id": "wb2",
+     "channel": "email",
+     "name": "Offer branch \u2014 15% welcome-back on Midnight Body Oil, only if no engagement with wb1"
+    },
+    {
+     "delay_days": 7
+    },
+    {
+     "id": "wb3",
+     "channel": "sms",
+     "name": "Last call SMS",
+     "filter": {
+      "metric": "sms_consent",
+      "op": "=",
+      "value": true
+     }
+    }
+   ],
+   "sms_send_window": {
+    "start": "09:00",
+    "end": "20:00",
+    "basis": "recipient_timezone"
+   },
+   "exit": {
+    "on_event": "Placed Order"
+   }
+  }
+ ]
+}

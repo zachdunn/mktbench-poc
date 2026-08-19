@@ -1,0 +1,55 @@
+sku,name,line,price_usd,cost_usd,inventory_on_hand,restock_date,subscription_eligible,status
+MER-001,Carry-On 38L — Harbor,Poly,275,113.78,813,,no,active
+MER-002,Carry-On 38L — Dune,Poly,275,103.98,958,,no,active
+MER-003,Carry-On 38L — Ink,Poly,275,109.6,298,,no,active
+MER-004,Carry-On 38L — Alpine,Poly,275,94.57,342,,no,active
+MER-005,Carry-On 38L — Coast,Poly,275,84.41,0,,no,discontinued
+MER-006,Carry-On Plus 46L — Harbor,Poly,295,96.1,1189,,no,active
+MER-007,Carry-On Plus 46L — Dune,Poly,295,103.85,326,,no,active
+MER-008,Carry-On Plus 46L — Ink,Poly,295,97.02,293,,no,active
+MER-009,Carry-On Plus 46L — Alpine,Poly,295,103.53,1278,,no,active
+MER-010,Carry-On Plus 46L — Coast,Poly,295,117.77,0,,no,discontinued
+MER-011,Checked 65L — Harbor,Poly,325,134.45,403,,no,active
+MER-012,Checked 65L — Dune,Poly,325,134.46,1343,,no,active
+MER-013,Checked 65L — Ink,Poly,325,120.34,1331,,no,active
+MER-014,Checked 65L — Alpine,Poly,325,135.57,251,,no,active
+MER-015,Checked 65L — Coast,Poly,325,99.32,0,,no,discontinued
+MER-016,Checked 95L — Harbor,Poly,345,115.49,422,,no,active
+MER-017,Checked 95L — Dune,Poly,345,125.88,445,,no,active
+MER-018,Checked 95L — Ink,Poly,345,116.27,1319,,no,active
+MER-019,Checked 95L — Alpine,Poly,345,107.77,520,,no,active
+MER-020,Checked 95L — Coast,Poly,345,127.15,0,,no,discontinued
+MER-021,Carry-On 38L — Harbor,Aluminum,495,154.29,1181,,no,active
+MER-022,Carry-On 38L — Ink,Aluminum,495,152.04,1377,,no,active
+MER-023,Checked 65L — Harbor,Aluminum,595,227.08,1308,,no,active
+MER-024,Checked 65L — Ink,Aluminum,595,200.93,1595,,no,active
+MER-025,Packing Cubes (4) — Harbor,Accessories,45,13.5,2156,,no,active
+MER-026,Packing Cubes (4) — Dune,Accessories,45,13.5,1781,,no,active
+MER-027,Packing Cubes (4) — Ink,Accessories,45,13.5,1527,,no,active
+MER-028,Toiletry Case — Harbor,Accessories,55,16.5,1317,,no,active
+MER-029,Toiletry Case — Dune,Accessories,55,16.5,1036,,no,active
+MER-030,Toiletry Case — Ink,Accessories,55,16.5,1299,,no,active
+MER-031,Everywhere Tote — Harbor,Accessories,145,43.5,635,,no,active
+MER-032,Everywhere Tote — Dune,Accessories,145,43.5,1529,,no,active
+MER-033,Everywhere Tote — Ink,Accessories,145,43.5,2451,,no,active
+MER-034,Garment Sleeve — Harbor,Accessories,65,19.5,2327,,no,active
+MER-035,Garment Sleeve — Dune,Accessories,65,19.5,1706,,no,active
+MER-036,Garment Sleeve — Ink,Accessories,65,19.5,2138,,no,active
+MER-037,Luggage Tag — Harbor,Accessories,25,7.5,1479,,no,active
+MER-038,Luggage Tag — Dune,Accessories,25,7.5,599,,no,active
+MER-039,Luggage Tag — Ink,Accessories,25,7.5,783,,no,active
+MER-040,Travel Wellness Kit — Harbor,Accessories,38,11.4,2396,,no,active
+MER-041,Travel Wellness Kit — Dune,Accessories,38,11.4,2012,,no,active
+MER-042,Travel Wellness Kit — Ink,Accessories,38,11.4,975,,no,active
+MER-043,Daypack — Harbor,Accessories,125,37.5,1701,,no,active
+MER-044,Daypack — Dune,Accessories,125,37.5,922,,no,active
+MER-045,Daypack — Ink,Accessories,125,37.5,2302,,no,active
+MER-046,Tech Organizer — Harbor,Accessories,48,14.4,2027,,no,active
+MER-047,Tech Organizer — Dune,Accessories,48,14.4,460,,no,active
+MER-048,Tech Organizer — Ink,Accessories,48,14.4,617,,no,active
+MER-049,Shoe Cubes (2) — Harbor,Accessories,35,10.5,1585,,no,active
+MER-050,Shoe Cubes (2) — Dune,Accessories,35,10.5,1693,,no,active
+MER-051,Shoe Cubes (2) — Ink,Accessories,35,10.5,1734,,no,active
+MER-052,Compression Cubes (2) — Harbor,Accessories,52,15.6,2334,,no,active
+MER-053,Compression Cubes (2) — Dune,Accessories,52,15.6,2168,,no,active
+MER-054,Compression Cubes (2) — Ink,Accessories,52,15.6,581,,no,active

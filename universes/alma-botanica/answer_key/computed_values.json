@@ -1,0 +1,13 @@
+{
+ "solstice_serum_sku": "SOL-001",
+ "body_oil_inventory": 5200,
+ "vip_sample_count": 61,
+ "vip_rot_count": 13,
+ "vip_rot_pct": 21.3,
+ "winback_subscribers_wrongly_included_sample": 51,
+ "winback_naive_audience_sample": 261,
+ "welcome_conv_pre": 0.082,
+ "welcome_conv_post": 0.044,
+ "welcome_monthly_revenue_impact": 7798,
+ "sms_quiet_hour_violations_in_log": 22
+}

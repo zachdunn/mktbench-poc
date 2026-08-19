@@ -1,0 +1,196 @@
+{
+ "segments": [
+  {
+   "id": "seg_vips",
+   "name": "VIPs",
+   "definition": {
+    "all": [
+     {
+      "metric": "ltv_usd",
+      "op": ">",
+      "value": 500
+     }
+    ]
+   },
+   "note": "Used for early-access and VIP campaigns"
+  },
+  {
+   "id": "seg_engaged_90",
+   "name": "Engaged 90d",
+   "definition": {
+    "all": [
+     {
+      "metric": "engagement_tier",
+      "op": "in",
+      "value": [
+       "engaged_30",
+       "engaged_90"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_lapsed_90",
+   "name": "Lapsed 90d (winback source)",
+   "definition": {
+    "all": [
+     {
+      "metric": "last_onetime_order_date",
+      "op": "older_than_days",
+      "value": 90
+     }
+    ]
+   },
+   "note": "Feeds winback flow"
+  },
+  {
+   "id": "seg_sms",
+   "name": "SMS subscribers",
+   "definition": {
+    "all": [
+     {
+      "metric": "sms_consent",
+      "op": "=",
+      "value": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_subs",
+   "name": "Active subscription customers",
+   "definition": {
+    "all": [
+     {
+      "metric": "is_subscriber",
+      "op": "=",
+      "value": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_new_30",
+   "name": "New customers 30d",
+   "definition": {
+    "all": [
+     {
+      "metric": "first_order_date",
+      "op": "newer_than_days",
+      "value": 30
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_solstice_buyers",
+   "name": "Solstice purchasers",
+   "definition": {
+    "all": [
+     {
+      "metric": "line_purchased",
+      "op": "contains",
+      "value": "Solstice"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_unengaged",
+   "name": "Unengaged 12m+",
+   "definition": {
+    "all": [
+     {
+      "metric": "engagement_tier",
+      "op": "=",
+      "value": "unengaged_12m"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_bday",
+   "name": "Birthday this month",
+   "definition": {
+    "all": [
+     {
+      "metric": "birthday_month",
+      "op": "=",
+      "value": "current"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_cart_recent",
+   "name": "Started checkout 7d",
+   "definition": {
+    "all": [
+     {
+      "metric": "started_checkout",
+      "op": "newer_than_days",
+      "value": 7
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_browse_recent",
+   "name": "Viewed product 3d",
+   "definition": {
+    "all": [
+     {
+      "metric": "viewed_product",
+      "op": "newer_than_days",
+      "value": 3
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_ny_metro",
+   "name": "NY metro",
+   "definition": {
+    "all": [
+     {
+      "metric": "region",
+      "op": "=",
+      "value": "NY-metro"
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_high_intent",
+   "name": "High intent (browse+cart 14d)",
+   "definition": {
+    "any": [
+     {
+      "metric": "started_checkout",
+      "op": "newer_than_days",
+      "value": 14
+     },
+     {
+      "metric": "viewed_product",
+      "op": "newer_than_days",
+      "value": 14
+     }
+    ]
+   }
+  },
+  {
+   "id": "seg_giftset",
+   "name": "Holiday gift-set buyers",
+   "definition": {
+    "all": [
+     {
+      "metric": "sku_purchased",
+      "op": "contains",
+      "value": "MID-Gift Set"
+     }
+    ]
+   }
+  }
+ ]
+}

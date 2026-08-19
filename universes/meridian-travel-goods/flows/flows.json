@@ -1,0 +1,172 @@
+{
+ "flows": [
+  {
+   "id": "flow_welcome",
+   "name": "Welcome Series",
+   "status": "live",
+   "last_edited": "2025-08-02",
+   "trigger": {
+    "type": "list_join",
+    "list": "Newsletter"
+   },
+   "steps": [
+    {
+     "msg": "w1",
+     "channel": "email",
+     "name": "Welcome \u2014 the Meridian standard",
+     "links": [
+      "https://meridian-travel.com/collections/all"
+     ]
+    },
+    {
+     "delay_hours": 72
+    },
+    {
+     "msg": "w2",
+     "channel": "email",
+     "name": "Which case fits how you travel",
+     "links": [
+      "https://meridian-travel.com/quiz"
+     ]
+    }
+   ],
+   "note": "Site migrated to meridiantravel.co on 2026-03-02; templates not updated"
+  },
+  {
+   "id": "flow_cart",
+   "name": "Abandoned Cart",
+   "status": "live",
+   "last_edited": "2025-09-12",
+   "trigger": {
+    "type": "event",
+    "event": "Started Checkout"
+   },
+   "steps": [
+    {
+     "delay_hours": 6
+    },
+    {
+     "msg": "c1",
+     "channel": "email",
+     "name": "Your case is waiting"
+    },
+    {
+     "delay_hours": 18
+    },
+    {
+     "msg": "c2",
+     "channel": "email",
+     "name": "10% if you complete today",
+     "code": "WANDER10"
+    }
+   ],
+   "note": "Added by former agency Sep 2025"
+  },
+  {
+   "id": "flow_winback",
+   "name": "Winback 90d",
+   "status": "live",
+   "last_edited": "2025-04-30",
+   "trigger": {
+    "type": "segment_join",
+    "segment": "seg_lapsed_90"
+   },
+   "steps": [
+    {
+     "msg": "wb1",
+     "channel": "email",
+     "name": "We miss you"
+    },
+    {
+     "delay_days": 6
+    },
+    {
+     "msg": "wb2",
+     "channel": "email",
+     "name": "Come back and see what's new"
+    }
+   ]
+  },
+  {
+   "id": "flow_postpurchase",
+   "name": "Owner Care Series",
+   "status": "live",
+   "last_edited": "2025-10-20",
+   "trigger": {
+    "type": "event",
+    "event": "Placed Order",
+    "filter": {
+     "line": [
+      "Poly",
+      "Aluminum"
+     ]
+    }
+   },
+   "steps": [
+    {
+     "delay_days": 7
+    },
+    {
+     "msg": "pp1",
+     "channel": "email",
+     "name": "Caring for your case"
+    },
+    {
+     "delay_days": 21
+    },
+    {
+     "msg": "pp2",
+     "channel": "email",
+     "name": "Register your lifetime warranty"
+    },
+    {
+     "delay_days": 45
+    },
+    {
+     "msg": "pp3",
+     "channel": "email",
+     "name": "Packing like you mean it"
+    }
+   ],
+   "note": "Targets purchaser profile; no gift-recipient branch"
+  },
+  {
+   "id": "flow_backinstock",
+   "name": "Back in Stock",
+   "status": "live",
+   "last_edited": "2024-11-15",
+   "trigger": {
+    "type": "event",
+    "event": "Subscribed to Back in Stock"
+   },
+   "steps": [
+    {
+     "msg": "bis1",
+     "channel": "email",
+     "name": "It's back"
+    }
+   ],
+   "note": "No SKU-status check; Coast waitlist (3,400) still enrolled"
+  },
+  {
+   "id": "flow_referral",
+   "name": "Referral nudge",
+   "status": "live",
+   "last_edited": "2025-06-10",
+   "trigger": {
+    "type": "event",
+    "event": "Order Delivered"
+   },
+   "steps": [
+    {
+     "delay_days": 21
+    },
+    {
+     "msg": "rf1",
+     "channel": "email",
+     "name": "Give $30, get $30"
+    }
+   ]
+  }
+ ]
+}

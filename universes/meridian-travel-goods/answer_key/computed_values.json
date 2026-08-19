@@ -1,0 +1,15 @@
+{
+ "coast_skus": [
+  "MER-005",
+  "MER-010",
+  "MER-015",
+  "MER-020"
+ ],
+ "aluminum_inventory_total": 5461,
+ "duplicate_profiles_in_sample": 40,
+ "wholesale_in_insiders_sample": 19,
+ "welcome_conv_pre_migration": 0.041,
+ "welcome_conv_post_migration": 0.009,
+ "winback_monthly_sends": 16020.0,
+ "winback_conv_rate": 0.0011
+}

@@ -1,0 +1,10 @@
+{
+ "campaign_id": "cmp_solstice_flash_2026",
+ "name": "Solstice Flash Sale — 25% off",
+ "status": "staged_ready_to_approve",
+ "offer": {"discount_pct": 25, "applies_to_line": "Solstice", "framing": "25% off sitewide Solstice"},
+ "audience_segments": ["seg_engaged_90", "seg_vips"],
+ "channels": ["email", "sms"],
+ "schedule": {"start": "2026-08-20T10:00:00-04:00", "window_hours": 48},
+ "creative": {"hero": "Solstice 25% off — 48 hours only", "countdown_timer": true}
+}

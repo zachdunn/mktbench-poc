@@ -1,0 +1,10 @@
+{
+ "id": "seg_vips",
+ "name": "VIPs (corrected)",
+ "definition": {
+  "all": [
+   {"metric": "ltv_usd", "op": ">", "value": 500},
+   {"metric": "suppressed", "op": "=", "value": false}
+  ]
+ }
+}

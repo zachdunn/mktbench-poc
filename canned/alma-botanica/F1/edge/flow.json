@@ -1,0 +1,63 @@
+{
+ "flows": [
+  {
+   "id": "flow_cart_v2",
+   "name": "Abandoned Cart (consolidated)",
+   "status": "live",
+   "last_edited": "2026-08-14",
+   "trigger": {
+    "type": "event",
+    "event": "Started Checkout"
+   },
+   "trigger_filters": [
+    {
+     "metric": "Placed Order",
+     "op": "zero_since_trigger"
+    }
+   ],
+   "flow_filters": [
+    {
+     "metric": "suppressed",
+     "op": "=",
+     "value": false
+    }
+   ],
+   "steps": [
+    {
+     "delay_hours": 4
+    },
+    {
+     "id": "c2m1",
+     "channel": "email",
+     "name": "Cart reminder",
+     "template": "messages/cart_v2_email_1.html"
+    },
+    {
+     "delay_hours": 20
+    },
+    {
+     "id": "c2m2",
+     "channel": "email",
+     "name": "Still thinking it over?"
+    },
+    {
+     "delay_hours": 24
+    }
+   ],
+   "exit": {
+    "on_event": "Placed Order"
+   }
+  },
+  {
+   "id": "flow_cart_2024",
+   "name": "Abandoned Cart (2024) \u2014 retired",
+   "status": "archived",
+   "last_edited": "2026-08-14",
+   "trigger": {
+    "type": "event",
+    "event": "Started Checkout"
+   },
+   "steps": []
+  }
+ ]
+}
