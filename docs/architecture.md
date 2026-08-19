@@ -23,8 +23,11 @@ universes/                the closed brand environments + their generators and a
 tests/                    acceptance + unit tests (stdlib unittest, no deps)
 ```
 
-Each run writes `runs/<run-id>/report.json`, `report.html`, and (for the LLM adapter)
-`agent_transcript.json`.
+Run and grade are separable phases: `execute_task` persists `deliverable.json` +
+`access_log.json` (+ `agent_transcript.json` for the LLM adapter), and `grade_run` grades a
+saved run dir into `report.json`/`report.html`. `python3 run_eval.py --regrade runs/<run-id>`
+re-grades without re-running the agent — the seam for judge-prompt iteration and future
+dual-judge passes. Note: regrading overwrites the run's reports in place.
 
 ## The four grader types
 

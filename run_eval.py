@@ -7,6 +7,7 @@ Examples:
   python run_eval.py --task all --agent llm                   # every task
   python run_eval.py --all-replay                             # full replay matrix (acceptance 1)
   python run_eval.py --dry-run                                # validate tasks/rubrics/canned, no tokens
+  python run_eval.py --regrade runs/<run-id> [...]            # re-grade saved runs, zero agent tokens
 """
 from __future__ import annotations
 
@@ -16,7 +17,7 @@ import sys
 from pathlib import Path
 
 from harness import config, scoring
-from harness.runner import run_task
+from harness.runner import grade_run, run_task
 from harness.taskspec import TaskSpecError, list_tasks, load_task, resolve_task_selector
 
 VARIANTS = ["good", "bad", "edge"]
@@ -100,14 +101,27 @@ def main() -> int:
                     help="run the whole replay matrix (all tasks × good/bad/edge), offline")
     ap.add_argument("--dry-run", action="store_true",
                     help="validate every task, rubric, and canned deliverable without running anything")
+    ap.add_argument("--regrade", nargs="+", metavar="RUN_DIR",
+                    help="re-grade saved run directories (no agent execution; honors --offline "
+                         "and current judge config)")
     args = ap.parse_args()
 
     if args.dry_run:
         return dry_run(args.universe)
     if args.all_replay:
         return run_matrix(args.universe)
+    if args.regrade:
+        for run_dir in args.regrade:
+            report = grade_run(Path(run_dir), offline=True if args.offline else None)
+            s = report["score"]
+            print(f"regraded {run_dir} · task {report['task']['id']} · shippable={s['shippable']} "
+                  f"({s['gates_passed']}/{s['gates_total']} gates)"
+                  + (f" · judge {report['judge_model']}" if report.get("judge_model") else " · offline"))
+            if s["failed_gates"]:
+                print("  failed gates:", ", ".join(s["failed_gates"]))
+        return 0
     if not args.task:
-        ap.error("--task is required unless --all-replay or --dry-run")
+        ap.error("--task is required unless --all-replay, --dry-run, or --regrade")
 
     task_ids = resolve_task_selector(args.task, args.universe)
     if len(task_ids) > 1 and args.out:

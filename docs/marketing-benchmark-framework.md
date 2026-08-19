@@ -40,7 +40,7 @@ The resolution is to recognize that marketing work decomposes into layers with v
 | **L3 — Compliance & safety** | CAN-SPAM, TCPA/SMS consent & quiet hours, GDPR/CASL, unsubscribe handling, claims substantiation, price/promo accuracy | Fully objective | Binary criteria, all-pass, zero tolerance |
 | **L4 — Strategic judgment** | Prioritization, audience choice, offer strategy, test design, calendar logic | Partially objective — experts converge on *failure modes* even when they diverge on ideal answers | Expert rubric: "a competent senior marketer would never…" criteria, mostly binary |
 | **L5 — Craft & brand voice** | Copy quality, subject lines, adherence to brand guidelines, creative brief quality | Subjective but constrainable | Rubric against in-environment brand guidelines + calibrated LLM judge; optionally comparative/preference grading |
-| **L6 — Outcomes** | Did it actually perform? | Only observable in market | Backtesting against historical realized results (see §6) — Klaviyo's unique unlock, phase 2 |
+| **L6 — Outcomes** | Did it actually perform? | Only observable in market | Backtesting against historical realized results (see §6) — Klaviyo's unique unlock, phase 3 |
 
 A key insight hiding in L4: much of "marketing judgment" becomes objectively gradable if you write criteria as **known-necessary elements and known failure modes** rather than as ideal answers. "Did the winback campaign exclude customers who purchased in the last 30 days?" is binary. "Did the SMS send respect quiet hours for the subscriber's timezone?" is binary. "Is this the *best possible* winback strategy?" is unanswerable — so don't ask it. Harvey's rubrics quietly do the same thing (they grade what must be present, not what perfection looks like), which is why the model transfers better than it first appears.
 
@@ -172,7 +172,7 @@ Note what happened: nine criteria, seven of them binary and machine-checkable gi
 
 ---
 
-## 6. The phase-2 unlock nobody else can build: outcome-grounded evaluation
+## 6. The phase-3 unlock nobody else can build: outcome-grounded evaluation
 
 Everything above is Harvey's playbook adapted. This section is where Klaviyo can exceed it.
 
@@ -188,9 +188,9 @@ Simulated-customer evaluation (LLM personas "receiving" the campaign) is the tre
 
 ## 7. Suggested sequencing
 
-**Phase 0 — Design partner recruitment.** 2–3 agencies + 2–3 in-house lifecycle leaders as task decomposers and rubric validators; a neutral eval partner conversation (Vals or academic) early, since their normalization standards shape the harness.
+**Phase 0 — Design partners & groundwork.** *Status: groundwork done — framework, task spec, and two sample accounts (Alma Botánica + Meridian Travel Goods) are built, with the PoC eval harness running.* Remaining: recruit 2–3 agencies + 2–3 in-house lifecycle leaders as task decomposers and rubric validators; a neutral eval partner conversation (Vals or academic) early, since their normalization standards shape the harness; legal and naming review.
 
-**Phase 1 — Pilot.** One synthetic brand universe, 2 task categories (audit + flow design are the most gate-heavy, hence cheapest to grade), ~40 tasks, frontier-model baselines, human-marketer baseline on a subsample. Goal: prove the grading stack (judge-vs-human agreement numbers) before scaling.
+**Phase 1 — Pilot.** ~46 tasks across the 2 easiest-to-grade categories (audit + flow design are the most gate-heavy, hence cheapest to grade), run on **both** sample accounts, with frontier-model baselines and a human-marketer baseline on a subsample. Goal: prove the grading stack — the judge-vs-human agreement numbers are the real deliverable, deciding how much weight later phases can carry.
 
 **Phase 2 — v1 launch.** 4–6 universes, 8 categories, 300–500 tasks, open dev set + private held-out set, methodology paper, no leaderboard yet (Harvey's sequencing), named research partners.
 
@@ -200,7 +200,7 @@ Simulated-customer evaluation (LLM personas "receiving" the campaign) is the tre
 
 ## 8. Open questions to resolve next
 
-The shortlist that most needs a decision or more digging, in rough priority order: (1) Composer's relationship to the leaderboard and the grade-your-own-homework problem; (2) synthetic-universe generation approach and whether Klaviyo's aggregate data can be used for calibration under its data-use terms; (3) neutral grading partner; (4) mock-API vs. file-system environment (determines how much of L2 is machine-checkable); (5) agency partner selection and incentives; (6) legal review of publishing compliance criteria; (7) naming, given the existing Klaviyo performance benchmarks.
+The shortlist that most needs a decision or more digging, in rough priority order: (1) Composer's relationship to the leaderboard and the grade-your-own-homework problem — recommended postures: dataset-first (Harvey's move), a public commitment to publish Composer's scores whatever they are, or v1 scoped to foundation models; third-party grading is required on every path; (2) synthetic-universe generation approach and whether Klaviyo's aggregate data can be used for calibration under its data-use terms — gates both the realism claim and the phase-3 differentiators; (3) neutral grading partner; (4) mock-API vs. file-system environment (determines how much of L2 is machine-checkable); (5) agency partner selection and incentives; (6) legal review of publishing compliance criteria; (7) naming — "MarketingBench" is a placeholder, and the collision with Klaviyo's existing performance-benchmark reports needs resolving, ideally so those reports become a calibration asset rather than a confusion; (8) governance — an advisory board of design partners, a lab, and an academic, as inexpensive insurance against the benchmark reading as a press release.
 
 ---
 
