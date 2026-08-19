@@ -17,14 +17,19 @@ def _deliverable_text(deliverable) -> str:
 
 
 def extract_value(text: str, extract: dict, ctx: GradingContext, criterion_text: str) -> tuple[float | None, str]:
-    for pattern in extract.get("regexes", []):
-        m = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
-        if m:
-            raw = m.group(1).replace(",", "").replace("$", "").strip()
-            try:
-                return float(raw), f"regex {pattern!r} → {m.group(0)!r}"
-            except ValueError:
-                continue
+    # Live mode uses the LLM to extract the claimed value (freeform memos routinely mention
+    # several numbers — baselines, deltas — and a regex can't tell which one is the claim).
+    # Offline mode falls back to the criterion's declared regexes, which the canned
+    # deliverables are written against. The comparison below is code either way.
+    if ctx.offline:
+        for pattern in extract.get("regexes", []):
+            m = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
+            if m:
+                raw = m.group(1).replace(",", "").replace("$", "").strip()
+                try:
+                    return float(raw), f"regex {pattern!r} → {m.group(0)!r}"
+                except ValueError:
+                    continue
     if not ctx.offline:
         prompt = (
             "Extract the numeric value the deliverable below claims for this criterion. "

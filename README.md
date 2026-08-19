@@ -68,7 +68,7 @@ what's being proven).
 **5. Live LLM adapter end-to-end** (A1 and F1, full HTML report + judge transcripts + access log):
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-…      # or: export OPENROUTER_API_KEY=sk-or-…
+cp .env.example .env                   # then set ANTHROPIC_API_KEY or OPENROUTER_API_KEY
 python3 run_eval.py --task A1 --agent llm
 python3 run_eval.py --task F1 --agent llm
 ```
@@ -86,7 +86,7 @@ The judge and the LLM adapter run against either the **Anthropic API** or **Open
 |---|---|
 | `MB_PROVIDER` | `anthropic` or `openrouter`; unset → auto-detect from whichever key exists (Anthropic wins if both) |
 | `ANTHROPIC_API_KEY` / `OPENROUTER_API_KEY` | credentials per provider |
-| `MB_JUDGE_MODEL` / `MB_AGENT_MODEL` | model override; defaults are `claude-sonnet-4-5` (Anthropic) / `anthropic/claude-sonnet-4.5` (OpenRouter) |
+| `MB_JUDGE_MODEL` / `MB_AGENT_MODEL` | model override; PoC defaults are deliberately small/cheap — `claude-haiku-4-5` (Anthropic) / `deepseek/deepseek-v4-flash` (OpenRouter) |
 
 OpenRouter model ids are namespaced (`anthropic/claude-sonnet-4.5`, `openai/gpt-4.1`, …). The
 harness speaks Anthropic's message shape internally; `harness/llm_client.py` translates tools and

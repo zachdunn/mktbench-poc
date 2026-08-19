@@ -17,7 +17,7 @@ class TestProviderSelection(unittest.TestCase):
         with mock.patch.dict(os.environ, {"OPENROUTER_API_KEY": "o"}, clear=True):
             self.assertEqual(config.provider(), "openrouter")
             self.assertEqual(config.api_key(), "o")
-            self.assertEqual(config.judge_model(), "anthropic/claude-sonnet-4.5")
+            self.assertEqual(config.judge_model(), "deepseek/deepseek-v4-flash")
             self.assertFalse(config.offline_default())
         with mock.patch.dict(os.environ, {}, clear=True):
             self.assertEqual(config.provider(), "anthropic")

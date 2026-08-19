@@ -6,6 +6,23 @@ from datetime import date
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def _load_dotenv() -> None:
+    """Read REPO_ROOT/.env into os.environ (existing env vars win). Read-only — the
+    harness never writes env files. Supports KEY=VALUE lines and # comments."""
+    path = REPO_ROOT / ".env"
+    if not path.exists():
+        return
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip().strip("'\""))
+
+
+_load_dotenv()
 UNIVERSES_ROOT = REPO_ROOT / "universes"
 TASKS_ROOT = REPO_ROOT / "tasks"
 CANNED_ROOT = REPO_ROOT / "canned"
@@ -22,9 +39,11 @@ ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 ANTHROPIC_VERSION = "2023-06-01"
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 
+# PoC posture: small, cheap models only. Escalate deliberately (MB_JUDGE_MODEL /
+# MB_AGENT_MODEL) once judge-vs-human agreement work starts.
 _DEFAULT_MODEL = {
-    "anthropic": "claude-sonnet-4-5",
-    "openrouter": "anthropic/claude-sonnet-4.5",
+    "anthropic": "claude-haiku-4-5",
+    "openrouter": "deepseek/deepseek-v4-flash",
 }
 JUDGE_MAX_TOKENS = 1024
 AGENT_MAX_TOKENS = 8192

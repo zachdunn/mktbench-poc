@@ -72,7 +72,16 @@ class LLMAdapter:
             for tu in tool_uses:
                 name, args = tu["name"], tu.get("input", {})
                 if name == "submit":
-                    parts = {str(k): str(v) for k, v in args.get("parts", {}).items()}
+                    raw_parts = args.get("parts", {}) if isinstance(args, dict) else args
+                    if isinstance(raw_parts, str):  # small models sometimes double-encode
+                        try:
+                            raw_parts = json.loads(raw_parts)
+                        except json.JSONDecodeError:
+                            raw_parts = {"memo": raw_parts}
+                    if not isinstance(raw_parts, dict):
+                        raw_parts = {"memo": str(raw_parts)}
+                    parts = {str(k): v if isinstance(v, str) else json.dumps(v, indent=1)
+                             for k, v in raw_parts.items()}
                     return Deliverable(parts=parts, meta={"adapter": self.name,
                                                           "turns": turn + 1, "transcript": transcript})
                 if name == "list_files":
