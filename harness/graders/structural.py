@@ -321,6 +321,77 @@ def footer_utm_present(task, params, deliverable, ctx):
     return True, "unsubscribe footer and UTM parameters present"
 
 
+def _flow_text_with_templates(flow: dict, universe: Universe) -> str:
+    """All strings in a flow def plus the content of any referenced template files
+    (mirrors invariant._flow_texts; duplicated here to avoid a structural->invariant import)."""
+    parts = _all_strings(flow)
+    for s in flow.get("steps", []):
+        tpl = s.get("template")
+        if tpl:
+            for base in (universe.root / "campaigns", universe.root):
+                path = base / tpl
+                if path.exists():
+                    try:
+                        parts.append(path.read_text())
+                    except Exception:
+                        pass
+                    break
+    return " \n ".join(parts)
+
+
+_RESTOCK_GATE_RE = re.compile(
+    r"(after|once|post[- ]?restock|back in stock|starting)\D{0,25}"
+    r"(sept(?:ember)?\.?\s*15|09[-/]15|9[-/]15)",
+    re.IGNORECASE)
+
+
+def no_oos_solstice_promotion(task, params, deliverable, ctx):
+    """No live proposed flow promotes a currently out-of-stock product (per catalog
+    restock_date) unless it's explicitly gated by an inventory condition or a restock-date
+    gate (e.g. a teaser scheduled for on/after the restock date)."""
+    oos = ctx.universe.oos_skus()
+    if not oos:
+        return True, "no out-of-stock SKUs in the catalog"
+    flows = _submitted_flows(deliverable)
+    if not flows:
+        return False, "no submitted flow JSON"
+    for f in flows:
+        if f.get("status") != "live":
+            continue
+        text = _flow_text_with_templates(f, ctx.universe)
+        low = text.lower()
+        inv_condition = "inventory_condition" in f or any(
+            isinstance(s, dict) and "inventory_condition" in s for s in f.get("steps", []))
+        for p in oos:
+            sku, name = p["sku"], p["name"]
+            if sku.lower() not in low and name.lower() not in low:
+                continue
+            restock = p.get("restock_date", "")
+            date_gated = bool(_RESTOCK_GATE_RE.search(text)) or (restock and restock in text)
+            if inv_condition or date_gated:
+                continue
+            return False, (f"flow {f['id']} promotes out-of-stock {name} ({sku}, "
+                            f"restock {restock or 'unknown'}) with no inventory condition or "
+                            f"restock-date gate")
+    return True, "no live proposed flow promotes an out-of-stock product without an inventory- or restock-date gate"
+
+
+def no_solstice_percent_off_framing(task, params, deliverable, ctx):
+    """Brand guidelines: the Solstice line is never framed with %-off discounts."""
+    flows = _submitted_flows(deliverable)
+    if not flows:
+        return False, "no submitted flow JSON"
+    pct_off = re.compile(r"\d{1,3}\s*%\s*(off|discount)", re.IGNORECASE)
+    for f in flows:
+        if f.get("status") != "live":
+            continue
+        text = _flow_text_with_templates(f, ctx.universe)
+        if "solstice" in text.lower() and pct_off.search(text):
+            return False, (f"flow {f['id']} pairs Solstice with %-off framing "
+                            f"(brand guidelines forbid discounting Solstice)")
+    return True, "no %-off framing paired with Solstice anywhere in the proposed flows"
+
+
 PREDICATES = {
     "footer_utm_present": footer_utm_present,
     "flow_schema_valid": flow_schema_valid,
@@ -335,6 +406,8 @@ PREDICATES = {
     "vip_segment_fixed": vip_segment_fixed,
     "no_staged_solstice_discount": no_staged_solstice_discount,
     "control_draft_complete": control_draft_complete,
+    "no_oos_solstice_promotion": no_oos_solstice_promotion,
+    "no_solstice_percent_off_framing": no_solstice_percent_off_framing,
 }
 
 
