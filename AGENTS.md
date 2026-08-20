@@ -12,6 +12,7 @@ python3 run_eval.py --all-replay                       # replay matrix: good pas
 python3 -m unittest discover -s tests                  # offline unit tests
 python3 run_eval.py --task <ID> --agent replay:good    # grade one canned variant (also replay:bad, replay:edge)
 python3 run_eval.py --universe meridian-travel-goods --dry-run   # non-default universe (flag applies to any mode)
+python3 run_eval.py --universe all --dry-run           # sweep every universe (--dry-run / --all-replay only)
 ```
 
 All three validation commands must be green before any work is considered done. Everything is

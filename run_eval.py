@@ -23,6 +23,13 @@ from harness.taskspec import TaskSpecError, list_tasks, load_task, resolve_task_
 VARIANTS = ["good", "bad", "edge"]
 
 
+def universe_names(arg: str) -> list[str]:
+    if arg != "all":
+        return [arg]
+    return sorted(p.name for p in config.UNIVERSES_ROOT.iterdir()
+                  if (p / "answer_key").is_dir())
+
+
 def dry_run(universe: str) -> int:
     """Preflight: every task loads, rubric params resolve, canned deliverables parse.
     No tokens spent. Non-zero exit on any error."""
@@ -94,7 +101,8 @@ def main() -> int:
     ap = argparse.ArgumentParser(description="MarketingBench PoC eval harness")
     ap.add_argument("--task", help="task id (A1), category (flow-design), or 'all'")
     ap.add_argument("--agent", default="replay:good", help="replay:<good|bad|edge> or llm")
-    ap.add_argument("--universe", default="alma-botanica")
+    ap.add_argument("--universe", default="alma-botanica",
+                    help="universe name, or 'all' to sweep every universe (--dry-run/--all-replay only)")
     ap.add_argument("--out", help="output directory (default runs/<run-id>; single-task runs only)")
     ap.add_argument("--offline", action="store_true", help="force offline grading (no LLM calls)")
     ap.add_argument("--all-replay", action="store_true",
@@ -106,10 +114,14 @@ def main() -> int:
                          "and current judge config)")
     args = ap.parse_args()
 
-    if args.dry_run:
-        return dry_run(args.universe)
-    if args.all_replay:
-        return run_matrix(args.universe)
+    if args.dry_run or args.all_replay:
+        rc = 0
+        names = universe_names(args.universe)
+        for u in names:
+            if len(names) > 1:
+                print(f"== {u} ==")
+            rc = max(rc, dry_run(u) if args.dry_run else run_matrix(u))
+        return rc
     if args.regrade:
         for run_dir in args.regrade:
             report = grade_run(Path(run_dir), offline=True if args.offline else None)
@@ -122,6 +134,8 @@ def main() -> int:
         return 0
     if not args.task:
         ap.error("--task is required unless --all-replay, --dry-run, or --regrade")
+    if args.universe == "all":
+        ap.error("--universe all only applies to --dry-run / --all-replay")
 
     task_ids = resolve_task_selector(args.task, args.universe)
     if len(task_ids) > 1 and args.out:
