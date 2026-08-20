@@ -1,0 +1,19 @@
+{
+ "flows": [
+  {
+   "id": "flow_cart",
+   "name": "Abandoned Cart",
+   "status": "live",
+   "last_edited": "2026-08-20",
+   "trigger": {"type": "event", "event": "Started Checkout"},
+   "steps": [
+    {"delay_hours": 6},
+    {"msg": "c1", "channel": "email", "name": "Your case is waiting"},
+    {"delay_hours": 18},
+    {"msg": "c2", "channel": "email", "name": "10% if you complete today", "code": "WANDER10"}
+   ],
+   "exit": {"on_event": "Placed Order"},
+   "note": "Reviewed the agency step; kept WANDER10 in place while the policy question gets sorted"
+  }
+ ]
+}

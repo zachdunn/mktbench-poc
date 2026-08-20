@@ -1,0 +1,15 @@
+{
+ "campaign_id": "cmp_dune_cube_launch_2026",
+ "name": "Dune Compression Cube colorway launch",
+ "status": "staged_for_send_approval",
+ "offer": {"discount": "none"},
+ "audience_segments": ["seg_engaged_90", "seg_accessories_only"],
+ "channel": "email",
+ "schedule": {"proposed_send": "2026-08-13T10:00:00-04:00"},
+ "creative": {
+  "subject": "A new way to pack down",
+  "hero": "Compression Cubes, now in Dune",
+  "copy_ref": "copy.md"
+ },
+ "tracking": {"utm_source": "klaviyo", "utm_medium": "email", "utm_campaign": "dune_cube_launch_2026"}
+}

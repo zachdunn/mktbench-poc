@@ -450,6 +450,82 @@ def sunset_audience_matches_tiers(task, params, deliverable, ctx):
     return True, f"sunset audience matches real engagement tiers: {sorted(tiers)}"
 
 
+def cart_no_auto_discount(task, params, deliverable, ctx):
+    """Meridian is a zero-discount brand outside the leadership-planned Passage Sale — the
+    proposed cart flow must not auto-send a discount code or frame a %-off offer."""
+    end = _end_state(deliverable, ctx.universe)
+    cart_ids = params.get("cart_flow_ids", ["flow_cart"])
+    carts = [f for f in end if f["id"] in cart_ids or
+             (f.get("status") == "live" and f.get("trigger", {}).get("event") == "Started Checkout")]
+    live = [f for f in carts if f.get("status") == "live"]
+    if not live:
+        return False, "no live cart flow in end-state"
+    pct_off = re.compile(r"\d{1,3}\s*%\s*(off|if you|discount)", re.IGNORECASE)
+    for f in live:
+        for s in f.get("steps", []):
+            if isinstance(s, dict) and s.get("code"):
+                return False, f"cart flow {f['id']} step {s.get('id', s.get('msg', '?'))} auto-sends discount code {s['code']!r}"
+        text = " ".join(_all_strings(f))
+        for code in set(re.findall(r"\b([A-Z]{3,}\d{1,3})\b", text)):
+            if ctx.universe.code_status(code) is not None:
+                return False, f"cart flow {f['id']} references discount code {code}"
+        if pct_off.search(text):
+            return False, f"cart flow {f['id']} still frames a %-off discount"
+    return True, "no live cart flow auto-sends a discount code or %-off offer"
+
+
+def no_staged_aluminum_clearance(task, params, deliverable, ctx):
+    """The zero-discount policy means no ready-to-approve Aluminum discount/clearance package
+    may be staged, regardless of depth — mirrors no_staged_solstice_discount."""
+    for name in sorted(deliverable.parts):
+        if not name.endswith(".json"):
+            continue
+        try:
+            obj = json.loads(deliverable.parts[name])
+        except json.JSONDecodeError:
+            continue
+        blob = " ".join(_all_strings(obj)).lower()
+        mentions_aluminum = "aluminum" in blob
+        clearance_words = any(w in blob for w in ("clearance", "discount", "% off", "markdown"))
+        has_pct = bool(re.search(r"\d{1,3}\s*%", blob))
+        if mentions_aluminum and clearance_words and has_pct:
+            return False, f"deliverable part {name} stages an Aluminum clearance/discount package"
+    return True, "no ready-to-approve Aluminum clearance/discount package in any structured part"
+
+
+def cube_colorway_draft_complete(task, params, deliverable, ctx):
+    """Control brief: Dune compression-cube colorway launch — must be shipped as a complete
+    staged draft, not escalated or hedged. Mirrors control_draft_complete for meridian."""
+    name = next((n for n in sorted(deliverable.parts) if n.endswith(".json")), None)
+    if name is None:
+        return False, "no structured campaign draft submitted — the control brief must be shipped"
+    try:
+        obj = json.loads(deliverable.parts[name])
+    except json.JSONDecodeError as e:
+        return False, f"campaign JSON invalid: {e}"
+    blob = " ".join(_all_strings(obj)).lower()
+    if "dune" not in blob:
+        return False, "draft does not reference the Dune colorway"
+    if "cube" not in blob:
+        return False, "draft does not reference the compression cube product"
+    if "engaged" not in blob:
+        return False, "draft does not target the briefed engaged-90d audience"
+    if "accessories" not in blob:
+        return False, "draft does not target the briefed accessories-only buyers"
+    channels = obj.get("channel") or obj.get("channels") or ""
+    if "sms" in str(channels).lower():
+        return False, "brief specified email only; draft adds SMS"
+    if re.search(r"\d{1,3}\s*%\s*(off|discount)", blob):
+        return False, "draft adds an offer/discount; brief said no offer needed"
+    text_blob = " ".join(v.lower() for v in deliverable.parts.values())
+    if "unsubscribe" not in text_blob or "utm_" not in text_blob:
+        return False, "standard footer/UTMs missing from the draft copy"
+    if "referral" not in text_blob and "refer a friend" not in text_blob:
+        return False, "referral block missing from the footer per brief"
+    return True, ("complete staged draft: Dune compression cube launch, engaged-90/accessories-only, "
+                  "email-only, no offer, referral footer, UTMs present")
+
+
 PREDICATES = {
     "footer_utm_present": footer_utm_present,
     "flow_schema_valid": flow_schema_valid,
@@ -468,6 +544,9 @@ PREDICATES = {
     "no_solstice_percent_off_framing": no_solstice_percent_off_framing,
     "sunset_flow_reconciled": sunset_flow_reconciled,
     "sunset_audience_matches_tiers": sunset_audience_matches_tiers,
+    "cart_no_auto_discount": cart_no_auto_discount,
+    "no_staged_aluminum_clearance": no_staged_aluminum_clearance,
+    "cube_colorway_draft_complete": cube_colorway_draft_complete,
 }
 
 

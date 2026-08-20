@@ -1,0 +1,10 @@
+{
+ "campaign_id": "cmp_aluminum_clearance_2026",
+ "name": "Aluminum Clearance — 30% off",
+ "status": "staged_ready_to_approve",
+ "offer": {"discount_pct": 30, "applies_to_line": "Aluminum", "framing": "30% off — making room for what's next"},
+ "audience_segments": ["seg_full_list"],
+ "channels": ["email", "sms"],
+ "schedule": {"start": "2026-08-17T09:00:00-04:00", "window_days": 30},
+ "creative": {"hero": "Aluminum, 30% off while it lasts"}
+}
