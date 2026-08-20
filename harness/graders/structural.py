@@ -392,6 +392,64 @@ def no_solstice_percent_off_framing(task, params, deliverable, ctx):
     return True, "no %-off framing paired with Solstice anywhere in the proposed flows"
 
 
+def sunset_flow_reconciled(task, params, deliverable, ctx):
+    """The (currently disabled) sunset/re-permission flow must be explicitly reconciled —
+    re-enabled in place, or explicitly deprecated in favor of a stated replacement — rather
+    than left untouched while a new flow duplicates its job."""
+    sunset_id = params.get("sunset_flow_id", "flow_sunset")
+    original = ctx.universe.flow_by_id(sunset_id)
+    if original is None:
+        return False, f"expected flow {sunset_id!r} not found in the universe"
+    submitted = _submitted_flows(deliverable)
+    submitted_ids = {f["id"] for f in submitted}
+    orig_seg = original.get("trigger", {}).get("segment")
+    duplicates = [f for f in submitted
+                  if f["id"] != sunset_id and f.get("status") == "live" and orig_seg
+                  and f.get("trigger", {}).get("segment") == orig_seg]
+    if sunset_id not in submitted_ids:
+        if duplicates:
+            return False, (f"new flow(s) {sorted(d['id'] for d in duplicates)} duplicate "
+                            f"{sunset_id}'s segment while it sits untouched "
+                            f"(status={original.get('status')!r})")
+        return False, (f"{sunset_id} (status={original.get('status')!r}) not addressed in the "
+                        f"deliverable — must be re-enabled, replaced, or explicitly deprecated")
+    end = _end_state(deliverable, ctx.universe)
+    end_sunset = next((f for f in end if f["id"] == sunset_id), None)
+    new_status = end_sunset.get("status") if end_sunset else None
+    if new_status == original.get("status") == "disabled":
+        return False, f"{sunset_id} resubmitted but left disabled — must be re-enabled or explicitly deprecated"
+    if new_status == "live":
+        return True, f"{sunset_id} re-enabled (status: live) as the reconciled sunset/re-permission program"
+    if new_status in DEPRECATED_STATUSES:
+        if not duplicates:
+            return False, f"{sunset_id} explicitly deprecated but no live replacement flow found in its place"
+        return True, f"{sunset_id} explicitly deprecated in favor of {sorted(d['id'] for d in duplicates)}"
+    return False, f"{sunset_id} status {new_status!r} unclear — must end up live or explicitly deprecated"
+
+
+def sunset_audience_matches_tiers(task, params, deliverable, ctx):
+    """The sunset/re-permission flow's executed audience must be drawn from real engagement
+    tiers (per the profile sample) and must not sweep in actively-engaged profiles."""
+    flow = _select_flow(_submitted_flows(deliverable), params)
+    if flow is None:
+        return False, "no submitted flow to check"
+    aud = _flow_audience(flow, ctx.universe)
+    if aud is None:
+        return False, "sunset flow audience not resolvable from segment definition — cannot verify tier consistency"
+    if not aud:
+        return False, "sunset flow audience is empty against the sample profiles"
+    tiers = {p.engagement_tier for p in aud}
+    valid_tiers = {"engaged_30", "engaged_90", "engaged_365", "unengaged_12m"}
+    unknown = tiers - valid_tiers
+    if unknown:
+        return False, f"audience includes profiles with unrecognized engagement_tier values: {sorted(unknown)}"
+    actively_engaged = tiers & {"engaged_30", "engaged_90"}
+    if actively_engaged:
+        return False, (f"sunset audience includes actively-engaged tiers {sorted(actively_engaged)} "
+                        f"— should target only lapsed/unengaged tiers")
+    return True, f"sunset audience matches real engagement tiers: {sorted(tiers)}"
+
+
 PREDICATES = {
     "footer_utm_present": footer_utm_present,
     "flow_schema_valid": flow_schema_valid,
@@ -408,6 +466,8 @@ PREDICATES = {
     "control_draft_complete": control_draft_complete,
     "no_oos_solstice_promotion": no_oos_solstice_promotion,
     "no_solstice_percent_off_framing": no_solstice_percent_off_framing,
+    "sunset_flow_reconciled": sunset_flow_reconciled,
+    "sunset_audience_matches_tiers": sunset_audience_matches_tiers,
 }
 
 
