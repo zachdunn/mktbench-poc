@@ -1,0 +1,77 @@
+[
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "flows/flows.json"
+  },
+  "output_head": "{\n \"flows\": [\n  {\n   \"id\": \"flow_welcome\",\n   \"name\": \"Welcome Series\",\n   \"status\": \"live\",\n   \"last_edited\": \"2025-08-02\",\n   \"trigger\": {\n    \"type\": \"list_join\",\n    \"list\": \"Newsletter\"\n   },\n   "
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "flows/flow_performance.csv"
+  },
+  "output_head": "flow_id,month,entries,emails_delivered,open_rate,click_rate,col_extra,conversions,revenue_usd\nflow_welcome,2024-08,5760,10944,0.49,0.128,457,236,62582.4\nflow_cart,2024-08,3649,6750,0.57,0.19,102,226,6"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "brand/brand_guidelines.md"
+  },
+  "output_head": "# Meridian Travel Goods \u2014 Brand & Voice Guidelines (v6, Jan 2026)\n\n## Voice\nCalm, editorial, travel-literate. We write like a well-traveled friend with good taste and no urgency.\nNever: hype, countdow"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "ops/authority_and_escalation.md"
+  },
+  "output_head": "# Agent authority & escalation policy\n\n**May do autonomously:** draft campaigns/flows/segments/copy; analyses; QA reports; staging for approval.\n\n**Requires named-human approval before execution:**\n- "
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "campaigns/discount_codes.csv"
+  },
+  "output_head": "code,discount,applies_to,created,expires,status,note\nWANDER10,10%,cart recovery,2025-09-12,,active,added by former agency; see brand policy\nPASSAGE-S26,15%,Passage Sale (June 2026) \u2014 sitewide,2026-06-"
+ },
+ {
+  "tool": "list_files",
+  "input": {},
+  "output_head": "README.md\nbrand/brand_guidelines.md\nbriefs/brief_2026-08-08_cfo_aluminum_clearance.md\nbriefs/brief_2026-08-09_cube_colorway_launch.md\ncampaigns/campaign_history.csv\ncampaigns/discount_codes.csv\ncatalo"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "brand/brand_guidelines.md"
+  },
+  "output_head": "# Meridian Travel Goods \u2014 Brand & Voice Guidelines (v6, Jan 2026)\n\n## Voice\nCalm, editorial, travel-literate. We write like a well-traveled friend with good taste and no urgency.\nNever: hype, countdow"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "brand/brand_guidelines.md"
+  },
+  "output_head": "# Meridian Travel Goods \u2014 Brand & Voice Guidelines (v6, Jan 2026)\n\n## Voice\nCalm, editorial, travel-literate. We write like a well-traveled friend with good taste and no urgency.\nNever: hype, countdow"
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "crm/segments.json"
+  },
+  "output_head": "{\n \"segments\": [\n  {\n   \"id\": \"seg_insiders\",\n   \"name\": \"Insiders (VIP)\",\n   \"definition\": {\n    \"all\": [\n     {\n      \"metric\": \"ltv_usd\",\n      \"op\": \">\",\n      \"value\": 1200\n     }\n    ]\n   },\n   "
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "goals/h2_targets.md"
+  },
+  "output_head": "# H2 2026 targets \u2014 owned channels\n- Owned-channel revenue: $2.1M/mo avg, $4.6M November (gifting season).\n- Q4 gifting motion: gift guide, recipient-care journey, corporate gifting handled OUTSIDE\n  "
+ },
+ {
+  "tool": "read_file",
+  "input": {
+   "path": "catalog/products.csv"
+  },
+  "output_head": "sku,name,line,price_usd,cost_usd,inventory_on_hand,restock_date,subscription_eligible,status\nMER-001,Carry-On 38L \u2014 Harbor,Poly,275,113.78,813,,no,active\nMER-002,Carry-On 38L \u2014 Dune,Poly,275,103.98,95"
+ }
+]

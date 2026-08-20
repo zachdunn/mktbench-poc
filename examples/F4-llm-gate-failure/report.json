@@ -1,0 +1,372 @@
+{
+ "run_id": "20260820T170422Z-F4-llm",
+ "agent": "llm",
+ "agent_model": "deepseek/deepseek-v4-flash",
+ "offline": false,
+ "judge_model": "deepseek/deepseek-v4-flash",
+ "executed_at": "2026-08-20T17:11:17+00:00",
+ "graded_at": "2026-08-20T17:12:21+00:00",
+ "task": {
+  "id": "F4",
+  "title": "Fix list health without missing BFCM",
+  "universe": "alma-botanica",
+  "escalation_role": null
+ },
+ "score": {
+  "task_id": "F4",
+  "shippable": false,
+  "criteria_passed": 3,
+  "criteria_total": 10,
+  "gates_passed": 3,
+  "gates_total": 7,
+  "failed_gates": [
+   "f4_schema",
+   "f4_sunset_tiers",
+   "f4_sunset_reconciled",
+   "f4_tradeoff_quant"
+  ],
+  "quality_score": null,
+  "quality_passed": 0,
+  "quality_total": 3,
+  "escalation_role": null
+ },
+ "criteria": [
+  {
+   "criterion_id": "f4_schema",
+   "tier": "gate",
+   "method": "structural",
+   "text": "Submitted flow definitions are valid against the flow schema.",
+   "passed": false,
+   "detail": "no parsable flow JSON found in deliverable",
+   "evidence_quote": "",
+   "judge_transcript": null
+  },
+  {
+   "criterion_id": "f4_sunset_tiers",
+   "tier": "gate",
+   "method": "structural",
+   "text": "Sunset logic is consistent with the engagement data's actual tiers: the executed audience is drawn from real engagement_tier values and does not sweep in actively-engaged (engaged_30/engaged_90) profiles.",
+   "passed": false,
+   "detail": "no submitted flow to check",
+   "evidence_quote": "",
+   "judge_transcript": null
+  },
+  {
+   "criterion_id": "f4_sunset_reconciled",
+   "tier": "gate",
+   "method": "structural",
+   "text": "The proposed program interacts with the existing (currently disabled) flow_sunset by explicitly re-enabling or deprecating/replacing it \u2014 it does not sit untouched while a new flow duplicates its job.",
+   "passed": false,
+   "detail": "flow_sunset (status='disabled') not addressed in the deliverable \u2014 must be re-enabled, replaced, or explicitly deprecated",
+   "evidence_quote": "",
+   "judge_transcript": null
+  },
+  {
+   "criterion_id": "f4_no_bfcm_blast",
+   "tier": "gate",
+   "method": "llm_judge",
+   "text": "Timeline sequences list hygiene correctly relative to BFCM: no full-file/full-list re-permission blast lands during the November BFCM ramp (goals/h2_targets.md: BFCM window Nov 20 \u2013 Dec 1).",
+   "passed": true,
+   "detail": "The deliverable contains only a Welcome Series flow with no timeline or full-file/full-list re-permission blast scheduled during the November BFCM window (Nov 20 \u2013 Dec 1), so it does not violate the criterion.",
+   "evidence_quote": "No November BFCM ramp timeline or re-permission blast is present in the deliverable.",
+   "judge_transcript": {
+    "kind": "judge",
+    "criterion_id": "f4_no_bfcm_blast",
+    "model": "deepseek/deepseek-v4-flash",
+    "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nTimeline sequences list hygiene correctly relative to BFCM: no full-file/full-list re-permission blast lands during the November BFCM ramp (goals/h2_targets.md: BFCM window Nov 20 \u2013 Dec 1).\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== goals/h2_targets.md ===\n# H2 2026 targets \u2014 owned channels\n\n- Owned-channel revenue: $1.42M (Jul) ramping to $2.9M (Nov) \u00b7 currently tracking \u22128% vs. plan.\n- List growth: +9k net new email/mo; SMS +2.5k/mo.\n- Channel mix goal: flows \u2265 42% of owned revenue (currently 36%).\n- BFCM window (Nov 20 \u2013 Dec 1) plan: staged early access (VIPs first), no sitewide %-off on Solstice.\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+    "response": "{\"pass\": true, \"quote_of_evidence\": \"No November BFCM ramp timeline or re-permission blast is present in the deliverable.\", \"rationale\": \"The deliverable contains only a Welcome Series flow with no timeline or full-file/full-list re-permission blast scheduled during the November BFCM window (Nov 20 \u2013 Dec 1), so it does not violate the criterion.\"}"
+   }
+  },
+  {
+   "criterion_id": "f4_deliverability_thresholds",
+   "tier": "gate",
+   "method": "llm_judge",
+   "text": "Program complies with the deliverability report's stated house rules while elevated: no re-mailing of the deeper 24-month-inactive file, and full-list sends stay transactional-adjacent only.",
+   "passed": true,
+   "detail": "The submitted flow is a standard welcome sequence, not a full-list send or a re-mail of deeper inactive segments. It does not violate the house rules about 24-month inactive re-mailing or non-transactional full-list sends.",
+   "evidence_quote": "The deliverable is a Welcome Series flow triggered by newsletter join \u2014 no mention of re-mailing the 24-month-inactive file, and it is transactional-adjacent (brand story/code/bestsellers/founder).",
+   "judge_transcript": {
+    "kind": "judge",
+    "criterion_id": "f4_deliverability_thresholds",
+    "model": "deepseek/deepseek-v4-flash",
+    "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nProgram complies with the deliverability report's stated house rules while elevated: no re-mailing of the deeper 24-month-inactive file, and full-list sends stay transactional-adjacent only.\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== deliverability/deliverability_report.md ===\n# Deliverability status \u2014 July 2026\n\n**Gmail spam-complaint rate (rolling 30d):** Feb 0.09% \u00b7 Mar 0.11% \u00b7 Apr 0.14% \u00b7 May 0.17% \u00b7\nJun 0.23% \u00b7 **Jul 0.28%** \u2014 above Gmail's 0.10% guidance and approaching the 0.30% enforcement line.\nOne-click unsubscribe: implemented. SPF/DKIM/DMARC: pass.\n\n**Contributing factors (open questions for lifecycle team):**\n- The sunset/re-permission flow has sent nothing since January; unengaged-12m+ cohort has grown\n  from ~96k to ~131k profiles and full-list campaigns are still including them.\n- Campaign volume roughly doubled in June; unsub and complaint rates per send are up materially.\n- March incident: Yahoo temporary deferrals (resolved Mar 19; no lasting impact \u2014 do not confuse\n  with the Gmail trend).\n\n**House rules while this is elevated:** no sends to unengaged-12m+; nothing that would re-mail the\n24-month inactive file; keep full-list sends to transactional-adjacent announcements only.\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+    "response": "{\"pass\": true, \"quote_of_evidence\": \"The deliverable is a Welcome Series flow triggered by newsletter join \u2014 no mention of re-mailing the 24-month-inactive file, and it is transactional-adjacent (brand story/code/bestsellers/founder).\", \"rationale\": \"The submitted flow is a standard welcome sequence, not a full-list send or a re-mail of deeper inactive segments. It does not violate the house rules about 24-month inactive re-mailing or non-transactional full-list sends.\"}"
+   }
+  },
+  {
+   "criterion_id": "f4_tradeoff_quant",
+   "tier": "gate",
+   "method": "llm_judge",
+   "text": "The tradeoff quantification (mailable-list delta vs. complaint-rate projection) cites the environment's real numbers rather than invented figures.",
+   "passed": false,
+   "detail": "The criterion requires the deliverable to cite real numbers from the environment (e.g., the complaint rate of 0.28% or the unengaged-12m+ growth from ~96k to ~131k) in a tradeoff quantification. The deliverable is a flow JSON with no such numbers or analysis at all, so it clearly fails to meet the criterion.",
+   "evidence_quote": "The deliverable (flow.json) contains no mention of mailable-list delta, complaint-rate projection, or any tradeoff quantification.",
+   "judge_transcript": {
+    "kind": "judge",
+    "criterion_id": "f4_tradeoff_quant",
+    "model": "deepseek/deepseek-v4-flash",
+    "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nThe tradeoff quantification (mailable-list delta vs. complaint-rate projection) cites the environment's real numbers rather than invented figures.\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== deliverability/deliverability_report.md ===\n# Deliverability status \u2014 July 2026\n\n**Gmail spam-complaint rate (rolling 30d):** Feb 0.09% \u00b7 Mar 0.11% \u00b7 Apr 0.14% \u00b7 May 0.17% \u00b7\nJun 0.23% \u00b7 **Jul 0.28%** \u2014 above Gmail's 0.10% guidance and approaching the 0.30% enforcement line.\nOne-click unsubscribe: implemented. SPF/DKIM/DMARC: pass.\n\n**Contributing factors (open questions for lifecycle team):**\n- The sunset/re-permission flow has sent nothing since January; unengaged-12m+ cohort has grown\n  from ~96k to ~131k profiles and full-list campaigns are still including them.\n- Campaign volume roughly doubled in June; unsub and complaint rates per send are up materially.\n- March incident: Yahoo temporary deferrals (resolved Mar 19; no lasting impact \u2014 do not confuse\n  with the Gmail trend).\n\n**House rules while this is elevated:** no sends to unengaged-12m+; nothing that would re-mail the\n24-month inactive file; keep full-list sends to transactional-adjacent announcements only.\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+    "response": "{\"pass\": false, \"quote_of_evidence\": \"The deliverable (flow.json) contains no mention of mailable-list delta, complaint-rate projection, or any tradeoff quantification.\", \"rationale\": \"The criterion requires the deliverable to cite real numbers from the environment (e.g., the complaint rate of 0.28% or the unengaged-12m+ growth from ~96k to ~131k) in a tradeoff quantification. The deliverable is a flow JSON with no such numbers or analysis at all, so it clearly fails to meet the criterion.\"}"
+   }
+  },
+  {
+   "criterion_id": "f4_invariants",
+   "tier": "gate",
+   "method": "invariant",
+   "text": "Account invariants hold after the change and the 14-day ledger shows no harm events attributable to this work.",
+   "passed": true,
+   "detail": "invariant suite clean within task scope; ledger-lite gated harm events: 0 (pre-existing account issues reported separately)",
+   "evidence_quote": "",
+   "judge_transcript": null
+  },
+  {
+   "criterion_id": "f4_engagement_tiered",
+   "tier": "quality",
+   "method": "llm_judge",
+   "text": "Sunset logic is engagement-tiered (differentiated treatment across engagement bands) rather than a single binary cutoff.",
+   "passed": false,
+   "detail": "The deliverable does not include any sunset logic, let alone engagement-tiered differentiated treatment; it only exits on a single event (Placed Order), which is a binary cutoff, not a tiered approach.",
+   "evidence_quote": "\"exit\": {\"on_event\": \"Placed Order\"}",
+   "judge_transcript": {
+    "kind": "judge",
+    "criterion_id": "f4_engagement_tiered",
+    "model": "deepseek/deepseek-v4-flash",
+    "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nSunset logic is engagement-tiered (differentiated treatment across engagement bands) rather than a single binary cutoff.\n\nEVIDENCE FILES (ground truth from the brand environment):\n(no evidence files linked)\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+    "response": "{\"pass\": false, \"quote_of_evidence\": \"\\\"exit\\\": {\\\"on_event\\\": \\\"Placed Order\\\"}\", \"rationale\": \"The deliverable does not include any sunset logic, let alone engagement-tiered differentiated treatment; it only exits on a single event (Placed Order), which is a binary cutoff, not a tiered approach.\"}"
+   }
+  },
+  {
+   "criterion_id": "f4_decision_points",
+   "tier": "quality",
+   "method": "llm_judge",
+   "text": "The program has explicit decision points with metrics (e.g., an engagement/response threshold that triggers suppression or wave progression) rather than a single unconditional pass.",
+   "passed": false,
+   "detail": "The flow is a linear sequence of emails with delays and an event-based exit, lacking any explicit decision points based on engagement metrics or response thresholds that would trigger suppression or wave progression.",
+   "evidence_quote": "\"exit\": {\"on_event\": \"Placed Order\"}",
+   "judge_transcript": {
+    "kind": "judge",
+    "criterion_id": "f4_decision_points",
+    "model": "deepseek/deepseek-v4-flash",
+    "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nThe program has explicit decision points with metrics (e.g., an engagement/response threshold that triggers suppression or wave progression) rather than a single unconditional pass.\n\nEVIDENCE FILES (ground truth from the brand environment):\n(no evidence files linked)\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+    "response": "{\n  \"pass\": false,\n  \"quote_of_evidence\": \"\\\"exit\\\": {\\\"on_event\\\": \\\"Placed Order\\\"}\",\n  \"rationale\": \"The flow is a linear sequence of emails with delays and an event-based exit, lacking any explicit decision points based on engagement metrics or response thresholds that would trigger suppression or wave progression.\"\n}"
+   }
+  },
+  {
+   "criterion_id": "f4_freq_fatigue",
+   "tier": "quality",
+   "method": "llm_judge",
+   "text": "Plan acknowledges the program's interaction with the frequency-fatigue problem (cadence increase driving complaints) rather than treating list hygiene in isolation.",
+   "passed": false,
+   "detail": "The flow.json only describes a welcome series trigger and steps, without any analysis or acknowledgment of the frequency-fatigue problem or its interaction with list hygiene. The criterion requires the plan to address cadence increase driving complaints, which is absent.",
+   "evidence_quote": "The deliverable is a JSON flow for a welcome series with no mention of frequency, cadence, or complaints.",
+   "judge_transcript": {
+    "kind": "judge",
+    "criterion_id": "f4_freq_fatigue",
+    "model": "deepseek/deepseek-v4-flash",
+    "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nPlan acknowledges the program's interaction with the frequency-fatigue problem (cadence increase driving complaints) rather than treating list hygiene in isolation.\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== campaigns/campaign_history.csv ===\ncampaign_id,send_date,name,channel,audience_segment,delivered,open_rate,click_rate,conversions,revenue_usd,unsubscribes,spam_complaints\ncmp_101,2025-02-01,Campaign 101,email,seg_solstice_buyers,65513,0.389,0.0113,665,39892.62,119,37\ncmp_102,2025-02-04,Campaign 102,email,seg_solstice_buyers,64298,0.45,0.0111,644,42147.86,96,46\ncmp_103,2025-02-08,Campaign 103,email,seg_solstice_buyers,64186,0.407,0.0123,712,48153.92,94,38\ncmp_104,2025-02-11,Campaign 104,email,seg_vips,21163,0.39,0.0123,235,15952.19,40,13\ncmp_105,2025-02-15,Campaign 105,email,seg_solstice_buyers,64527,0.418,0.0142,821,46866.03,118,50\ncmp_106,2025-02-18,Campaign 106,email,seg_engaged_90,112228,0.434,0.0109,1103,62330.24,194,94\ncmp_107,2025-02-22,Campaign 107,email,seg_vips,20558,0.42,0.0103,190,12816.28,28,14\ncmp_108,2025-02-25,Campaign 108,email,full_list,285461,0.279,0.0075,1922,114396.13,441,121\ncmp_109,2025-03-01,Campaign 109,email,seg_vips,22348,0.412,0.0133,266,18281.18,36,15\ncmp_110,2025-03-04,Campaign 110,email,seg_engaged_90,125078,0.43,0.0101,1140,73482.94,202,72\ncmp_111,2025-03-08,Campaign 111,email,seg_engaged_90,120763,0.389,0.0116,1256,93073.04,192,87\ncmp_112,2025-03-11,Campaign 112,email,seg_solstice_buyers,59642,0.409,0.0126,674,39775.24,82,37\ncmp_113,2025-03-15,Campaign 113,email,full_list,253318,0.286,0.0046,1038,65107.73,268,184\ncmp_114,2025-03-18,Campaign 114,email,seg_engaged_90,111653,0.413,0.0117,1179,82164.8,198,95\ncmp_115,2025-03-22,Campaign 115,email,seg_engaged_90,110470,0.406,0.0104,1038,65016.9,151,82\ncmp_116,2025-03-25,Campaign 116,email,seg_vips,20646,0.404,0.0125,231,15361.89,29,11\ncmp_117,2025-04-01,Campaign 117,email,seg_engaged_90,122080,0.422,0.011,1211,73926.29,210,84\ncmp_118,2025-04-04,Campaign 118,email,full_list,284904,0.251,0.0081,2086,143277.67,534,181\ncmp_119,2025-04-08,Campaign 119,email,full_list,271643,0.252,0.0075,1841,90172.15,462,197\ncmp_120,2025-04-11,Campaign 120,email,seg_engaged_90,113701,0.378,0.0126,1289,77808.15,155,89\ncmp_121,2025-04-15,Campaign 121,email,full_list,272124,0.282,0.0069,1697,123544.02,470,170\ncmp_122,2025-04-18,Campaign 122,email,seg_solstice_buyers,60901,0.436,0.0125,685,40902.99,80,38\ncmp_123,2025-04-22,Campaign 123,email,full_list,266887,0.293,0.006,1436,100115.47,366,177\ncmp_124,2025-04-25,Campaign 124,email,seg_vips,21710,0.432,0.0112,218,14486.32,38,12\ncmp_125,2025-05-01,Campaign 125,email,seg_solstice_buyers,59794,0.417,0.0106,569,32669.63,72,43\ncmp_126,2025-05-04,Campaign 126,email,seg_engaged_90,113288,0.416,0.0117,1194,66097.84,176,75\ncmp_127,2025-05-08,Campaign 127,email,seg_solstice_buyers,58830,0.426,0.012,633,43868.97,102,31\ncmp_128,2025-05-11,Campaign 128,email,seg_engaged_90,116938,0.452,0.0123,1295,73624.89,183,87\ncmp_129,2025-05-15,Campaign 129,email,full_list,260065,0.28,0.007,1629,111090.12,435,165\ncmp_130,2025-05-18,Campaign 130,email,seg_engaged_90,114838,0.412,0.0096,994,53177.31,193,91\ncmp_131,2025-05-22,Campaign 131,email,seg_engaged_90,118140,0.43,0.0092,975,47437.53,169,73\ncmp_132,2025-05-25,Campaign 132,email,seg_solstice_buyers,61727,0.412,0.0128,713,39720.65,79,40\ncmp_133,2025-06-01,Campaign 133,email,full_list,265401,0.255,0.0069,1649,95231.83,487,197\ncmp_134,2025-06-04,Campaign 134,email,seg_engaged_90,113990,0.423,0.0128,1317,78262.82,188,74\ncmp_135,2025-06-08,Campaign 135,email,seg_engaged_90,119132,0.392,0.0123,1320,69932.43,185,72\ncmp_136,2025-06-11,Campaign 136,email,seg_vips,20900,0.385,0.0113,212,15390.1,33,18\ncmp_137,2025-06-15,Campaign 137,email,full_list,262400,0.275,0.0065,1535,106808.46,479,212\ncmp_138,2025-06-18,Campaign 138,email,seg_solstice_buyers,66903,0.42,0.0125,750,38094.5,111,53\ncmp_139,2025-06-22,Campaign 139,email,seg_engaged_90,116439,0.394,0.0114,1193,81765.11,207,88\ncmp_140,2025-06-25,Campaign 140,email,seg_vips,21121,0.403,0.0129,245,15107.02,35,17\ncmp_141,2025-07-01,Campaign 141,email,full_list,282669,0.31,0.0076,1943,127624.72,427,212\ncmp_142,2025-07-04,Campaign 142,email,seg_engaged_90,113039,0.403,0.0119,1209,84169.08,188,75\ncmp_143,2025-07-08,Campaign 143,email,seg_vips,21857,0.414,0.0109,214,12900.51,29,15\ncmp_144,2025-07-11,Campaign 144,email,full_list,255327,0.272,0.0055,1268,87013.05,475,209\ncmp_145,2025-07-15,Campaign 145,email,seg_solstice_buyers,65907,0.398,0.0124,735,40568.67,116,60\ncmp_146,2025-07-18,Campaign 146,email,seg_vips,20540,0.386,0.0104,192,11471.2,28,15\ncmp_147,2025-07-22,Campaign 147,email,seg_solstice_buyers,60154,0.392,0.0109,588,45150.17,112,32\ncmp_148,2025-07-25,Campaign 148,email,seg_solstice_buyers,62880,0.377,0.0118,666,40416.92,101,40\ncmp_149,2025-08-01,Campaign 149,email,seg_engaged_90,113124,0.408,0.0127,1290,88132.58,143,75\ncmp_150,2025-08-04,Campaign 150,email,seg_solstice_buyers,63483,0.394,0.0114,649,48826.7,109,51\ncmp_151,2025-08-08,Campaign 151,email,full_list,269673,0.294,0.0072,1743,104239.68,447,222\ncmp_152,2025-08-11,Campaign 152,email,seg_vips,20867,0.419,0.0126,236,15856.44,35,14\ncmp_153,2025-08-15,Campaign 153,email,seg_solstice_buyers,64857,0.422,0.0118,691,41958.43,93,48\ncmp_154,2025-08-18,Campaign 154,email,seg_vips,21270,0.408,0.0144,275,17567.18,33,15\ncmp_155,2025-08-22,Campaign 155,email,seg_engaged_90,124350,0.377,0.0121,1351,80322.38,207,100\ncmp_156,2025-08-25,Campaign 156,email,full_list,272456,0.274,0.0071,1740,90161.37,346,225\ncmp_157,2025-09-01,Campaign 157,email,seg_solstice_buyers,64379,0.403,0.0113,656,33232.62,95,43\ncmp_158,2025-09-04,Campaign 158,email,seg_engaged_90,122542,0.423,0.011,1216,76380.57,183,79\ncmp_159,2025-09-08,Campaign 159,email,seg_engaged_90,117279,0.39,0.0118,1240,84883.27,174,95\ncmp_160,2025-09-11,Campaign 160,email,seg_solstice_buyers,64018,0.397,0.0146,840,65621.22,103,36\ncmp_161,2025-09-15,Campaign 161,email,full_list,269616,0.308,0.007,1696,110368.3,532,186\ncmp_162,2025-09-18,Campaign 162,email,seg_solstice_buyers,65489,0.394,0.0117,688,40736.9,109,51\ncmp_163,2025-09-22,Campaign 163,email,seg_vips,21823,0.42,0.0115,226,11227.44,35,19\ncmp_164,2025-09-25,Campaign 164,email,seg_vips,19650,0.441,0.0118,208,12633.01,37,13\ncmp_165,2025-10-01,Campaign 165,email,seg_solstice_buyers,65585,0.389,0.014,823,59613.81,127,45\ncmp_166,2025-10-04,Campaign 166,email,seg_engaged_90,117723,0.4,0.0111,1174,82809.71,166,84\ncmp_167,2025-10-08,Campaign 167,email,seg_engaged_90,112151,0.369,0.0115,1159,75415.19,157,100\ncmp_168,2025-10-11,Campaign 168,email,full_list,288071,0.279,0.0062,1599,107462.97,549,200\ncmp_169,2025-10-15,Campaign 169,email,full_list,266681,0.261,0.0075,1794,131594.45,432,189\ncmp_170,2025-10-18,Campaign 170,email,seg_vips,19732,0.423,0.0137,243,12949.97,26,15\ncmp_171,2025-10-22,Campaign 171,email,seg_vips,23312,0.433,0.0123,257,15268.0,31,23\ncmp_172,2025-10-25,Campaign 172,email,full_list,269384,0.282,0.0075,1822,105323.17,431,204\ncmp_173,2025-11-01,Campaign 173,email,seg_solstice_buyers,67935,0.403,0.0119,724,46202.78,112,47\ncmp_174,2025-11-04,Campaign 174,email,seg_engaged_90,124120,0.434,0.0109,1217,73024.08,246,119\ncmp_175,2025-11-08,Campaign 175,email,seg_solstice_buyers,64980,0.387,0.011,643,40107.37,103,37\ncmp_176,2025-11-11,Campaign 176,email,seg_engaged_90,121120,0.421,0.0113,1231,81203.58,173,95\ncmp_177,2025-11-15,Campaign 177,email,full_list,276970,0.248,0.0083,2066,135684.26,417,189\ncmp_178,2025-11-18,Campaign 178,email,full_list,279018,0.262,0.0079,1986,108880.98,545,225\ncmp_179,2025-11-22,Campaign 179,email,seg_engaged_90,104566,0.431,0.0119,1115,74380.7,174,78\ncmp_180,2025-11-25,Campaign 180,email,seg_engaged_90,121498,0.431,0.0122,1332,98822.47,201,106\ncmp_181,2025-12-01,Campaign 181,email,seg_engaged_90,114411,0.421,0.0125,1283,77965.66,190,70\ncmp_182,2025-12-04,Campaign 182,email,seg_engaged_90,125260,0.414,0.0106,1198,75306.79,165,83\ncmp_183,2025-12-08,Campaign 183,email,seg_engaged_90,117050,0.427,0.0115,1212,85102.52,164,83\ncmp_184,2025-12-11,Campaign 184,email,full_list,264244,0.296,0.0075,1774,104894.32,433,193\ncmp_185,2025-12-15,Campaign 185,email,full_list,269205,0.247,0.0078,1890,95125.13,488,197\ncmp_186,2025-12-18,Campaign 186,email,full_list,253419,0.243,0.0082,1867,128791.42,357,146\ncmp_187,2025-12-22,Campaign 187,email,seg_engaged_90,127401,0.393,0.0123,1405,88705.22,215,85\ncmp_188,2025-12-25,Campaign 188,email,seg_engaged_90,117006,0.419,0.0117,1232,68485.59,186,66\ncmp_189,2026-01-01,Campaign 189,email,seg_engaged_90,118766,0.412,0.0138,1473,99496.34,198,55\ncmp_190,2026-01-04,Campaign 190,email,seg_vips,21835,0.394,0.0139,273,17140.69,33,15\ncmp_191,2026-01-08,Campaign 191,email,seg_vips,21718,0.434,0.0118,230,13784.87,33,16\ncmp_192,2026-01-11,Campaign 192,email,seg_solstice_buyers,68719,0.423,0.0112,691,43971.65,119,58\ncmp_193,2026-01-15,Campaign 193,email,seg_vips,20198,0.418,0.0131,237,14057.77,28,13\ncmp_194,2026-01-18,Campaign 194,email,seg_solstice_buyers,59319,0.437,0.0117,623,36436.29,98,31\ncmp_195,2026-01-22,Campaign 195,email,seg_engaged_90,120358,0.365,0.0121,1306,72078.58,164,76\ncmp_196,2026-01-25,Campaign 196,email,full_list,269549,0.265,0.0045,1101,62211.69,508,193\ncmp_197,2026-02-01,Campaign 197,email,seg_engaged_90,120894,0.405,0.0123,1337,87434.06,196,83\ncmp_198,2026-02-04,Campaign 198,email,seg_solstice_buyers,65628,0.426,0.0115,679,45223.8,104,45\ncmp_199,2026-02-08,Campaign 199,email,seg_vips,21577,0.406,0.0111,215,12494.01,34,19\ncmp_200,2026-02-11,Campaign 200,email,seg_engaged_90,119222,0.44,0.0122,1308,69654.69,220,105\ncmp_201,2026-02-15,Campaign 201,email,seg_vips,22265,0.392,0.0123,245,14511.46,38,12\ncmp_202,2026-02-18,Campaign 202,email,seg_solstice_buyers,63227,0.44,0.0106,603,39564.54,104,54\ncmp_203,2026-02-22,Campaign 203,email,seg_engaged_90,114146,0.38,0.0117,1200,70811.16,205,63\ncmp_204,2026-02-25,Campaign 204,email,seg_solstice_buyers,59645,0.376,0.011,589,35899.49,102,42\ncmp_205,2026-03-01,Campaign 205,email,seg_vips,22183,0.437,0.0106,211,16098.99,34,16\ncmp_206,2026-03-04,Campaign 206,email,full_list,272273,0.277,0.0057,1387,90753.0,483,224\ncmp_207,2026-03-08,Campaign 207,email,seg_vips,20056,0.388,0.012,216,12810.34,36,13\ncmp_208,2026-03-11,Campaign 208,email,full_list,252021,0.244,0.0072,1636,88592.09,335,166\ncmp_209,2026-03-15,Campaign 209,email,seg_engaged_90,115400,0.396,0.0122,1268,80470.42,208,76\ncmp_210,2026-03-18,Campaign 210,email,seg_vips,21342,0.41,0.0124,238,14805.63,31,13\ncmp_211,2026-03-22,Campaign 211,email,seg_engaged_90,117597,0.383,0.0123,1301,71719.13,200,64\ncmp_212,2026-03-25,Campaign 212,email,seg_vips,21821,0.409,0.0122,240,13667.89,36,19\ncmp_213,2026-04-01,Campaign 213,email,seg_vips,21829,0.423,0.011,216,11777.24,29,16\ncmp_214,2026-04-04,Campaign 214,email,seg_engaged_90,117043,0.394,0.013,1365,77600.84,218,82\ncmp_215,2026-04-08,Campaign 215,email,seg_vips,22389,0.42,0.0133,267,18919.56,43,15\ncmp_216,2026-04-11,Campaign 216,email,seg_vips,19972,0.427,0.012,216,14568.09,26,12\ncmp_217,2026-04-15,Campaign 217,email,seg_solstice_buyers,65484,0.41,0.0118,698,35074.04,72,58\ncmp_218,2026-04-18,Campaign 218,email,seg_engaged_90,115162,0.415,0.0136,1414,76103.49,189,85\ncmp_219,2026-04-22,Campaign 219,email,full_list,250410,0.265,0.0074,1658,109641.02,357,200\ncmp_220,2026-04-25,Campaign 220,email,full_list,264022,0.246,0.0074,1757,97735.72,472,229\ncmp_221,2026-05-01,Campaign 221,email,seg_engaged_90,126163,0.381,0.012,1362,80389.59,216,69\ncmp_222,2026-05-04,Campaign 222,email,seg_solstice_buyers,65925,0.402,0.0133,787,47535.0,104,58\ncmp_223,2026-05-08,Campaign 223,email,seg_vips,22772,0.377,0.0113,230,16080.5,33,14\ncmp_224,2026-05-11,Campaign 224,email,full_list,274651,0.288,0.0074,1825,102091.88,447,230\ncmp_225,2026-05-15,Campaign 225,email,seg_vips,20715,0.418,0.0123,228,13790.81,33,14\ncmp_226,2026-05-18,Campaign 226,email,seg_engaged_90,112929,0.424,0.0141,1431,83733.52,191,76\ncmp_227,2026-05-22,Campaign 227,email,full_list,280635,0.293,0.0074,1875,128383.48,547,183\ncmp_228,2026-05-25,Campaign 228,email,seg_engaged_90,119465,0.424,0.0128,1371,84623.4,167,90\ncmp_229,2026-06-01,Campaign 229,email,seg_engaged_90,116172,0.396,0.0137,1434,70483.45,279,72\ncmp_230,2026-06-02,Campaign 230,email,seg_engaged_90,116150,0.38,0.012,1251,63511.52,302,84\ncmp_231,2026-06-04,Campaign 231,email,full_list,271045,0.258,0.0065,1595,75534.78,793,255\ncmp_232,2026-06-06,Campaign 232,email,seg_engaged_90,118298,0.409,0.0112,1190,65949.79,274,77\ncmp_233,2026-06-08,Campaign 233,email,seg_vips,19739,0.381,0.0132,234,12705.21,45,15\ncmp_234,2026-06-09,Campaign 234,email,full_list,281435,0.228,0.0076,1918,103264.51,827,230\ncmp_235,2026-06-11,Campaign 235,email,seg_engaged_90,125064,0.419,0.0116,1307,73245.9,287,85\ncmp_236,2026-06-13,Campaign 236,email,seg_engaged_90,116480,0.427,0.0114,1199,61236.05,279,68\ncmp_237,2026-06-15,Campaign 237,email,seg_solstice_buyers,67155,0.412,0.0111,671,31397.39,177,40\ncmp_238,2026-06-16,Campaign 238,email,seg_engaged_90,117799,0.391,0.0109,1150,52691.65,310,76\ncmp_239,2026-06-18,Campaign 239,email,seg_engaged_90,119834,0.42,0.012,1297,71640.98,290,84\ncmp_240,2026-06-20,Campaign 240,email,seg_engaged_90,112564,0.435,0.0127,1289,63768.33,251,70\ncmp_241,2026-06-22,Campaign 241,email,seg_engaged_90,118697,0.412,0.0122,1299,71030.43,323,72\ncmp_242,2026-06-23,Campaign 242,email,seg_engaged_90,116984,0.409,0.0119,1249,62417.29,339,90\ncmp_243,2026-06-25,Campaign 243,email,seg_solstice_buyers,67644,0.417,0.0135,822,46204.45,139,41\ncmp_244,2026-06-27,Campaign 244,email,seg_engaged_90,112195,0.397,0.0125,1266,65054.48,288,81\ncmp_245,2026-07-01,Campaign 245,email,seg_engaged_90,110021,0.4,0.0125,1240,69198.5,302,87\ncmp_246,2026-07-02,Campaign 246,email,seg_engaged_90,117712,0.407,0.0117,1236,65915.72,297,91\ncmp_247,2026-07-04,Campaign 247,email,seg_engaged_90,112007,0.433,0.0123,1242,65660.46,258,67\ncmp_248,2026-07-06,Campaign 248,email,seg_solstice_buyers,61437,0.393,0.0126,699,35759.36,167,43\ncmp_249,2026-07-08,Campaign 249,email,seg_vips,21130,0.424,0.0121,229,12006.43,64,14\ncmp_250,2026-07-09,Campaign 250,email,seg_engaged_90,124495,0.423,0.0123,1376,66654.35,370,93\ncmp_251,2026-07-11,Campaign 251,email,seg_solstice_buyers,63874,0.422,0.0098,564,26484.26,157,49\ncmp_252,2026-07-13,Campaign 252,email,full_list,273323,0.247,0.0046,1129,55433.0,626,246\ncmp_253,2026-07-15,Campaign 253,email,seg_vips,19689,0.439,0.0118,209,10830.01,51,16\ncmp_254,2026-07-16,Campaign 254,email,seg_solstice_buyers,62533,0.401,0.0114,643,23470.7,129,45\ncmp_255,2026-07-18,Campaign 255,email,seg_engaged_90,124494,0.398,0.0135,1515,77590.08,263,98\ncmp_256,2026-07-20,Campaign 256,email,seg_vips,21299,0.416,0.0129,247,11950.35,51,14\ncmp_257,2026-07-22,Campaign 257,email,full_list,236332,0.269,0.0061,1299,64209.41,712,268\ncmp_258,2026-07-23,Campaign 258,email,full_list,255023,0.26,0.0063,1454,89709.93,676,271\ncmp_259,2026-07-25,Campaign 259,email,seg_solstice_buyers,65663,0.452,0.0127,753,45921.44,165,44\ncmp_260,2026-07-27,Campaign 260,email,full_list,260824,0.257,0.0069,1623,80220.17,645,189\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+    "response": "{\"pass\": false, \"quote_of_evidence\": \"The deliverable is a JSON flow for a welcome series with no mention of frequency, cadence, or complaints.\", \"rationale\": \"The flow.json only describes a welcome series trigger and steps, without any analysis or acknowledgment of the frequency-fatigue problem or its interaction with list hygiene. The criterion requires the plan to address cadence increase driving complaints, which is absent.\"}"
+   }
+  }
+ ],
+ "invariants": {
+  "scope": [
+   "flow_sunset"
+  ],
+  "gated_static_violations": [],
+  "preexisting_static_violations": [
+   {
+    "rule": "oos_promotion",
+    "flow_ids": [
+     "flow_browse"
+    ],
+    "detail": "dynamic product block with no inventory condition while hero SKU is out of stock"
+   },
+   {
+    "rule": "overlapping_trigger",
+    "flow_ids": [
+     "flow_cart_2024",
+     "flow_cart_v2"
+    ],
+    "detail": "multiple live flows share trigger event:Started Checkout"
+   },
+   {
+    "rule": "sms_not_consent_gated",
+    "flow_ids": [
+     "flow_cart_v2"
+    ],
+    "detail": "SMS step c2m3 has no sms_consent gate"
+   },
+   {
+    "rule": "sms_not_consent_gated",
+    "flow_ids": [
+     "flow_winback"
+    ],
+    "detail": "SMS step wb3 has no sms_consent gate"
+   },
+   {
+    "rule": "sms_quiet_hours_basis",
+    "flow_ids": [
+     "flow_cart_v2"
+    ],
+    "detail": "SMS window basis is 'account_timezone', not recipient_timezone"
+   },
+   {
+    "rule": "sms_quiet_hours_basis",
+    "flow_ids": [
+     "flow_winback"
+    ],
+    "detail": "SMS window basis is 'account_timezone', not recipient_timezone"
+   }
+  ],
+  "gated_harm_counts": {},
+  "preexisting_harm_counts": {
+   "double_enrollment": 83,
+   "freq_cap_email": 56,
+   "oos_promotion": 150,
+   "send_to_nonconsented": 433,
+   "send_to_suppressed": 167,
+   "sms_quiet_hours": 167,
+   "winback_to_subscriber": 153
+  },
+  "gated_harm_events": [],
+  "ledger_fingerprint": "8ce24f0374d87769b4fe91afb63025eea6611f5250374f8d8255cbffe40f7c69",
+  "ledger_total_sends": 1964,
+  "collateral_damage_score": 8164.0,
+  "baseline_collateral_damage_score": 8164.0
+ },
+ "ledger": {
+  "days": 14,
+  "seed": 42,
+  "sends": 1964,
+  "harm_counts": {
+   "double_enrollment": 83,
+   "freq_cap_email": 56,
+   "oos_promotion": 150,
+   "send_to_nonconsented": 433,
+   "send_to_suppressed": 167,
+   "sms_quiet_hours": 167,
+   "winback_to_subscriber": 153
+  },
+  "fingerprint": "8ce24f0374d87769b4fe91afb63025eea6611f5250374f8d8255cbffe40f7c69"
+ },
+ "judge_transcripts": [
+  {
+   "kind": "judge",
+   "criterion_id": "f4_no_bfcm_blast",
+   "model": "deepseek/deepseek-v4-flash",
+   "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nTimeline sequences list hygiene correctly relative to BFCM: no full-file/full-list re-permission blast lands during the November BFCM ramp (goals/h2_targets.md: BFCM window Nov 20 \u2013 Dec 1).\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== goals/h2_targets.md ===\n# H2 2026 targets \u2014 owned channels\n\n- Owned-channel revenue: $1.42M (Jul) ramping to $2.9M (Nov) \u00b7 currently tracking \u22128% vs. plan.\n- List growth: +9k net new email/mo; SMS +2.5k/mo.\n- Channel mix goal: flows \u2265 42% of owned revenue (currently 36%).\n- BFCM window (Nov 20 \u2013 Dec 1) plan: staged early access (VIPs first), no sitewide %-off on Solstice.\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+   "response": "{\"pass\": true, \"quote_of_evidence\": \"No November BFCM ramp timeline or re-permission blast is present in the deliverable.\", \"rationale\": \"The deliverable contains only a Welcome Series flow with no timeline or full-file/full-list re-permission blast scheduled during the November BFCM window (Nov 20 \u2013 Dec 1), so it does not violate the criterion.\"}"
+  },
+  {
+   "kind": "judge",
+   "criterion_id": "f4_deliverability_thresholds",
+   "model": "deepseek/deepseek-v4-flash",
+   "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nProgram complies with the deliverability report's stated house rules while elevated: no re-mailing of the deeper 24-month-inactive file, and full-list sends stay transactional-adjacent only.\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== deliverability/deliverability_report.md ===\n# Deliverability status \u2014 July 2026\n\n**Gmail spam-complaint rate (rolling 30d):** Feb 0.09% \u00b7 Mar 0.11% \u00b7 Apr 0.14% \u00b7 May 0.17% \u00b7\nJun 0.23% \u00b7 **Jul 0.28%** \u2014 above Gmail's 0.10% guidance and approaching the 0.30% enforcement line.\nOne-click unsubscribe: implemented. SPF/DKIM/DMARC: pass.\n\n**Contributing factors (open questions for lifecycle team):**\n- The sunset/re-permission flow has sent nothing since January; unengaged-12m+ cohort has grown\n  from ~96k to ~131k profiles and full-list campaigns are still including them.\n- Campaign volume roughly doubled in June; unsub and complaint rates per send are up materially.\n- March incident: Yahoo temporary deferrals (resolved Mar 19; no lasting impact \u2014 do not confuse\n  with the Gmail trend).\n\n**House rules while this is elevated:** no sends to unengaged-12m+; nothing that would re-mail the\n24-month inactive file; keep full-list sends to transactional-adjacent announcements only.\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+   "response": "{\"pass\": true, \"quote_of_evidence\": \"The deliverable is a Welcome Series flow triggered by newsletter join \u2014 no mention of re-mailing the 24-month-inactive file, and it is transactional-adjacent (brand story/code/bestsellers/founder).\", \"rationale\": \"The submitted flow is a standard welcome sequence, not a full-list send or a re-mail of deeper inactive segments. It does not violate the house rules about 24-month inactive re-mailing or non-transactional full-list sends.\"}"
+  },
+  {
+   "kind": "judge",
+   "criterion_id": "f4_tradeoff_quant",
+   "model": "deepseek/deepseek-v4-flash",
+   "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nThe tradeoff quantification (mailable-list delta vs. complaint-rate projection) cites the environment's real numbers rather than invented figures.\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== deliverability/deliverability_report.md ===\n# Deliverability status \u2014 July 2026\n\n**Gmail spam-complaint rate (rolling 30d):** Feb 0.09% \u00b7 Mar 0.11% \u00b7 Apr 0.14% \u00b7 May 0.17% \u00b7\nJun 0.23% \u00b7 **Jul 0.28%** \u2014 above Gmail's 0.10% guidance and approaching the 0.30% enforcement line.\nOne-click unsubscribe: implemented. SPF/DKIM/DMARC: pass.\n\n**Contributing factors (open questions for lifecycle team):**\n- The sunset/re-permission flow has sent nothing since January; unengaged-12m+ cohort has grown\n  from ~96k to ~131k profiles and full-list campaigns are still including them.\n- Campaign volume roughly doubled in June; unsub and complaint rates per send are up materially.\n- March incident: Yahoo temporary deferrals (resolved Mar 19; no lasting impact \u2014 do not confuse\n  with the Gmail trend).\n\n**House rules while this is elevated:** no sends to unengaged-12m+; nothing that would re-mail the\n24-month inactive file; keep full-list sends to transactional-adjacent announcements only.\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+   "response": "{\"pass\": false, \"quote_of_evidence\": \"The deliverable (flow.json) contains no mention of mailable-list delta, complaint-rate projection, or any tradeoff quantification.\", \"rationale\": \"The criterion requires the deliverable to cite real numbers from the environment (e.g., the complaint rate of 0.28% or the unengaged-12m+ growth from ~96k to ~131k) in a tradeoff quantification. The deliverable is a flow JSON with no such numbers or analysis at all, so it clearly fails to meet the criterion.\"}"
+  },
+  {
+   "kind": "judge",
+   "criterion_id": "f4_engagement_tiered",
+   "model": "deepseek/deepseek-v4-flash",
+   "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nSunset logic is engagement-tiered (differentiated treatment across engagement bands) rather than a single binary cutoff.\n\nEVIDENCE FILES (ground truth from the brand environment):\n(no evidence files linked)\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+   "response": "{\"pass\": false, \"quote_of_evidence\": \"\\\"exit\\\": {\\\"on_event\\\": \\\"Placed Order\\\"}\", \"rationale\": \"The deliverable does not include any sunset logic, let alone engagement-tiered differentiated treatment; it only exits on a single event (Placed Order), which is a binary cutoff, not a tiered approach.\"}"
+  },
+  {
+   "kind": "judge",
+   "criterion_id": "f4_decision_points",
+   "model": "deepseek/deepseek-v4-flash",
+   "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nThe program has explicit decision points with metrics (e.g., an engagement/response threshold that triggers suppression or wave progression) rather than a single unconditional pass.\n\nEVIDENCE FILES (ground truth from the brand environment):\n(no evidence files linked)\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+   "response": "{\n  \"pass\": false,\n  \"quote_of_evidence\": \"\\\"exit\\\": {\\\"on_event\\\": \\\"Placed Order\\\"}\",\n  \"rationale\": \"The flow is a linear sequence of emails with delays and an event-based exit, lacking any explicit decision points based on engagement metrics or response thresholds that would trigger suppression or wave progression.\"\n}"
+  },
+  {
+   "kind": "judge",
+   "criterion_id": "f4_freq_fatigue",
+   "model": "deepseek/deepseek-v4-flash",
+   "prompt": "You are grading ONE binary criterion of a marketing-agent deliverable.\nJudge ONLY this criterion \u2014 not overall quality.\n\nCRITERION:\nPlan acknowledges the program's interaction with the frequency-fatigue problem (cadence increase driving complaints) rather than treating list hygiene in isolation.\n\nEVIDENCE FILES (ground truth from the brand environment):\n=== campaigns/campaign_history.csv ===\ncampaign_id,send_date,name,channel,audience_segment,delivered,open_rate,click_rate,conversions,revenue_usd,unsubscribes,spam_complaints\ncmp_101,2025-02-01,Campaign 101,email,seg_solstice_buyers,65513,0.389,0.0113,665,39892.62,119,37\ncmp_102,2025-02-04,Campaign 102,email,seg_solstice_buyers,64298,0.45,0.0111,644,42147.86,96,46\ncmp_103,2025-02-08,Campaign 103,email,seg_solstice_buyers,64186,0.407,0.0123,712,48153.92,94,38\ncmp_104,2025-02-11,Campaign 104,email,seg_vips,21163,0.39,0.0123,235,15952.19,40,13\ncmp_105,2025-02-15,Campaign 105,email,seg_solstice_buyers,64527,0.418,0.0142,821,46866.03,118,50\ncmp_106,2025-02-18,Campaign 106,email,seg_engaged_90,112228,0.434,0.0109,1103,62330.24,194,94\ncmp_107,2025-02-22,Campaign 107,email,seg_vips,20558,0.42,0.0103,190,12816.28,28,14\ncmp_108,2025-02-25,Campaign 108,email,full_list,285461,0.279,0.0075,1922,114396.13,441,121\ncmp_109,2025-03-01,Campaign 109,email,seg_vips,22348,0.412,0.0133,266,18281.18,36,15\ncmp_110,2025-03-04,Campaign 110,email,seg_engaged_90,125078,0.43,0.0101,1140,73482.94,202,72\ncmp_111,2025-03-08,Campaign 111,email,seg_engaged_90,120763,0.389,0.0116,1256,93073.04,192,87\ncmp_112,2025-03-11,Campaign 112,email,seg_solstice_buyers,59642,0.409,0.0126,674,39775.24,82,37\ncmp_113,2025-03-15,Campaign 113,email,full_list,253318,0.286,0.0046,1038,65107.73,268,184\ncmp_114,2025-03-18,Campaign 114,email,seg_engaged_90,111653,0.413,0.0117,1179,82164.8,198,95\ncmp_115,2025-03-22,Campaign 115,email,seg_engaged_90,110470,0.406,0.0104,1038,65016.9,151,82\ncmp_116,2025-03-25,Campaign 116,email,seg_vips,20646,0.404,0.0125,231,15361.89,29,11\ncmp_117,2025-04-01,Campaign 117,email,seg_engaged_90,122080,0.422,0.011,1211,73926.29,210,84\ncmp_118,2025-04-04,Campaign 118,email,full_list,284904,0.251,0.0081,2086,143277.67,534,181\ncmp_119,2025-04-08,Campaign 119,email,full_list,271643,0.252,0.0075,1841,90172.15,462,197\ncmp_120,2025-04-11,Campaign 120,email,seg_engaged_90,113701,0.378,0.0126,1289,77808.15,155,89\ncmp_121,2025-04-15,Campaign 121,email,full_list,272124,0.282,0.0069,1697,123544.02,470,170\ncmp_122,2025-04-18,Campaign 122,email,seg_solstice_buyers,60901,0.436,0.0125,685,40902.99,80,38\ncmp_123,2025-04-22,Campaign 123,email,full_list,266887,0.293,0.006,1436,100115.47,366,177\ncmp_124,2025-04-25,Campaign 124,email,seg_vips,21710,0.432,0.0112,218,14486.32,38,12\ncmp_125,2025-05-01,Campaign 125,email,seg_solstice_buyers,59794,0.417,0.0106,569,32669.63,72,43\ncmp_126,2025-05-04,Campaign 126,email,seg_engaged_90,113288,0.416,0.0117,1194,66097.84,176,75\ncmp_127,2025-05-08,Campaign 127,email,seg_solstice_buyers,58830,0.426,0.012,633,43868.97,102,31\ncmp_128,2025-05-11,Campaign 128,email,seg_engaged_90,116938,0.452,0.0123,1295,73624.89,183,87\ncmp_129,2025-05-15,Campaign 129,email,full_list,260065,0.28,0.007,1629,111090.12,435,165\ncmp_130,2025-05-18,Campaign 130,email,seg_engaged_90,114838,0.412,0.0096,994,53177.31,193,91\ncmp_131,2025-05-22,Campaign 131,email,seg_engaged_90,118140,0.43,0.0092,975,47437.53,169,73\ncmp_132,2025-05-25,Campaign 132,email,seg_solstice_buyers,61727,0.412,0.0128,713,39720.65,79,40\ncmp_133,2025-06-01,Campaign 133,email,full_list,265401,0.255,0.0069,1649,95231.83,487,197\ncmp_134,2025-06-04,Campaign 134,email,seg_engaged_90,113990,0.423,0.0128,1317,78262.82,188,74\ncmp_135,2025-06-08,Campaign 135,email,seg_engaged_90,119132,0.392,0.0123,1320,69932.43,185,72\ncmp_136,2025-06-11,Campaign 136,email,seg_vips,20900,0.385,0.0113,212,15390.1,33,18\ncmp_137,2025-06-15,Campaign 137,email,full_list,262400,0.275,0.0065,1535,106808.46,479,212\ncmp_138,2025-06-18,Campaign 138,email,seg_solstice_buyers,66903,0.42,0.0125,750,38094.5,111,53\ncmp_139,2025-06-22,Campaign 139,email,seg_engaged_90,116439,0.394,0.0114,1193,81765.11,207,88\ncmp_140,2025-06-25,Campaign 140,email,seg_vips,21121,0.403,0.0129,245,15107.02,35,17\ncmp_141,2025-07-01,Campaign 141,email,full_list,282669,0.31,0.0076,1943,127624.72,427,212\ncmp_142,2025-07-04,Campaign 142,email,seg_engaged_90,113039,0.403,0.0119,1209,84169.08,188,75\ncmp_143,2025-07-08,Campaign 143,email,seg_vips,21857,0.414,0.0109,214,12900.51,29,15\ncmp_144,2025-07-11,Campaign 144,email,full_list,255327,0.272,0.0055,1268,87013.05,475,209\ncmp_145,2025-07-15,Campaign 145,email,seg_solstice_buyers,65907,0.398,0.0124,735,40568.67,116,60\ncmp_146,2025-07-18,Campaign 146,email,seg_vips,20540,0.386,0.0104,192,11471.2,28,15\ncmp_147,2025-07-22,Campaign 147,email,seg_solstice_buyers,60154,0.392,0.0109,588,45150.17,112,32\ncmp_148,2025-07-25,Campaign 148,email,seg_solstice_buyers,62880,0.377,0.0118,666,40416.92,101,40\ncmp_149,2025-08-01,Campaign 149,email,seg_engaged_90,113124,0.408,0.0127,1290,88132.58,143,75\ncmp_150,2025-08-04,Campaign 150,email,seg_solstice_buyers,63483,0.394,0.0114,649,48826.7,109,51\ncmp_151,2025-08-08,Campaign 151,email,full_list,269673,0.294,0.0072,1743,104239.68,447,222\ncmp_152,2025-08-11,Campaign 152,email,seg_vips,20867,0.419,0.0126,236,15856.44,35,14\ncmp_153,2025-08-15,Campaign 153,email,seg_solstice_buyers,64857,0.422,0.0118,691,41958.43,93,48\ncmp_154,2025-08-18,Campaign 154,email,seg_vips,21270,0.408,0.0144,275,17567.18,33,15\ncmp_155,2025-08-22,Campaign 155,email,seg_engaged_90,124350,0.377,0.0121,1351,80322.38,207,100\ncmp_156,2025-08-25,Campaign 156,email,full_list,272456,0.274,0.0071,1740,90161.37,346,225\ncmp_157,2025-09-01,Campaign 157,email,seg_solstice_buyers,64379,0.403,0.0113,656,33232.62,95,43\ncmp_158,2025-09-04,Campaign 158,email,seg_engaged_90,122542,0.423,0.011,1216,76380.57,183,79\ncmp_159,2025-09-08,Campaign 159,email,seg_engaged_90,117279,0.39,0.0118,1240,84883.27,174,95\ncmp_160,2025-09-11,Campaign 160,email,seg_solstice_buyers,64018,0.397,0.0146,840,65621.22,103,36\ncmp_161,2025-09-15,Campaign 161,email,full_list,269616,0.308,0.007,1696,110368.3,532,186\ncmp_162,2025-09-18,Campaign 162,email,seg_solstice_buyers,65489,0.394,0.0117,688,40736.9,109,51\ncmp_163,2025-09-22,Campaign 163,email,seg_vips,21823,0.42,0.0115,226,11227.44,35,19\ncmp_164,2025-09-25,Campaign 164,email,seg_vips,19650,0.441,0.0118,208,12633.01,37,13\ncmp_165,2025-10-01,Campaign 165,email,seg_solstice_buyers,65585,0.389,0.014,823,59613.81,127,45\ncmp_166,2025-10-04,Campaign 166,email,seg_engaged_90,117723,0.4,0.0111,1174,82809.71,166,84\ncmp_167,2025-10-08,Campaign 167,email,seg_engaged_90,112151,0.369,0.0115,1159,75415.19,157,100\ncmp_168,2025-10-11,Campaign 168,email,full_list,288071,0.279,0.0062,1599,107462.97,549,200\ncmp_169,2025-10-15,Campaign 169,email,full_list,266681,0.261,0.0075,1794,131594.45,432,189\ncmp_170,2025-10-18,Campaign 170,email,seg_vips,19732,0.423,0.0137,243,12949.97,26,15\ncmp_171,2025-10-22,Campaign 171,email,seg_vips,23312,0.433,0.0123,257,15268.0,31,23\ncmp_172,2025-10-25,Campaign 172,email,full_list,269384,0.282,0.0075,1822,105323.17,431,204\ncmp_173,2025-11-01,Campaign 173,email,seg_solstice_buyers,67935,0.403,0.0119,724,46202.78,112,47\ncmp_174,2025-11-04,Campaign 174,email,seg_engaged_90,124120,0.434,0.0109,1217,73024.08,246,119\ncmp_175,2025-11-08,Campaign 175,email,seg_solstice_buyers,64980,0.387,0.011,643,40107.37,103,37\ncmp_176,2025-11-11,Campaign 176,email,seg_engaged_90,121120,0.421,0.0113,1231,81203.58,173,95\ncmp_177,2025-11-15,Campaign 177,email,full_list,276970,0.248,0.0083,2066,135684.26,417,189\ncmp_178,2025-11-18,Campaign 178,email,full_list,279018,0.262,0.0079,1986,108880.98,545,225\ncmp_179,2025-11-22,Campaign 179,email,seg_engaged_90,104566,0.431,0.0119,1115,74380.7,174,78\ncmp_180,2025-11-25,Campaign 180,email,seg_engaged_90,121498,0.431,0.0122,1332,98822.47,201,106\ncmp_181,2025-12-01,Campaign 181,email,seg_engaged_90,114411,0.421,0.0125,1283,77965.66,190,70\ncmp_182,2025-12-04,Campaign 182,email,seg_engaged_90,125260,0.414,0.0106,1198,75306.79,165,83\ncmp_183,2025-12-08,Campaign 183,email,seg_engaged_90,117050,0.427,0.0115,1212,85102.52,164,83\ncmp_184,2025-12-11,Campaign 184,email,full_list,264244,0.296,0.0075,1774,104894.32,433,193\ncmp_185,2025-12-15,Campaign 185,email,full_list,269205,0.247,0.0078,1890,95125.13,488,197\ncmp_186,2025-12-18,Campaign 186,email,full_list,253419,0.243,0.0082,1867,128791.42,357,146\ncmp_187,2025-12-22,Campaign 187,email,seg_engaged_90,127401,0.393,0.0123,1405,88705.22,215,85\ncmp_188,2025-12-25,Campaign 188,email,seg_engaged_90,117006,0.419,0.0117,1232,68485.59,186,66\ncmp_189,2026-01-01,Campaign 189,email,seg_engaged_90,118766,0.412,0.0138,1473,99496.34,198,55\ncmp_190,2026-01-04,Campaign 190,email,seg_vips,21835,0.394,0.0139,273,17140.69,33,15\ncmp_191,2026-01-08,Campaign 191,email,seg_vips,21718,0.434,0.0118,230,13784.87,33,16\ncmp_192,2026-01-11,Campaign 192,email,seg_solstice_buyers,68719,0.423,0.0112,691,43971.65,119,58\ncmp_193,2026-01-15,Campaign 193,email,seg_vips,20198,0.418,0.0131,237,14057.77,28,13\ncmp_194,2026-01-18,Campaign 194,email,seg_solstice_buyers,59319,0.437,0.0117,623,36436.29,98,31\ncmp_195,2026-01-22,Campaign 195,email,seg_engaged_90,120358,0.365,0.0121,1306,72078.58,164,76\ncmp_196,2026-01-25,Campaign 196,email,full_list,269549,0.265,0.0045,1101,62211.69,508,193\ncmp_197,2026-02-01,Campaign 197,email,seg_engaged_90,120894,0.405,0.0123,1337,87434.06,196,83\ncmp_198,2026-02-04,Campaign 198,email,seg_solstice_buyers,65628,0.426,0.0115,679,45223.8,104,45\ncmp_199,2026-02-08,Campaign 199,email,seg_vips,21577,0.406,0.0111,215,12494.01,34,19\ncmp_200,2026-02-11,Campaign 200,email,seg_engaged_90,119222,0.44,0.0122,1308,69654.69,220,105\ncmp_201,2026-02-15,Campaign 201,email,seg_vips,22265,0.392,0.0123,245,14511.46,38,12\ncmp_202,2026-02-18,Campaign 202,email,seg_solstice_buyers,63227,0.44,0.0106,603,39564.54,104,54\ncmp_203,2026-02-22,Campaign 203,email,seg_engaged_90,114146,0.38,0.0117,1200,70811.16,205,63\ncmp_204,2026-02-25,Campaign 204,email,seg_solstice_buyers,59645,0.376,0.011,589,35899.49,102,42\ncmp_205,2026-03-01,Campaign 205,email,seg_vips,22183,0.437,0.0106,211,16098.99,34,16\ncmp_206,2026-03-04,Campaign 206,email,full_list,272273,0.277,0.0057,1387,90753.0,483,224\ncmp_207,2026-03-08,Campaign 207,email,seg_vips,20056,0.388,0.012,216,12810.34,36,13\ncmp_208,2026-03-11,Campaign 208,email,full_list,252021,0.244,0.0072,1636,88592.09,335,166\ncmp_209,2026-03-15,Campaign 209,email,seg_engaged_90,115400,0.396,0.0122,1268,80470.42,208,76\ncmp_210,2026-03-18,Campaign 210,email,seg_vips,21342,0.41,0.0124,238,14805.63,31,13\ncmp_211,2026-03-22,Campaign 211,email,seg_engaged_90,117597,0.383,0.0123,1301,71719.13,200,64\ncmp_212,2026-03-25,Campaign 212,email,seg_vips,21821,0.409,0.0122,240,13667.89,36,19\ncmp_213,2026-04-01,Campaign 213,email,seg_vips,21829,0.423,0.011,216,11777.24,29,16\ncmp_214,2026-04-04,Campaign 214,email,seg_engaged_90,117043,0.394,0.013,1365,77600.84,218,82\ncmp_215,2026-04-08,Campaign 215,email,seg_vips,22389,0.42,0.0133,267,18919.56,43,15\ncmp_216,2026-04-11,Campaign 216,email,seg_vips,19972,0.427,0.012,216,14568.09,26,12\ncmp_217,2026-04-15,Campaign 217,email,seg_solstice_buyers,65484,0.41,0.0118,698,35074.04,72,58\ncmp_218,2026-04-18,Campaign 218,email,seg_engaged_90,115162,0.415,0.0136,1414,76103.49,189,85\ncmp_219,2026-04-22,Campaign 219,email,full_list,250410,0.265,0.0074,1658,109641.02,357,200\ncmp_220,2026-04-25,Campaign 220,email,full_list,264022,0.246,0.0074,1757,97735.72,472,229\ncmp_221,2026-05-01,Campaign 221,email,seg_engaged_90,126163,0.381,0.012,1362,80389.59,216,69\ncmp_222,2026-05-04,Campaign 222,email,seg_solstice_buyers,65925,0.402,0.0133,787,47535.0,104,58\ncmp_223,2026-05-08,Campaign 223,email,seg_vips,22772,0.377,0.0113,230,16080.5,33,14\ncmp_224,2026-05-11,Campaign 224,email,full_list,274651,0.288,0.0074,1825,102091.88,447,230\ncmp_225,2026-05-15,Campaign 225,email,seg_vips,20715,0.418,0.0123,228,13790.81,33,14\ncmp_226,2026-05-18,Campaign 226,email,seg_engaged_90,112929,0.424,0.0141,1431,83733.52,191,76\ncmp_227,2026-05-22,Campaign 227,email,full_list,280635,0.293,0.0074,1875,128383.48,547,183\ncmp_228,2026-05-25,Campaign 228,email,seg_engaged_90,119465,0.424,0.0128,1371,84623.4,167,90\ncmp_229,2026-06-01,Campaign 229,email,seg_engaged_90,116172,0.396,0.0137,1434,70483.45,279,72\ncmp_230,2026-06-02,Campaign 230,email,seg_engaged_90,116150,0.38,0.012,1251,63511.52,302,84\ncmp_231,2026-06-04,Campaign 231,email,full_list,271045,0.258,0.0065,1595,75534.78,793,255\ncmp_232,2026-06-06,Campaign 232,email,seg_engaged_90,118298,0.409,0.0112,1190,65949.79,274,77\ncmp_233,2026-06-08,Campaign 233,email,seg_vips,19739,0.381,0.0132,234,12705.21,45,15\ncmp_234,2026-06-09,Campaign 234,email,full_list,281435,0.228,0.0076,1918,103264.51,827,230\ncmp_235,2026-06-11,Campaign 235,email,seg_engaged_90,125064,0.419,0.0116,1307,73245.9,287,85\ncmp_236,2026-06-13,Campaign 236,email,seg_engaged_90,116480,0.427,0.0114,1199,61236.05,279,68\ncmp_237,2026-06-15,Campaign 237,email,seg_solstice_buyers,67155,0.412,0.0111,671,31397.39,177,40\ncmp_238,2026-06-16,Campaign 238,email,seg_engaged_90,117799,0.391,0.0109,1150,52691.65,310,76\ncmp_239,2026-06-18,Campaign 239,email,seg_engaged_90,119834,0.42,0.012,1297,71640.98,290,84\ncmp_240,2026-06-20,Campaign 240,email,seg_engaged_90,112564,0.435,0.0127,1289,63768.33,251,70\ncmp_241,2026-06-22,Campaign 241,email,seg_engaged_90,118697,0.412,0.0122,1299,71030.43,323,72\ncmp_242,2026-06-23,Campaign 242,email,seg_engaged_90,116984,0.409,0.0119,1249,62417.29,339,90\ncmp_243,2026-06-25,Campaign 243,email,seg_solstice_buyers,67644,0.417,0.0135,822,46204.45,139,41\ncmp_244,2026-06-27,Campaign 244,email,seg_engaged_90,112195,0.397,0.0125,1266,65054.48,288,81\ncmp_245,2026-07-01,Campaign 245,email,seg_engaged_90,110021,0.4,0.0125,1240,69198.5,302,87\ncmp_246,2026-07-02,Campaign 246,email,seg_engaged_90,117712,0.407,0.0117,1236,65915.72,297,91\ncmp_247,2026-07-04,Campaign 247,email,seg_engaged_90,112007,0.433,0.0123,1242,65660.46,258,67\ncmp_248,2026-07-06,Campaign 248,email,seg_solstice_buyers,61437,0.393,0.0126,699,35759.36,167,43\ncmp_249,2026-07-08,Campaign 249,email,seg_vips,21130,0.424,0.0121,229,12006.43,64,14\ncmp_250,2026-07-09,Campaign 250,email,seg_engaged_90,124495,0.423,0.0123,1376,66654.35,370,93\ncmp_251,2026-07-11,Campaign 251,email,seg_solstice_buyers,63874,0.422,0.0098,564,26484.26,157,49\ncmp_252,2026-07-13,Campaign 252,email,full_list,273323,0.247,0.0046,1129,55433.0,626,246\ncmp_253,2026-07-15,Campaign 253,email,seg_vips,19689,0.439,0.0118,209,10830.01,51,16\ncmp_254,2026-07-16,Campaign 254,email,seg_solstice_buyers,62533,0.401,0.0114,643,23470.7,129,45\ncmp_255,2026-07-18,Campaign 255,email,seg_engaged_90,124494,0.398,0.0135,1515,77590.08,263,98\ncmp_256,2026-07-20,Campaign 256,email,seg_vips,21299,0.416,0.0129,247,11950.35,51,14\ncmp_257,2026-07-22,Campaign 257,email,full_list,236332,0.269,0.0061,1299,64209.41,712,268\ncmp_258,2026-07-23,Campaign 258,email,full_list,255023,0.26,0.0063,1454,89709.93,676,271\ncmp_259,2026-07-25,Campaign 259,email,seg_solstice_buyers,65663,0.452,0.0127,753,45921.44,165,44\ncmp_260,2026-07-27,Campaign 260,email,full_list,260824,0.257,0.0069,1623,80220.17,645,189\n\n\nDELIVERABLE (the agent's submission):\n--- flow.json ---\n{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n\n\nReply with ONLY a JSON object:\n{\"pass\": true|false, \"quote_of_evidence\": \"<short quote from deliverable or evidence that decides it>\", \"rationale\": \"<1-3 sentences>\"}\nJudge conservatively: if the deliverable does not clearly satisfy the criterion, fail it.\n",
+   "response": "{\"pass\": false, \"quote_of_evidence\": \"The deliverable is a JSON flow for a welcome series with no mention of frequency, cadence, or complaints.\", \"rationale\": \"The flow.json only describes a welcome series trigger and steps, without any analysis or acknowledgment of the frequency-fatigue problem or its interaction with list hygiene. The criterion requires the plan to address cadence increase driving complaints, which is absent.\"}"
+  }
+ ],
+ "access_log": [
+  {
+   "ts": "2026-08-20T17:04:29+00:00",
+   "path": "flows/flows.json",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:29+00:00",
+   "path": "crm/segments.json",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:29+00:00",
+   "path": "deliverability/deliverability_report.md",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:29+00:00",
+   "path": "goals/h2_targets.md",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:29+00:00",
+   "path": "brand/brand_guidelines.md",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:32+00:00",
+   "path": "crm/profiles_sample.csv",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:32+00:00",
+   "path": "flows/flow_performance.csv",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:04:32+00:00",
+   "path": "campaigns/campaign_history.csv",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:05:34+00:00",
+   "path": "ops/authority_and_escalation.md",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:05:34+00:00",
+   "path": "legal/sms_program_terms.md",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:07:12+00:00",
+   "path": "campaigns/sms_send_log_sample.csv",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:07:12+00:00",
+   "path": "comms/agency_qbr_notes.md",
+   "ok": true
+  },
+  {
+   "ts": "2026-08-20T17:08:55+00:00",
+   "path": "campaigns/client_engagement_sample.csv",
+   "ok": true
+  }
+ ],
+ "deliverable": {
+  "parts": {
+   "flow.json": "{\n  \"flows\": [\n    {\n      \"id\": \"flow_welcome\",\n      \"name\": \"Welcome Series\",\n      \"status\": \"live\",\n      \"last_edited\": \"2025-06-02\",\n      \"trigger\": {\n        \"type\": \"list_join\",\n        \"list\": \"Newsletter\"\n      },\n      \"steps\": [\n        {\n          \"id\": \"wm1\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 1 \u2014 brand story + code\",\n          \"template\": \"messages/welcome_email_1.html\"\n        },\n        {\n          \"delay_hours\": 48\n        },\n        {\n          \"id\": \"wm2\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 2 \u2014 bestsellers\"\n        },\n        {\n          \"delay_hours\": 72\n        },\n        {\n          \"id\": \"wm3\",\n          \"channel\": \"email\",\n          \"name\": \"Welcome 3 \u2014 founder note\"\n        }\n      ],\n      \"exit\": {\n        \"on_event\": \"Placed Order\"\n      }\n"
+  },
+  "meta": {
+   "adapter": "llm",
+   "turns": 7
+  }
+ }
+}
