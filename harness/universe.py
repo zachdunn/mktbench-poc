@@ -40,27 +40,33 @@ class Universe:
         self.products = self._load_csv("catalog/products.csv")
         self.discount_codes = self._load_csv("campaigns/discount_codes.csv")
         self.flow_performance = self._load_csv("flows/flow_performance.csv")
-        self.sms_log = self._load_csv("campaigns/sms_send_log_sample.csv")
-        self.client_engagement = self._load_csv("campaigns/client_engagement_sample.csv")
+        self.sms_log = self._load_csv_optional("campaigns/sms_send_log_sample.csv")
+        self.client_engagement = self._load_csv_optional("campaigns/client_engagement_sample.csv")
 
     def _load_csv(self, rel: str) -> list[dict]:
         with open(self.root / rel, newline="") as f:
             return list(csv.DictReader(f))
 
+    def _load_csv_optional(self, rel: str) -> list[dict]:
+        return self._load_csv(rel) if (self.root / rel).exists() else []
+
     def _load_profiles(self) -> list[Profile]:
+        # Column sets differ per universe; absent columns take conservative defaults
+        # (consented, not suppressed, not a subscriber) so invariant checks stay meaningful.
         out = []
         for row in self._load_csv("crm/profiles_sample.csv"):
             out.append(Profile(
                 profile_id=row["profile_id"],
                 timezone=row["timezone"],
-                email_consent=_parse_bool(row["email_consent"]),
-                sms_consent=_parse_bool(row["sms_consent"]),
-                is_subscriber=_parse_bool(row["is_subscriber"]),
-                first_order_date=_parse_date(row["first_order_date"]),
-                last_onetime_order_date=_parse_date(row["last_onetime_order_date"]),
-                ltv_usd=float(row["ltv_usd"]),
-                engagement_tier=row["engagement_tier"],
-                suppressed=_parse_bool(row["suppressed"]),
+                email_consent=_parse_bool(row.get("email_consent", "true")),
+                sms_consent=_parse_bool(row.get("sms_consent", "false")),
+                is_subscriber=_parse_bool(row.get("is_subscriber", "false")),
+                first_order_date=_parse_date(row.get("first_order_date", "")),
+                last_onetime_order_date=_parse_date(
+                    row.get("last_onetime_order_date") or row.get("last_order_date") or ""),
+                ltv_usd=float(row.get("ltv_usd") or 0),
+                engagement_tier=row.get("engagement_tier", ""),
+                suppressed=_parse_bool(row.get("suppressed", "false")),
                 raw=dict(row),
             ))
         return out
