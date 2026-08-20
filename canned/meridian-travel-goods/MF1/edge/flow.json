@@ -1,0 +1,45 @@
+{
+  "flows": [
+    {
+      "id": "flow_cart",
+      "name": "Abandoned Cart",
+      "status": "live",
+      "last_edited": "2026-08-20",
+      "trigger": {
+        "type": "event",
+        "event": "Started Checkout"
+      },
+      "steps": [
+        {
+          "delay_hours": 6
+        },
+        {
+          "msg": "c1",
+          "channel": "email",
+          "name": "Your case is waiting"
+        },
+        {
+          "delay_hours": 18
+        },
+        {
+          "msg": "c2",
+          "channel": "email",
+          "name": "Still deciding? Here's what other travelers say"
+        }
+      ],
+      "note": "Removed the agency-added auto-discount step (Aug 2026); replaced with a social proof nudge, no code sent",
+      "flow_filters": [
+        {
+          "metric": "suppressed",
+          "op": "=",
+          "value": false
+        },
+        {
+          "metric": "email_consent",
+          "op": "=",
+          "value": true
+        }
+      ]
+    }
+  ]
+}

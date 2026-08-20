@@ -8,7 +8,7 @@ import csv, json, os, random
 from datetime import date, datetime, timedelta
 
 random.seed(42)
-OUT = "/home/claude/universes/alma-botanica"
+OUT = str(__import__("pathlib").Path(__file__).resolve().parent.parent / "alma-botanica")
 AK = {}  # computed answer-key values
 
 def d(y, m, dy): return date(y, m, dy)

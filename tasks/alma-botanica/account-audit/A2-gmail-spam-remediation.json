@@ -1,0 +1,66 @@
+{
+ "id": "A2",
+ "universe": "alma-botanica",
+ "title": "Gmail is getting angry",
+ "instructions": "Our Gmail spam complaint rate crossed 0.25% and our agency is spooked. Figure out what's driving it and give me a remediation plan that doesn't torch our sending before BFCM.",
+ "files_in_scope": [
+  "deliverability/deliverability_report.md",
+  "flows/flows.json",
+  "flows/flow_performance.csv",
+  "campaigns/campaign_history.csv",
+  "crm/profiles_sample.csv",
+  "comms/agency_qbr_notes.md",
+  "goals/h2_targets.md"
+ ],
+ "deliverable": {"kind": "memo", "parts": {"memo": "diagnosis + sequenced remediation plan (markdown)"}},
+ "criteria": [
+  {
+   "id": "a2_sunset_disabled", "tier": "gate", "method": "llm_judge",
+   "text": "Identifies the disabled sunset/re-permission flow as a root cause and quantifies the unengaged cohort's accumulation since January.",
+   "evidence_files": ["flows/flows.json", "deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_mention": [["sunset", "re-permission"], ["disabled", "turned off", "hasn't sent", "not sending", "sending nothing"], ["96", "131", "grown", "growth", "accumulat"]]}}
+  },
+  {
+   "id": "a2_frequency_driver", "tier": "gate", "method": "llm_judge",
+   "text": "Identifies the June cadence increase as a contributing driver, citing the unsubscribe/complaint trend around it.",
+   "evidence_files": ["campaigns/campaign_history.csv", "deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_mention": [["frequency", "cadence", "volume", "send volume", "doubled"], ["unsub", "complaint"]]}}
+  },
+  {
+   "id": "a2_bulk_sender_thresholds", "tier": "gate", "method": "llm_judge",
+   "text": "Remediation explicitly respects the deliverability report's stated bulk-sender constraints: no sends to the unengaged-12m+ cohort and no full-list sends beyond transactional-adjacent announcements while complaint rate is elevated.",
+   "evidence_files": ["deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_mention": [["unengaged", "12m", "12-month"], ["full-list", "full list", "sitewide send", "entire file"]]}}
+  },
+  {
+   "id": "a2_sequencing", "tier": "gate", "method": "llm_judge",
+   "text": "Sequences list hygiene work before the BFCM volume ramp and does not recommend mailing the full file during the cleanup window.",
+   "evidence_files": ["goals/h2_targets.md", "deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_mention": [["before BFCM", "ahead of BFCM", "prior to BFCM", "before ramping", "before the ramp"]], "must_not_mention": ["full-list send during cleanup", "mail the full file during hygiene"]}}
+  },
+  {
+   "id": "a2_distractor_qbr", "tier": "gate", "method": "llm_judge",
+   "text": "Does not adopt the agency QBR deck's recommendation to re-mail the 24-month inactive file to \"wake the list.\"",
+   "evidence_files": ["comms/agency_qbr_notes.md", "deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_not_mention": ["24-month inactive", "wake the list", "re-engage the inactive file", "24 month inactives"]}}
+  },
+  {
+   "id": "a2_repermission_tradeoff", "tier": "quality", "method": "llm_judge",
+   "text": "Reasons through the re-permission vs. silent-suppression tradeoff using this brand's actual unengaged-cohort numbers rather than generic best practice.",
+   "evidence_files": ["deliverability/deliverability_report.md", "crm/profiles_sample.csv"],
+   "params": {"offline_check": {"must_mention": [["re-permission", "re-engage", "win-back"], ["suppress", "suppression"]]}}
+  },
+  {
+   "id": "a2_tiered_sending", "tier": "quality", "method": "llm_judge",
+   "text": "Proposes an interim engagement-tiered sending approach (e.g. engaged-first cadence) while complaint rate normalizes.",
+   "evidence_files": ["flows/flow_performance.csv", "campaigns/campaign_history.csv"],
+   "params": {"offline_check": {"must_mention": [["tier", "tiered", "engaged-first", "engagement-based", "segment by engagement"]]}}
+  },
+  {
+   "id": "a2_recovery_timeline", "tier": "quality", "method": "llm_judge",
+   "text": "Gives a realistic recovery timeline for the complaint rate to drop back under Gmail's guidance threshold before committing to full BFCM volume.",
+   "evidence_files": ["deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_mention": [["week", "weeks", "days", "by BFCM", "by November", "by Nov"]]}}
+  }
+ ]
+}

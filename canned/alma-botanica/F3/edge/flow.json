@@ -1,0 +1,58 @@
+{
+ "flows": [
+  {
+   "id": "flow_postpurchase",
+   "name": "Post-Purchase Care (Midnight bundle cross-sell)",
+   "status": "live",
+   "last_edited": "2026-08-14",
+   "trigger": {"type": "event", "event": "Placed Order"},
+   "flow_filters": [
+    {"metric": "suppressed", "op": "=", "value": false},
+    {"metric": "email_consent", "op": "=", "value": true}
+   ],
+   "steps": [
+    {"delay_days": 3},
+    {"id": "pp1", "channel": "email", "name": "How to use your products"},
+    {"delay_days": 18},
+    {"id": "pp2", "channel": "email",
+     "name": "Replenishment check-in — plus the Midnight bundle: spend $60, get the Body Butter free"}
+   ]
+  },
+  {
+   "id": "flow_browse",
+   "name": "Browse Abandonment (inventory-aware)",
+   "status": "live",
+   "last_edited": "2026-08-14",
+   "trigger": {"type": "event", "event": "Viewed Product"},
+   "flow_filters": [
+    {"metric": "suppressed", "op": "=", "value": false},
+    {"metric": "email_consent", "op": "=", "value": true}
+   ],
+   "inventory_condition": {
+    "rule": "dynamic block only inserts SKUs with inventory_on_hand > 0; browsed items at 0 on hand fall back to the Midnight bundle slot instead of being featured"
+   },
+   "steps": [
+    {"delay_hours": 20},
+    {"id": "bm1", "channel": "email",
+     "name": "Featured: what you viewed (or the Midnight bundle — spend $60, get the Body Butter free — if that item is out of stock)"}
+   ],
+   "note": "Dynamic product block now checks inventory_on_hand before inserting; no out-of-stock item is ever featured"
+  },
+  {
+   "id": "flow_solstice_restock_teaser",
+   "name": "Solstice Vitamin C Serum — restock teaser",
+   "status": "live",
+   "last_edited": "2026-08-14",
+   "trigger": {"type": "segment_join", "segment": "seg_solstice_buyers"},
+   "start_date": "2026-09-16",
+   "flow_filters": [
+    {"metric": "suppressed", "op": "=", "value": false},
+    {"metric": "email_consent", "op": "=", "value": true}
+   ],
+   "steps": [
+    {"id": "srt1", "channel": "email",
+     "name": "Back after September 15 — the Solstice Vitamin C Serum has restocked, early access this week"}
+   ]
+  }
+ ]
+}

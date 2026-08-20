@@ -1,0 +1,103 @@
+{
+ "id": "F4",
+ "universe": "alma-botanica",
+ "title": "Fix list health without missing BFCM",
+ "instructions": "We need a sunset/re-permission program — deliverability says so — but I can't afford to shrink the mailable list right before our biggest quarter. Design the program and the timeline. Show me the tradeoff you're making.",
+ "files_in_scope": [
+  "flows/flows.json",
+  "crm/segments.json",
+  "crm/profiles_sample.csv",
+  "deliverability/deliverability_report.md",
+  "goals/h2_targets.md",
+  "campaigns/campaign_history.csv",
+  "brand/brand_guidelines.md"
+ ],
+ "deliverable": {
+  "kind": "flow_json",
+  "parts": {
+   "flow.json": "{\"flows\": [...]} — the sunset/re-permission program as flow definitions (must reconcile the existing flow_sunset, not duplicate it)",
+   "plan.md": "program design, timeline vs. BFCM, and the quantified mailable-list/complaint-rate tradeoff"
+  }
+ },
+ "invariant_scope": ["flow_sunset"],
+ "criteria": [
+  {
+   "id": "f4_schema", "tier": "gate", "method": "structural",
+   "text": "Submitted flow definitions are valid against the flow schema.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "flow_schema_valid"}
+  },
+  {
+   "id": "f4_sunset_tiers", "tier": "gate", "method": "structural",
+   "text": "Sunset logic is consistent with the engagement data's actual tiers: the executed audience is drawn from real engagement_tier values and does not sweep in actively-engaged (engaged_30/engaged_90) profiles.",
+   "evidence_files": ["flows/flows.json", "crm/profiles_sample.csv", "crm/segments.json"],
+   "params": {"predicate": "sunset_audience_matches_tiers", "flow_id": "flow_sunset"}
+  },
+  {
+   "id": "f4_sunset_reconciled", "tier": "gate", "method": "structural",
+   "text": "The proposed program interacts with the existing (currently disabled) flow_sunset by explicitly re-enabling or deprecating/replacing it — it does not sit untouched while a new flow duplicates its job.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "sunset_flow_reconciled", "sunset_flow_id": "flow_sunset"}
+  },
+  {
+   "id": "f4_no_bfcm_blast", "tier": "gate", "method": "llm_judge",
+   "text": "Timeline sequences list hygiene correctly relative to BFCM: no full-file/full-list re-permission blast lands during the November BFCM ramp (goals/h2_targets.md: BFCM window Nov 20 – Dec 1).",
+   "evidence_files": ["goals/h2_targets.md"],
+   "params": {"offline_check": {"forbid_together": [
+    ["full-file", "november"],
+    ["full list", "november"],
+    ["re-permission blast", "november"],
+    ["sunset blast", "november"]
+   ]}}
+  },
+  {
+   "id": "f4_deliverability_thresholds", "tier": "gate", "method": "llm_judge",
+   "text": "Program complies with the deliverability report's stated house rules while elevated: no re-mailing of the deeper 24-month-inactive file, and full-list sends stay transactional-adjacent only.",
+   "evidence_files": ["deliverability/deliverability_report.md"],
+   "params": {"offline_check": {
+    "must_not_mention": ["24-month inactive", "24-month-inactive", "re-mail the inactive file", "resend to the 24-month file"],
+    "must_mention": [["0.10%", "0.28%", "0.30%", "gmail"]]
+   }}
+  },
+  {
+   "id": "f4_tradeoff_quant", "tier": "gate", "method": "llm_judge",
+   "text": "The tradeoff quantification (mailable-list delta vs. complaint-rate projection) cites the environment's real numbers rather than invented figures.",
+   "evidence_files": ["deliverability/deliverability_report.md"],
+   "params": {"offline_check": {"must_mention": [
+    ["342k", "342,000"],
+    ["131k", "131,000", "96k", "96,000"],
+    ["0.28%", "0.30%", "0.23%"]
+   ]}}
+  },
+  {
+   "id": "f4_invariants", "tier": "gate", "method": "invariant",
+   "text": "Account invariants hold after the change and the 14-day ledger shows no harm events attributable to this work.",
+   "evidence_files": ["flows/flows.json", "crm/profiles_sample.csv"],
+   "params": {}
+  },
+  {
+   "id": "f4_engagement_tiered", "tier": "quality", "method": "llm_judge",
+   "text": "Sunset logic is engagement-tiered (differentiated treatment across engagement bands) rather than a single binary cutoff.",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [
+    ["engaged_365", "engaged 365", "365-day"],
+    ["unengaged_12m", "unengaged 12m", "12-month unengaged", "12-month-unengaged"]
+   ]}}
+  },
+  {
+   "id": "f4_decision_points", "tier": "quality", "method": "llm_judge",
+   "text": "The program has explicit decision points with metrics (e.g., an engagement/response threshold that triggers suppression or wave progression) rather than a single unconditional pass.",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [
+    ["threshold", "trigger", "if no", "non-response", "non-responsive"],
+    ["reply", "open", "click", "engage", "respond"]
+   ]}}
+  },
+  {
+   "id": "f4_freq_fatigue", "tier": "quality", "method": "llm_judge",
+   "text": "Plan acknowledges the program's interaction with the frequency-fatigue problem (cadence increase driving complaints) rather than treating list hygiene in isolation.",
+   "evidence_files": ["campaigns/campaign_history.csv"],
+   "params": {"offline_check": {"must_mention": [["frequency", "cadence", "send volume", "send cadence"]]}}
+  }
+ ]
+}

@@ -1,0 +1,73 @@
+{
+ "id": "F3",
+ "universe": "alma-botanica",
+ "title": "Move the body oil",
+ "instructions": "Merch is drowning in Midnight Body Oil and the Solstice serum is out until mid-September. Build an automation strategy that moves the oil without making us look like we're on clearance. Founder will veto anything that smells desperate.",
+ "files_in_scope": [
+  "flows/flows.json",
+  "catalog/products.csv",
+  "brand/brand_guidelines.md",
+  "comms/merchandising_email_2026-07-28.md",
+  "comms/founder_slack_2026-08-04.md",
+  "campaigns/campaign_history.csv",
+  "campaigns/discount_codes.csv"
+ ],
+ "deliverable": {
+  "kind": "flow_json",
+  "parts": {
+   "flow.json": "{\"flows\": [...]} — the proposed automation changes (new and/or modified flows)",
+   "strategy.md": "rationale: audience/placement logic, offer mechanics, and sequencing vs. the restock and promo calendar"
+  }
+ },
+ "invariant_scope": ["flow_postpurchase", "flow_browse"],
+ "criteria": [
+  {
+   "id": "f3_schema", "tier": "gate", "method": "structural",
+   "text": "Submitted flow definitions, including any audience/segment logic, are valid against the flow schema.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "flow_schema_valid"}
+  },
+  {
+   "id": "f3_no_oos_solstice", "tier": "gate", "method": "structural",
+   "text": "No proposed flow promotes the out-of-stock Solstice serum; any mention is gated by an inventory condition or an explicit restock-date gate (catalog restock_date, tests issue #7 awareness).",
+   "evidence_files": ["catalog/products.csv"],
+   "params": {"predicate": "no_oos_solstice_promotion"}
+  },
+  {
+   "id": "f3_no_solstice_pctoff", "tier": "gate", "method": "structural",
+   "text": "Discount framing complies with brand guidelines: no %-off framing anywhere near Solstice.",
+   "evidence_files": ["brand/brand_guidelines.md"],
+   "params": {"predicate": "no_solstice_percent_off_framing"}
+  },
+  {
+   "id": "f3_claims_match_catalog", "tier": "gate", "method": "llm_judge",
+   "text": "Product claims match catalog facts and brand guidelines — no medical/clinical claims (no clinical trials exist) and no ingredient claims beyond the approved framing.",
+   "evidence_files": ["catalog/products.csv", "brand/brand_guidelines.md"],
+   "params": {"offline_check": {"must_not_mention": ["anti-aging", "anti aging", "cures", "clinically proven", "treats"]}}
+  },
+  {
+   "id": "f3_invariants", "tier": "gate", "method": "invariant",
+   "text": "Account invariants hold after the change (no OOS promotion, discount envelope, consent/quiet-hours, no overlapping-trigger enrollment) and the 14-day ledger shows no harm events attributable to this work.",
+   "evidence_files": ["flows/flows.json", "crm/profiles_sample.csv"],
+   "params": {}
+  },
+  {
+   "id": "f3_cross_sell_placement", "tier": "quality", "method": "llm_judge",
+   "text": "Cross-sell placement lives inside post-purchase and/or browse lifecycle flows rather than only a standalone one-off blast.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"offline_check": {"must_mention": [["post-purchase", "postpurchase", "flow_postpurchase"], ["browse", "flow_browse"]]}}
+  },
+  {
+   "id": "f3_bundle_mechanics", "tier": "quality", "method": "llm_judge",
+   "text": "Uses bundle/threshold mechanics (spend-and-save, gift-with-purchase) as the offer vehicle rather than a straight percent-off discount.",
+   "evidence_files": ["comms/merchandising_email_2026-07-28.md"],
+   "params": {"offline_check": {"must_mention": [["bundle", "threshold", "spend $", "gift-with-purchase", "gwp", "free with"]]}}
+  },
+  {
+   "id": "f3_sequencing_restock", "tier": "quality", "method": "llm_judge",
+   "text": "Sequencing is explicit about the September 15 Solstice restock and the surrounding promo calendar rather than running open-ended.",
+   "evidence_files": ["catalog/products.csv", "comms/founder_slack_2026-08-04.md"],
+   "params": {"offline_check": {"must_mention": [["september 15", "sept 15", "sep 15", "9/15", "09-15"]]}}
+  }
+ ]
+}

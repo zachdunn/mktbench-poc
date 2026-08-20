@@ -1,0 +1,33 @@
+{
+ "flows": [
+  {
+   "id": "flow_sunset",
+   "name": "Sunset / Re-permission (tiered, reconciled)",
+   "status": "live",
+   "last_edited": "2026-08-20",
+   "start_date": "2026-11-18",
+   "trigger": {
+    "type": "segment_join",
+    "segment_definition": {
+     "any": [
+      {"metric": "engagement_tier", "op": "=", "value": "engaged_365"},
+      {"metric": "engagement_tier", "op": "=", "value": "unengaged_12m"}
+     ]
+    }
+   },
+   "flow_filters": [
+    {"metric": "suppressed", "op": "=", "value": false},
+    {"metric": "email_consent", "op": "=", "value": true},
+    {"metric": "is_subscriber", "op": "=", "value": false}
+   ],
+   "steps": [
+    {"delay_days": 98},
+    {"id": "su_full_file_blast", "channel": "email",
+     "name": "Do you still want to hear from us? / Last call before we stop mailing you"},
+    {"delay_days": 2},
+    {"action": "suppress_if_no_engagement"}
+   ],
+   "note": "Reconciles the flow that sat disabled since 2026-01-12. Single full-file send covering engaged_365 and unengaged_12m together, going out 2026-11-18; non-responders suppressed within 48 hours."
+  }
+ ]
+}

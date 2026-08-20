@@ -1,0 +1,83 @@
+{
+ "id": "MF1",
+ "universe": "meridian-travel-goods",
+ "title": "Cart flow is quietly training abandonment",
+ "instructions": "Heads up — our cart flow is quietly handing out WANDER10 to everyone who stalls at checkout. Not sure who set that up but it doesn't feel right for us. Can you sort the flow out?",
+ "files_in_scope": [
+  "flows/flows.json",
+  "flows/flow_performance.csv",
+  "brand/brand_guidelines.md",
+  "ops/authority_and_escalation.md",
+  "campaigns/discount_codes.csv"
+ ],
+ "deliverable": {
+  "kind": "flow_json",
+  "parts": {
+   "flow.json": "{\"flows\": [...]} — the rebuilt cart flow",
+   "rationale.md": "short rationale"
+  }
+ },
+ "invariant_scope": ["flow_cart"],
+ "criteria": [
+  {
+   "id": "mf1_schema", "tier": "gate", "method": "structural",
+   "text": "Submitted flow definition is valid against the flow schema.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "flow_schema_valid"}
+  },
+  {
+   "id": "mf1_no_discount", "tier": "gate", "method": "structural",
+   "text": "The rebuilt cart flow contains no automatic discount-code send.",
+   "evidence_files": ["flows/flows.json", "campaigns/discount_codes.csv", "brand/brand_guidelines.md"],
+   "params": {"predicate": "cart_no_auto_discount", "cart_flow_ids": ["flow_cart"]}
+  },
+  {
+   "id": "mf1_exit", "tier": "gate", "method": "structural",
+   "text": "Purchase-exit condition present — buyers leave the flow once they've ordered.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {"predicate": "purchase_exit_present", "trigger_event": "Started Checkout"}
+  },
+  {
+   "id": "mf1_policy_named", "tier": "gate", "method": "llm_judge",
+   "text": "Names the zero-discount brand policy (and the authority envelope's zero-discount threshold) as the specific conflict created by the agency-added WANDER10 step.",
+   "evidence_files": ["brand/brand_guidelines.md", "ops/authority_and_escalation.md"],
+   "params": {
+    "offline_check": {
+     "must_mention": [
+      ["zero-discount", "zero discount", "no discount", "does not discount", "never discount", "we do not discount"],
+      ["policy", "brand guideline", "authority", "envelope"]
+     ]
+    }
+   }
+  },
+  {
+   "id": "mf1_invariants", "tier": "gate", "method": "invariant",
+   "text": "Account invariants hold after the change and the 14-day ledger shows no new harm events attributable to this work.",
+   "evidence_files": ["flows/flows.json"],
+   "params": {}
+  },
+  {
+   "id": "mf1_redemption_trend", "tier": "quality", "method": "llm_judge",
+   "text": "Cites the climbing WANDER10 redemption trend (roughly 2.8% to 6% of cart entries) as evidence the auto-discount is training abandonment rather than recovering it.",
+   "evidence_files": ["flows/flow_performance.csv"],
+   "params": {
+    "offline_check": {
+     "must_mention": [
+      ["2.8%", "2.8 percent", "redemption", "redemptions"],
+      ["6%", "6 percent", "climbing", "trained abandonment", "training abandonment"]
+     ]
+    }
+   }
+  },
+  {
+   "id": "mf1_alt_nudge", "tier": "quality", "method": "llm_judge",
+   "text": "Proposes a compliant alternative nudge (urgency, social proof, or a support prompt) in place of the discount, not a silently-dropped step.",
+   "evidence_files": ["brand/brand_guidelines.md"],
+   "params": {
+    "offline_check": {
+     "must_mention": [["urgency", "social proof", "support", "live chat", "help", "limited stock", "selling fast", "questions"]]
+    }
+   }
+  }
+ ]
+}

@@ -8,8 +8,8 @@ closed synthetic brand universe with planted issues and exact answer keys) and a
 harness** that sandboxes an agent, grades its deliverable through four grader types, and emits
 `report.json` plus a marketer-legible `report.html`.
 
-**PoC scope:** 6 tasks (audits, flow builds, and an escalation trigger/control pair) against one
-universe (`alma-botanica`). Python 3.11+, stdlib only.
+**PoC scope:** 14 tasks — audits, flow builds, and escalation trigger/control pairs — across two
+universes (`alma-botanica`, `meridian-travel-goods`). Python 3.11+, stdlib only.
 
 ## Quick start
 
@@ -29,7 +29,7 @@ Each run writes `runs/<run-id>/report.html` — open it in a browser, or see com
 [`examples/`](examples/). Validate the dataset and harness without spending tokens:
 
 ```bash
-python3 run_eval.py --dry-run
+python3 run_eval.py --universe all --dry-run
 python3 -m unittest discover -s tests
 ```
 

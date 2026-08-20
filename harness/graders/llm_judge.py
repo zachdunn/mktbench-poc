@@ -39,8 +39,13 @@ def _deliverable_text(deliverable, part: str | None = None) -> str:
     return "\n\n".join(f"--- {n} ---\n{c}" for n, c in sorted(deliverable.parts.items()))
 
 
+# A lone newline mid-paragraph is a soft wrap, not a sentence boundary — a negation cue
+# must still count when the wrapped line carries the flagged term.
+_SOFT_WRAP = re.compile(r"(?<![.!?:\n])\n(?![\n\-*#\d])")
+
+
 def _sentences(text: str) -> list[str]:
-    return re.split(r"(?<=[.!?:])\s+|\n+", text)
+    return re.split(r"(?<=[.!?:])\s+|\n+", _SOFT_WRAP.sub(" ", text))
 
 
 def offline_evaluate(check: dict, text: str) -> tuple[bool, str]:

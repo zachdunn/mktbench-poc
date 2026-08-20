@@ -50,8 +50,8 @@ tests/                                         offline, token-free (stdlib unitt
 ## Validate
 
 ```bash
-python3 run_eval.py --dry-run       # every task loads, rubric params resolve, canned parts parse
-python3 run_eval.py --all-replay    # good passes, bad fails its planted gate
+python3 run_eval.py --universe all --dry-run       # every task loads, rubric params resolve, canned parts parse
+python3 run_eval.py --universe all --all-replay    # good passes, bad fails its planted gate
 python3 -m unittest discover -s tests
 ```
 

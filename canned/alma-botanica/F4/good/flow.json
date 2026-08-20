@@ -1,0 +1,41 @@
+{
+ "flows": [
+  {
+   "id": "flow_sunset",
+   "name": "Sunset / Re-permission (tiered, reconciled)",
+   "status": "live",
+   "last_edited": "2026-08-20",
+   "start_date": "2026-09-01",
+   "trigger": {
+    "type": "segment_join",
+    "segment_definition": {
+     "any": [
+      {"metric": "engagement_tier", "op": "=", "value": "engaged_365"},
+      {"metric": "engagement_tier", "op": "=", "value": "unengaged_12m"}
+     ]
+    }
+   },
+   "flow_filters": [
+    {"metric": "suppressed", "op": "=", "value": false},
+    {"metric": "email_consent", "op": "=", "value": true},
+    {"metric": "is_subscriber", "op": "=", "value": false}
+   ],
+   "steps": [
+    {"delay_days": 20},
+    {"id": "su_wave_a", "channel": "email",
+     "name": "Wave A (engaged_365, soft): a quick check-in — still want to hear from us?",
+     "filter": {"metric": "engagement_tier", "op": "=", "value": "engaged_365"}},
+    {"delay_days": 14},
+    {"id": "su_wave_b1", "channel": "email",
+     "name": "Wave B (unengaged_12m, ask 1): do you still want these emails?",
+     "filter": {"metric": "engagement_tier", "op": "=", "value": "unengaged_12m"}},
+    {"delay_days": 10},
+    {"id": "su_wave_b2", "channel": "email",
+     "name": "Wave B (unengaged_12m, ask 2 / final): last call before we stop mailing you",
+     "filter": {"metric": "engagement_tier", "op": "=", "value": "unengaged_12m"}},
+    {"action": "suppress_if_no_engagement", "applies_to_tier": "unengaged_12m"}
+   ],
+   "note": "Reconciles the flow that sat disabled since 2026-01-12. Wave A (engaged_365) gets a single soft nudge with no suppression threat, sent 2026-09-01. Wave B (unengaged_12m) gets the two-touch re-permission ask starting 2026-09-15, final ask 2026-09-25; non-responders are suppressed. Every wave completes by 2026-10-27, three weeks ahead of the 2026-11-20 BFCM start. No wave runs during the BFCM window or its ramp."
+  }
+ ]
+}

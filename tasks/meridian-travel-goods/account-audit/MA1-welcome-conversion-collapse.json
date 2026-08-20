@@ -1,0 +1,81 @@
+{
+ "id": "MA1",
+ "universe": "meridian-travel-goods",
+ "title": "Welcome-flow revenue quietly collapsed",
+ "instructions": "Someone on the exec team pulled up welcome-series numbers for the board deck and revenue is way down from where it was a year ago. I pulled the flow and the emails look fine to me — same copy, same cadence, people are still opening and clicking. Can you dig in and tell us what's actually going on and what it's costing us? Need something I can forward as-is.",
+ "files_in_scope": [
+  "flows/flow_performance.csv",
+  "flows/flows.json",
+  "brand/brand_guidelines.md",
+  "comms/cx_email_2026-07-22.md",
+  "deliverability/deliverability_report.md"
+ ],
+ "deliverable": {"kind": "memo", "parts": {"memo": "short diagnostic memo (markdown)"}},
+ "criteria": [
+  {
+   "id": "ma1_root_cause", "tier": "gate", "method": "llm_judge",
+   "text": "Identifies the dead/expired meridian-travel.com domain in the welcome-flow links as the root cause of the conversion collapse.",
+   "evidence_files": ["flows/flows.json", "brand/brand_guidelines.md", "flows/flow_performance.csv"],
+   "params": {"offline_check": {"must_mention": [["meridian-travel.com", "old domain", "dead domain", "expired domain"], ["expired", "redirect"]]}}
+  },
+  {
+   "id": "ma1_distractor_reject", "tier": "gate", "method": "llm_judge",
+   "text": "Notes that click rates on the welcome emails stayed healthy while post-click sessions and conversions collapsed, and does not misattribute the drop to creative fatigue, subject lines, or deliverability/inboxing issues.",
+   "evidence_files": ["flows/flow_performance.csv", "deliverability/deliverability_report.md"],
+   "params": {
+    "offline_check": {
+     "must_mention": [["click rate", "click-through", "clicks stayed", "clicks remained", "clicks held", "clicks are healthy", "clicking"], ["session", "conversion"]],
+     "must_not_mention": ["creative fatigue", "deliverability", "inboxing", "subject line", "fatigued"]
+    }
+   }
+  },
+  {
+   "id": "ma1_timing", "tier": "gate", "method": "llm_judge",
+   "text": "States timing consistent with the March 2, 2026 domain migration and the July 1, 2026 old-domain redirect expiry.",
+   "evidence_files": ["flows/flows.json", "brand/brand_guidelines.md", "flows/flow_performance.csv"],
+   "params": {"offline_check": {"must_mention": [["March 2026", "March 2, 2026", "site migration", "migrated"], ["July 1", "2026-07-01", "redirects expired", "redirect expiry"]]}}
+  },
+  {
+   "id": "ma1_conv_pre", "tier": "gate", "method": "computed",
+   "text": "States the pre-migration welcome-flow conversion rate, reconciling with the answer-key value within tolerance.",
+   "evidence_files": ["flows/flow_performance.csv"],
+   "params": {
+    "key": "welcome_conv_pre_migration", "tolerance_pct": 15,
+    "extract": {
+     "regexes": [
+      "(?:pre-migration|before the migration|prior to the migration|through Feb(?:ruary)? 2026|historically ran at)[\\s\\S]{0,80}?(0\\.0\\d{1,3})",
+      "from\\s+(0\\.0\\d{1,3})\\s+to[\\s\\S]{0,10}?0\\.0\\d{1,3}"
+     ],
+     "hint": "the welcome-flow conversion rate before the March 2026 domain migration, as a decimal fraction (e.g. 0.041)"
+    }
+   }
+  },
+  {
+   "id": "ma1_conv_post", "tier": "gate", "method": "computed",
+   "text": "States the post-migration welcome-flow conversion rate, reconciling with the answer-key value within tolerance.",
+   "evidence_files": ["flows/flow_performance.csv"],
+   "params": {
+    "key": "welcome_conv_post_migration", "tolerance_pct": 15,
+    "extract": {
+     "regexes": [
+      "(?:post-migration|since the migration|now converting at|has fallen to|has collapsed to|dropped to|down to)[\\s\\S]{0,80}?(0\\.0\\d{1,3})",
+      "from\\s+0\\.0\\d{1,3}\\s+to[\\s\\S]{0,10}?(0\\.0\\d{1,3})"
+     ],
+     "hint": "the welcome-flow conversion rate after the March 2026 domain migration / July 1 redirect expiry, as a decimal fraction (e.g. 0.009)"
+    }
+   }
+  },
+  {
+   "id": "ma1_fix_prevention", "tier": "quality", "method": "llm_judge",
+   "text": "Proposes both an immediate fix (repoint the welcome-flow links to the live domain) and a prevention practice (link/domain monitoring).",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [["repoint", "update the link", "point to meridiantravel.co", "fix the link", "correct the domain", "swap the domain"], ["monitor", "alert", "audit", "link check", "link-check"]]}}
+  },
+  {
+   "id": "ma1_remail", "tier": "quality", "method": "llm_judge",
+   "text": "Notes that the affected cohort could be re-mailed with working links.",
+   "evidence_files": [],
+   "params": {"offline_check": {"must_mention": [["re-mail", "remail", "re-send", "resend", "re-email"]]}}
+  }
+ ]
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Alma Botánica — narrative docs, briefs, HTML email templates, hero image."""
 import os, json
-OUT = "/home/claude/universes/alma-botanica"
+OUT = str(__import__("pathlib").Path(__file__).resolve().parent.parent / "alma-botanica")
 AK = json.load(open(f"{OUT}/answer_key/computed_values.json"))
 def W(path, s): open(f"{OUT}/{path}", "w").write(s.strip() + "\n")
 

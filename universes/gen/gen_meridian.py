@@ -6,7 +6,7 @@ strict no-discount policy, high AOV — the 'right answers' change with the cate
 import csv, json, os, random
 from datetime import date, timedelta
 random.seed(7)
-OUT = "/home/claude/universes/meridian-travel-goods"
+OUT = str(__import__("pathlib").Path(__file__).resolve().parent.parent / "meridian-travel-goods")
 AK = {}
 def d(y,m,dy): return date(y,m,dy)
 def iso(x): return x.isoformat()
@@ -104,13 +104,18 @@ with open(f"{OUT}/crm/profiles_sample.csv","w",newline="") as f:
     w=csv.writer(f)
     w.writerow(["profile_id","email","first_name","last_name","timezone","account_type","is_gift_purchaser_2025Q4",
                 "first_order_date","last_order_date","orders_count","ltv_usd","engagement_tier","sms_consent",
-                "created_source"])
+                "created_source","email_consent","suppressed"])
     for p in profiles:
         email=f"{p['fn'].lower()}.{p['ln'].lower()}{p['pid'][3:]}@example.com" if not p["dup"] else \
               f"{p['fn'].lower()}.{p['ln'].lower()}{int(p['pid'][3:])-70000}@example.com"   # same email as original!
+        # derived from existing values (no RNG draws) so the seeded stream is unchanged
+        nid=int(p["pid"][3:])
+        consent = nid % 25 != 0                                  # ~4% revoked email consent
+        supp = p["tier"]=="unengaged_12m" and nid % 9 == 0       # complaint/bounce suppressions
         w.writerow([p["pid"],email,p["fn"],p["ln"],p["tz"],"wholesale" if p["ws"] else "consumer",
                     str(p["gift"]).lower(),iso(p["first"]),iso(p["last"]),p["n"],p["ltv"],p["tier"],
-                    str(p["sms"]).lower(),"site_migration_2026_03" if p["dup"] else "checkout"])
+                    str(p["sms"]).lower(),"site_migration_2026_03" if p["dup"] else "checkout",
+                    str(consent).lower(),str(supp).lower()])
 
 # ---------------- segments ----------------
 segments=[
