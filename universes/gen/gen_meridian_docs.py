@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Meridian Travel Goods — narrative docs, briefs, answer key."""
 import json
-OUT = "/home/claude/universes/meridian-travel-goods"
+OUT = str(__import__("pathlib").Path(__file__).resolve().parent.parent / "meridian-travel-goods")
 AK = json.load(open(f"{OUT}/answer_key/computed_values.json"))
 def W(p,s): open(f"{OUT}/{p}","w").write(s.strip()+"\n")
 
